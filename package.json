@@ -1,0 +1,18 @@
+{
+	"name": "test-code-doc",
+	"version": "1.0.0",
+	"description": "manual comment parser",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"format": "prettier -w ."
+	},
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"prettier": "^2.8.4"
+	},
+	"dependencies": {
+		"ts-node": "^10.9.2"
+	}
+}

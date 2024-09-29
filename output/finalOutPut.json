@@ -1,0 +1,46 @@
+{
+  "fileName": "finalOutPut",
+  "folderNames": [
+    "0_contextSetup"
+  ],
+  "commentBlocks": [
+    {
+      "blocNumber": 1,
+      "descriptionTags": {
+        "description": "These steps are used to setup the context of tests config and user login"
+      }
+    },
+    {
+      "blocNumber": 2,
+      "folder": "0_contextSetup",
+      "descriptionTags": {
+        "description": "For now it is used to reflect the config needed (only manual purpose)"
+      },
+      "paramTags": {
+        "param_type": "{string}",
+        "param_name": "config",
+        "param_desc": "- Not implemented (manual purpose)"
+      },
+      "todoTags": {
+        "todo_type": "{question}",
+        "todo_text": "See to use it with fixture import or to remove ?"
+      }
+    },
+    {
+      "blocNumber": 3,
+      "folder": "0_contextSetup",
+      "descriptionTags": {
+        "description": "Use to log the HCP in a particular project with a particular account"
+      },
+      "paramTags": {
+        "param_type": "{string}",
+        "param_name": "account",
+        "param_desc": "- Reference to an HCP account (with/ without patient ...Etc) HCP account are defined in cypress/fixtures/user.ts"
+      },
+      "todoTags": {
+        "todo_type": "{API}",
+        "todo_text": ">> make login with API"
+      }
+    }
+  ]
+}

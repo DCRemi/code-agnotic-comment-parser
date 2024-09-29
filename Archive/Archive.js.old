@@ -1,0 +1,56 @@
+const regexArobase = /\@(.*?)([\s\S])\@/gs
+const regexArobase = /\@(.*?)\@/gs
+const regexArobase = /\* @(.*?)\* @/gs
+const regexArobase = /\* (@[\w\s\S]*)*(\* @|\*\/)/gs
+const regexArobase = /( \* @)(.*?)( \* @|\*\/)/s
+const regexArobase = /( \* @)((.*?)([\s\S]))( \* @|\*\/)/s
+const regexArobase = /( \* @)(.*?)([\s\S])( \* @|\*\/)/gs
+const regexArobase = /( \* \@)(.*?)( \* \@)/gs
+const regexArobase = /\* \@(.*?)([\s\S]) \* \@/gs
+const regexArobase = /( * @(.*[\s]?) * @?)/gs
+
+const startRegex = " \* \@"
+const endRegex = " \* \@\|\*\/"
+const startRegex = " \\* \\@"
+const endRegex = " \\* \\@"
+const stringregex = `${startRegex}(.*?)([\\s\\S])${endRegex}`
+const regexArobase = new RegExp(stringregex,"gs")
+console.log(regexArobase)
+console.log("\n\n\n")
+
+// Construction of regex 
+const delimiterRegex = new RegExp(/\@((.|\n)*)\w.*((.|\n)*)\@/gs)
+const stringregex = `\@(.*?)([\\s\\S])\@/`
+const delimiterRegex = new RegExp(stringregex,"gs")
+
+// #region Utile
+// for avec tagStart index tag End tag+1
+// MEttre un nom sur ce qu'on doit garder genre full text block 1 ...ETc
+
+// console.log("\n\nResult a :" +"\n")
+// console.log(getJsComTag(jsComentsWithout[0] ))
+// console.log(getJsComTag(jsComentsWithout[1] ))
+// console.log(getJsComTag(jsComentsWithout[2] ))
+
+
+// console.log("Comment blocks : \n");
+// console.log(jsCommentsBlocksClean);
+// console.log("\n\n\n");
+
+// console.log("jsCommentsBlocksTagIndex :\n");
+// console.log(jsCommentsBlocksTagIndex);
+// console.log("\n\n");
+
+// console.log("jsCommentsBlocksTagData :\n");
+// console.log(jsCommentsBlocksTagData);
+// console.log("\n\n");
+
+// console.log("jsCommentsBlocksTagIndex :\n");
+// console.log(jsCommentsBlocksTagIndex);
+// console.log("\n\n");
+
+// console.log("TESSSST \n" + test);
+
+// console.log("CommentBlock:\n");
+// console.log(tagSentence);
+// #endregion

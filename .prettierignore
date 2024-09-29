@@ -1,0 +1,10 @@
+# cypress
+input
+output
+node-modules
+*.old
+.prettierignore
+.prettierrc
+package.json
+package-lock.json
+.vscode
