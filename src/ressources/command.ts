@@ -1,4 +1,4 @@
-import { GenericCommentBlock, GenericTagSentence, TagIndex } from "../../interfaces";
+import { GenericCommentBlock, GenericTagSentence, TagIndex } from "./interfaces";
 const fs = require("fs");
 
 /**

@@ -1,4 +1,4 @@
-import {GenericCommentBlock, GenericGlobalComments } from "../interfaces";
+import {GenericCommentBlock, GenericGlobalComments } from "./ressources/interfaces";
 const fs = require("fs");
 // const { GenericCommentBlock, GenericGlobalComments } = require("../interfaces");
 const {
