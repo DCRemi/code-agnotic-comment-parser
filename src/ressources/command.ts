@@ -1,4 +1,14 @@
-import { GenericCommentBlock, GenericTagSentence, TagIndex } from "./interfaces";
+import {
+	CommentBlock,
+	DescriptionTag,
+	FileCommentExtract,
+	GenericCommentBlock,
+	GenericGlobalComments,
+	GenericTagSentence,
+	ParamTag,
+	TagIndex,
+	TodoTag
+} from "./interfaces";
 const fs = require("fs");
 
 /**
@@ -31,14 +41,14 @@ export const removeJsComBoundary = function (text: string): string {
 
 /**
  * extract from a jsCommentBlock each tag marked with @ and with their index in the string
- * @param {string} jsCommentBlock 
+ * @param {string} jsCommentBlock
  * @returns list of all tag with their index
  */
-export const getTagIndex = function (jsCommentBlock: string):TagIndex[] {
+export const getTagIndex = function (jsCommentBlock: string): TagIndex[] {
 	const tagRegex = / * @\w*/g;
 	const tagMatches = jsCommentBlock.matchAll(tagRegex);
 
-	const tagsIndex :TagIndex[]= [];
+	const tagsIndex: TagIndex[] = [];
 	for (const match of tagMatches) {
 		tagsIndex.push({ tag: match[0], tagStart: match.index, tagEnd: match.index + match[0].length });
 	}
@@ -51,13 +61,15 @@ export const getTagIndex = function (jsCommentBlock: string):TagIndex[] {
  * @param {TagIndex[]} jsBlockTagsIndex array of tags to extract
  * @returns array of GenericTagSentence that contains the tag and its content
  */
-export const getTagDataFromBlock = function (jsCommentBlock:string, jsBlockTagsIndex:TagIndex[]):GenericTagSentence[] {
-	const genericTagSentences:GenericTagSentence[] = [];
+export const getTagDataFromBlock = function (
+	jsCommentBlock: string,
+	jsBlockTagsIndex: TagIndex[]
+): GenericTagSentence[] {
+	const genericTagSentences: GenericTagSentence[] = [];
 
 	jsBlockTagsIndex.forEach((element, index) => {
-        
-		let genericTagSentence:GenericTagSentence 
-        genericTagSentence= {
+		let genericTagSentence: GenericTagSentence;
+		genericTagSentence = {
 			tag: element.tag.trim(),
 			tag_content:
 				index !== jsBlockTagsIndex.length - 1 // for the last tag the end is */ and not the next tag start
@@ -72,8 +84,66 @@ export const getTagDataFromBlock = function (jsCommentBlock:string, jsBlockTagsI
 };
 
 /**
- * Write a json object in a file 
- * @param obj json object to save in a file 
- * @param filename 
+ * construct from a Generic global comment a structured json with different tags and their parameters
+ * @param {string} fileName name of the file the comments comes from 
+ * @param {GenericGlobalComments} genericGlobalComments array of tags extracted 
+ * @returns json structured with all the known tags and their parameter to be used as documentation 
+ */
+export const extractTagSpecificData = function (
+	fileName: string,
+	genericGlobalComments: GenericGlobalComments
+): FileCommentExtract {
+	const fileComments:FileCommentExtract = { fileName, folderNames: [], commentBlocks: [] };
+	genericGlobalComments.genericCommentBlocks.forEach((genericCommentBlock) => {
+		let commentBlock:CommentBlock = { blocNumber: genericCommentBlock.blocNumber, folder:"" };
+		genericCommentBlock.genericTagSentences.forEach((genericTagSentence) => {
+			const typeRegex = /\{.*\}/;
+
+			switch (genericTagSentence.tag) {
+				case "@folderName":
+					fileComments.folderNames.push(genericTagSentence.tag_content.trim());
+					break;
+				case "@stepDef":
+					commentBlock.stepDef = genericTagSentence.tag_content.trim();
+				case "@memberof":
+					commentBlock.folder = genericTagSentence.tag_content.trim();
+					break;
+				case "@param":
+					const param_type = genericTagSentence.tag_content.match(typeRegex)[0];
+					const param_name_desc = genericTagSentence.tag_content.substring(param_type.length).trim();
+					const param_name = param_name_desc.match(/\w+/)[0];
+					const paramTag: ParamTag = {
+						param_type,
+						param_name,
+						param_desc: param_name_desc.substring(param_name.length).trim()
+					};
+					commentBlock.paramTags.push(paramTag)
+					break;
+				case "@todo":
+					const todo_type = genericTagSentence.tag_content.match(typeRegex)[0];
+					const todoTag : TodoTag = {
+						todo_type,
+						todo_text: genericTagSentence.tag_content.substring(todo_type.length).trim()
+					};
+					commentBlock.todoTags.push(todoTag)
+					break;
+				case "@description":
+					const descriptionTag : DescriptionTag = {
+					description: genericTagSentence.tag_content
+				};
+				commentBlock.descriptionTags.push(descriptionTag)
+				default:
+					break;
+			}
+		});
+		fileComments.commentBlocks.push(commentBlock);
+	});
+	return fileComments;
+};
+
+/**
+ * Write a json object in a file
+ * @param obj json object to save in a file
+ * @param filename
  */
 export const JSONToFile = (obj, filename) => fs.writeFileSync(`${filename}.json`, JSON.stringify(obj, null, 2));
