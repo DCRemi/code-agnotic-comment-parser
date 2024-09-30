@@ -1,17 +1,20 @@
-import {GenericCommentBlock, GenericGlobalComments } from "./ressources/interfaces";
-const fs = require("fs");
-// const { GenericCommentBlock, GenericGlobalComments } = require("../interfaces");
-const {
+import {
+	extractTagSpecificData,
 	extractJsComContent,
 	getTagDataFromBlock,
 	getTagIndex,
 	JSONToFile,
 	removeJsComBoundary
-} = require("./command/command");
+} from "./ressources/command";
+import { GenericCommentBlock, GenericGlobalComments } from "./ressources/interfaces";
+const fs = require("fs");
+// const { GenericCommentBlock, GenericGlobalComments } = require("../interfaces");
 
 // const inputFilePath = "./sampleData/test.js"
-const inputFilePath = "./input/contextSetup.ts";
+const inputFileName = "contextSetup.ts";
+const inputFilePath = `./input/${inputFileName}`;
 const outputFilePath = "./output/jsCommentExtractedOutput";
+const finalOutputFilePath = `./output/finalOutput`;
 
 // #region run
 /** STEP 1 : Get file content */
@@ -22,13 +25,13 @@ const jsCommentsBlocks = extractJsComContent(file);
 
 /** STEP 3 : Remove start and end indicator of blocks */
 const jsCommentsBlocksCleaned: string[] = [];
-jsCommentsBlocks?.forEach((element:string, index:number) => {
+jsCommentsBlocks?.forEach((element: string, index: number) => {
 	jsCommentsBlocksCleaned[index] = removeJsComBoundary(element);
 });
 
 /** STEP 4 : For each comments block extract tag value and content */
-const genericCommentBlocks:GenericCommentBlock[]=[];
-const genericGlobalComments: GenericGlobalComments={
+const genericCommentBlocks: GenericCommentBlock[] = [];
+const genericGlobalComments: GenericGlobalComments = {
 	genericCommentBlocks
 };
 jsCommentsBlocksCleaned.forEach((element, index) => {
@@ -38,6 +41,13 @@ jsCommentsBlocksCleaned.forEach((element, index) => {
 	};
 });
 
-/** STEP 5 : Write result in a json file */
+/** STEP 5 : Write intermediary json to file */
 JSONToFile(genericGlobalComments, outputFilePath);
+
+/** STEP 6 :  extract tag specific data */
+const finalJson = extractTagSpecificData(inputFileName, genericGlobalComments);
+
+/** STEP 7 : Write final json to file */
+JSONToFile(finalJson, finalOutputFilePath);
+
 // #endregion

@@ -50,9 +50,10 @@ export interface CommentBlock {
 	paramTags?: ParamTag[];
 	descriptionTags?: DescriptionTag[];
 	todoTags?: TodoTag[];
-	genericTags?: GenericTag[];
+	genericTags?: GenericTagSentence[];
 }
-export interface FileComment {
+
+export interface FileCommentExtract {
 	fileName: string;
 	commentBlocks: CommentBlock[];
 	folderNames: string[];
