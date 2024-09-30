@@ -30,6 +30,14 @@ export interface DescriptionTag {
 	description: string;
 }
 
+export interface SeeTag {
+	see_content: string;
+}
+
+export interface ExampleTag {
+	example_content: string;
+}
+
 export interface StepDefTag {
 	description: string;
 }
@@ -49,6 +57,8 @@ export interface CommentBlock {
 	stepDef?: string;
 	paramTags?: ParamTag[];
 	descriptionTags?: DescriptionTag[];
+	seeTags?: SeeTag[];
+	exampleTags?: ExampleTag[];
 	todoTags?: TodoTag[];
 	genericTags?: GenericTagSentence[];
 }

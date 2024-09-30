@@ -1,11 +1,13 @@
 import {
 	CommentBlock,
 	DescriptionTag,
+	ExampleTag,
 	FileCommentExtract,
 	GenericCommentBlock,
 	GenericGlobalComments,
 	GenericTagSentence,
 	ParamTag,
+	SeeTag,
 	TagIndex,
 	TodoTag
 } from "./interfaces";
@@ -85,17 +87,17 @@ export const getTagDataFromBlock = function (
 
 /**
  * construct from a Generic global comment a structured json with different tags and their parameters
- * @param {string} fileName name of the file the comments comes from 
- * @param {GenericGlobalComments} genericGlobalComments array of tags extracted 
- * @returns json structured with all the known tags and their parameter to be used as documentation 
+ * @param {string} fileName name of the file the comments comes from
+ * @param {GenericGlobalComments} genericGlobalComments array of tags extracted
+ * @returns json structured with all the known tags and their parameter to be used as documentation
  */
 export const extractTagSpecificData = function (
 	fileName: string,
 	genericGlobalComments: GenericGlobalComments
 ): FileCommentExtract {
-	const fileComments:FileCommentExtract = { fileName, folderNames: [], commentBlocks: [] };
+	const fileComments: FileCommentExtract = { fileName, folderNames: [], commentBlocks: [] };
 	genericGlobalComments.genericCommentBlocks.forEach((genericCommentBlock) => {
-		let commentBlock:CommentBlock = { blocNumber: genericCommentBlock.blocNumber, folder:"" };
+		let commentBlock: CommentBlock = { blocNumber: genericCommentBlock.blocNumber, folder: "" };
 		genericCommentBlock.genericTagSentences.forEach((genericTagSentence) => {
 			const typeRegex = /\{.*\}/;
 
@@ -117,21 +119,34 @@ export const extractTagSpecificData = function (
 						param_name,
 						param_desc: param_name_desc.substring(param_name.length).trim()
 					};
-					commentBlock.paramTags.push(paramTag)
+					commentBlock.paramTags.push(paramTag);
 					break;
 				case "@todo":
 					const todo_type = genericTagSentence.tag_content.match(typeRegex)[0];
-					const todoTag : TodoTag = {
+					const todoTag: TodoTag = {
 						todo_type,
 						todo_text: genericTagSentence.tag_content.substring(todo_type.length).trim()
 					};
-					commentBlock.todoTags.push(todoTag)
+					commentBlock.todoTags.push(todoTag);
 					break;
 				case "@description":
-					const descriptionTag : DescriptionTag = {
-					description: genericTagSentence.tag_content
-				};
-				commentBlock.descriptionTags.push(descriptionTag)
+					const descriptionTag: DescriptionTag = {
+						description: genericTagSentence.tag_content
+					};
+					commentBlock.descriptionTags.push(descriptionTag);
+				case "@see":
+					const seeTag: SeeTag = {
+						see_content: genericTagSentence.tag_content
+					};
+					commentBlock.seeTags.push(seeTag);
+					break;
+				case "@example":
+					const exampleTag: ExampleTag = {
+						example_content: genericTagSentence.tag_content
+					};
+					commentBlock.exampleTags.push(exampleTag);
+					break;
+
 				default:
 					break;
 			}
