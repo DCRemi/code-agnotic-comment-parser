@@ -1,12 +1,18 @@
 // Generic
-export interface GenericTag {
+export interface TagIndex {
+	tag: string;
+	tagStart: number;
+	tagEnd: number;
+}
+
+export interface GenericTagSentence {
 	tag: string;
 	tag_content: string;
 }
 
 export interface GenericCommentBlock {
-	blocNumber :number;
-	genericTagSentence: GenericTag[];
+	blocNumber: number;
+	genericTagSentences: GenericTagSentence[];
 }
 
 export interface GenericGlobalComments {
@@ -34,12 +40,12 @@ export interface TodoTag {
 }
 
 export interface FolderTag {
-	folder_name:string;
+	folder_name: string;
 }
 
 export interface CommentBlock {
-	blocNumber : number;
-	folder : string;
+	blocNumber: number;
+	folder: string;
 	stepDef?: string;
 	paramTags?: ParamTag[];
 	descriptionTags?: DescriptionTag[];
@@ -49,5 +55,5 @@ export interface CommentBlock {
 export interface FileComment {
 	fileName: string;
 	commentBlocks: CommentBlock[];
-	folderNames : string[];
+	folderNames: string[];
 }
