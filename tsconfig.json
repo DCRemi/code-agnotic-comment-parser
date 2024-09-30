@@ -1,12 +1,12 @@
 {
 	"compilerOptions": {
-	  "target": "es6",
-	  "lib": ["es6", "dom"],
-	  "types": ["node"],
-	  "allowSyntheticDefaultImports": true,
-	  "moduleResolution": "node",
-	  "resolveJsonModule": true
+		"target": "es6",
+		"lib": ["es6", "dom"],
+		"types": ["node"],
+		"allowSyntheticDefaultImports": true,
+		"moduleResolution": "node",
+		"resolveJsonModule": true
 	},
 	"include": ["**/*.ts"],
-	"exclude": ["node_modules","Archive",],
-  }
+	"exclude": ["node_modules", "Archive"]
+}
