@@ -31,9 +31,9 @@ export interface DescriptionTag {
 }
 
 export interface GenericTag {
+	tag: string;
 	content: string;
 }
-
 
 export interface SeeTag {
 	see_content: string;
