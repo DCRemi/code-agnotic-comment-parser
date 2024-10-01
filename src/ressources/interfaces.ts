@@ -71,5 +71,5 @@ export interface CommentBlock {
 export interface FileCommentExtract {
 	fileName: string;
 	commentBlocks: CommentBlock[];
-	folderNames: string[];
+	folderNames?: string[];
 }
