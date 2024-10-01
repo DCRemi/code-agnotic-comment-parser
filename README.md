@@ -30,8 +30,8 @@ It could even be used for all language or type of document
 * Input will contain the files to go accross to create the documentation
 * Output will contains for each file the comment tags extract.
 * src/ressources
-** interface for the object used
-** command to extract and parse the data
+  * interface for the object used
+  * command to extract and parse the data
 * extractJsComments, main code
 
 # Tags
