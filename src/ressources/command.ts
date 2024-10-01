@@ -95,7 +95,7 @@ export const getTagDataFromBlock = function (
  * @returns json structured with all the known tags and their parameter to be used as documentation
  */
 export const extractTagSpecificData = function (fileName: string, genericGlobalComments: GenericGlobalComments) {
-	const fileComments: FileCommentExtract = { fileName, folderNames: [], commentBlocks: [] };	
+	const fileComments: FileCommentExtract = { fileName, folderNames: [], commentBlocks: [] };
 	genericGlobalComments.genericCommentBlocks.forEach((genericCommentBlock) => {
 		const commentBlock: CommentBlock = { blocNumber: genericCommentBlock.blocNumber, folder: "none" };
 		genericCommentBlock.genericTagSentences.forEach((genericTagSentence) => {
@@ -136,7 +136,7 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 				case "@todo":
 					let todoTag: TodoTag;
 					if (genericTagSentence.tag_content.match(typeRegex)) {
-						const todo_type = genericTagSentence.tag_content.match(typeRegex)[0]
+						const todo_type = genericTagSentence.tag_content.match(typeRegex)[0];
 						todoTag = {
 							todo_type,
 							todo_text: genericTagSentence.tag_content.substring(todo_type.length).trim()
