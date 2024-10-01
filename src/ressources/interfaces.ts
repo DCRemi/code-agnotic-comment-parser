@@ -58,7 +58,7 @@ export interface FolderTag {
 
 export interface CommentBlock {
 	blocNumber: number;
-	folder: string;
+	folder?: string;
 	stepDef?: string;
 	paramTags?: ParamTag[];
 	descriptionTags?: DescriptionTag[];

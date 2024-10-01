@@ -97,7 +97,7 @@ export const getTagDataFromBlock = function (
 export const extractTagSpecificData = function (fileName: string, genericGlobalComments: GenericGlobalComments) {
 	const fileComments: FileCommentExtract = { fileName, folderNames: [], commentBlocks: [] };
 	genericGlobalComments.genericCommentBlocks.forEach((genericCommentBlock) => {
-		const commentBlock: CommentBlock = { blocNumber: genericCommentBlock.blocNumber, folder: "none" };
+		const commentBlock: CommentBlock = { blocNumber: genericCommentBlock.blocNumber };
 		genericCommentBlock.genericTagSentences.forEach((genericTagSentence) => {
 			const typeRegex = /\{.*\}/;
 			switch (genericTagSentence.tag) {
