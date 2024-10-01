@@ -30,6 +30,11 @@ export interface DescriptionTag {
 	description: string;
 }
 
+export interface GenericTag {
+	content: string;
+}
+
+
 export interface SeeTag {
 	see_content: string;
 }
@@ -60,7 +65,7 @@ export interface CommentBlock {
 	seeTags?: SeeTag[];
 	exampleTags?: ExampleTag[];
 	todoTags?: TodoTag[];
-	genericTags?: GenericTagSentence[];
+	genericTags?: GenericTag[];
 }
 
 export interface FileCommentExtract {

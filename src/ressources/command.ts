@@ -5,6 +5,7 @@ import {
 	FileCommentExtract,
 	GenericCommentBlock,
 	GenericGlobalComments,
+	GenericTag,
 	GenericTagSentence,
 	ParamTag,
 	SeeTag,
@@ -78,8 +79,10 @@ export const getTagDataFromBlock = function (
 					? jsCommentBlock.substring(jsBlockTagsIndex[index].tagEnd, jsBlockTagsIndex[index + 1].tagStart).trim()
 					: jsCommentBlock.substring(jsBlockTagsIndex[index].tagEnd).trim()
 		};
+		// Clean content
 		// Remove wildcards from the contents, then remove space and line break at the end
-		genericTagSentence.tag_content = genericTagSentence.tag_content.replace(/ \*/gi, "").trim();
+		genericTagSentence.tag_content = genericTagSentence.tag_content.replace(/\*/gi, "").trim();
+		genericTagSentence.tag_content = genericTagSentence.tag_content.replace(/\n\s+/gi, "\n").trim();
 		genericTagSentences.push(genericTagSentence);
 	});
 	return genericTagSentences;
@@ -93,7 +96,7 @@ export const getTagDataFromBlock = function (
  */
 export const extractTagSpecificData = function (fileName: string, genericGlobalComments: GenericGlobalComments) {
 	const fileComments: FileCommentExtract = { fileName, folderNames: [], commentBlocks: [] };
-
+	console.log(genericGlobalComments);
 	genericGlobalComments.genericCommentBlocks.forEach((genericCommentBlock) => {
 		const commentBlock: CommentBlock = { blocNumber: genericCommentBlock.blocNumber, folder: "" };
 		genericCommentBlock.genericTagSentences.forEach((genericTagSentence) => {
@@ -109,22 +112,43 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 					break;
 				case "@param":
 					const param_type = genericTagSentence.tag_content.match(typeRegex)[0];
-					const param_name_desc = genericTagSentence.tag_content.substring(param_type.length).trim();
-					const param_name = param_name_desc.match(/\w+/)[0];
-					const paramTag: ParamTag = {
-						param_type,
-						param_name,
-						param_desc: param_name_desc.substring(param_name.length).trim()
-					};
+					let paramTag: ParamTag;
+					if (param_type) {
+						const param_name_desc = genericTagSentence.tag_content.substring(param_type.length).trim();
+						const param_name = param_name_desc.match(/\w+/)[0];
+						paramTag = {
+							param_type,
+							param_name,
+							param_desc: param_name_desc.substring(param_name.length).trim()
+						};
+					} else {
+						paramTag = {
+							param_type: "none",
+							param_name: "none",
+							param_desc: genericTagSentence.tag_content
+						};
+						console.error(
+							"error : the param tag config is missing missing {param_type} param_name description (see documentation)"
+						);
+					}
 					// if the paramTags array doesn't exist, can't use push but need to initialize it
 					commentBlock.paramTags ? commentBlock.paramTags.push(paramTag) : (commentBlock.paramTags = [paramTag]);
 					break;
 				case "@todo":
 					const todo_type = genericTagSentence.tag_content.match(typeRegex)[0];
-					const todoTag: TodoTag = {
-						todo_type,
-						todo_text: genericTagSentence.tag_content.substring(todo_type.length).trim()
-					};
+					let todoTag: TodoTag;
+					if (todo_type) {
+						todoTag = {
+							todo_type,
+							todo_text: genericTagSentence.tag_content.substring(todo_type.length).trim()
+						};
+					} else {
+						todoTag = {
+							todo_type: "none",
+							todo_text: genericTagSentence.tag_content
+						};
+						console.error("error : the todo tag config is missing missing {todo_type} description (see documentation)");
+					}
 					// if the todoTags array doesn't exist, can't use push but need to initialize it
 					commentBlock.todoTags ? commentBlock.todoTags.push(todoTag) : (commentBlock.todoTags = [todoTag]);
 					break;
@@ -136,6 +160,7 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 					commentBlock.descriptionTags
 						? commentBlock.descriptionTags.push(descriptionTag)
 						: (commentBlock.descriptionTags = [descriptionTag]);
+					break;
 				case "@see":
 					const seeTag: SeeTag = {
 						see_content: genericTagSentence.tag_content
@@ -153,6 +178,13 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 						: (commentBlock.exampleTags = [exampleTag]);
 					break;
 				default:
+					const genericTag: GenericTag = {
+						content: genericTagSentence.tag_content
+					};
+					// if the descriptionTags array doesn't exist, can't use push but need to initialize it
+					commentBlock.genericTags
+						? commentBlock.genericTags.push(genericTag)
+						: (commentBlock.genericTags = [genericTag]);
 					break;
 			}
 		});
