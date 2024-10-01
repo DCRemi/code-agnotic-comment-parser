@@ -91,16 +91,13 @@ export const getTagDataFromBlock = function (
  * @param {GenericGlobalComments} genericGlobalComments array of tags extracted
  * @returns json structured with all the known tags and their parameter to be used as documentation
  */
-export const extractTagSpecificData = function (
-	fileName: string,
-	genericGlobalComments: GenericGlobalComments
-): FileCommentExtract {
+export const extractTagSpecificData = function (fileName: string, genericGlobalComments: GenericGlobalComments) {
 	const fileComments: FileCommentExtract = { fileName, folderNames: [], commentBlocks: [] };
+
 	genericGlobalComments.genericCommentBlocks.forEach((genericCommentBlock) => {
-		let commentBlock: CommentBlock = { blocNumber: genericCommentBlock.blocNumber, folder: "" };
+		const commentBlock: CommentBlock = { blocNumber: genericCommentBlock.blocNumber, folder: "" };
 		genericCommentBlock.genericTagSentences.forEach((genericTagSentence) => {
 			const typeRegex = /\{.*\}/;
-
 			switch (genericTagSentence.tag) {
 				case "@folderName":
 					fileComments.folderNames.push(genericTagSentence.tag_content.trim());
@@ -119,7 +116,8 @@ export const extractTagSpecificData = function (
 						param_name,
 						param_desc: param_name_desc.substring(param_name.length).trim()
 					};
-					commentBlock.paramTags.push(paramTag);
+					// if the paramTags array doesn't exist, can't use push but need to initialize it
+					commentBlock.paramTags ? commentBlock.paramTags.push(paramTag) : (commentBlock.paramTags = [paramTag]);
 					break;
 				case "@todo":
 					const todo_type = genericTagSentence.tag_content.match(typeRegex)[0];
@@ -127,26 +125,33 @@ export const extractTagSpecificData = function (
 						todo_type,
 						todo_text: genericTagSentence.tag_content.substring(todo_type.length).trim()
 					};
-					commentBlock.todoTags.push(todoTag);
+					// if the todoTags array doesn't exist, can't use push but need to initialize it
+					commentBlock.todoTags ? commentBlock.todoTags.push(todoTag) : (commentBlock.todoTags = [todoTag]);
 					break;
 				case "@description":
 					const descriptionTag: DescriptionTag = {
 						description: genericTagSentence.tag_content
 					};
-					commentBlock.descriptionTags.push(descriptionTag);
+					// if the descriptionTags array doesn't exist, can't use push but need to initialize it
+					commentBlock.descriptionTags
+						? commentBlock.descriptionTags.push(descriptionTag)
+						: (commentBlock.descriptionTags = [descriptionTag]);
 				case "@see":
 					const seeTag: SeeTag = {
 						see_content: genericTagSentence.tag_content
 					};
-					commentBlock.seeTags.push(seeTag);
+					// if the seeTags array doesn't exist, can't use push but need to initialize it
+					commentBlock.seeTags ? commentBlock.seeTags.push(seeTag) : (commentBlock.seeTags = [seeTag]);
 					break;
 				case "@example":
 					const exampleTag: ExampleTag = {
 						example_content: genericTagSentence.tag_content
 					};
-					commentBlock.exampleTags.push(exampleTag);
+					// if the exampleTag array doesn't exist, can't use push but need to initialize it
+					commentBlock.exampleTags
+						? commentBlock.exampleTags.push(exampleTag)
+						: (commentBlock.exampleTags = [exampleTag]);
 					break;
-
 				default:
 					break;
 			}
