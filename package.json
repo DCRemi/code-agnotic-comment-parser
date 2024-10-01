@@ -4,8 +4,8 @@
 	"description": "manual comment parser",
 	"main": "index.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"format": "prettier -w ."
+		"format": "prettier -w .",
+		"extractComment" : "npx ts-node ./src/extractJsComment.ts"
 	},
 	"author": "",
 	"license": "ISC",
