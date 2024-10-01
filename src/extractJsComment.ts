@@ -9,10 +9,10 @@ import {
 import { GenericCommentBlock, GenericGlobalComments } from "./ressources/interfaces";
 const fs = require("fs");
 
-const folderPath = "input";
+const folderPath = "input/common";
 fs.readdir(folderPath, (err, files) => {
 	files.forEach((fileName) => {
-		const inputFilePath = `./input/${fileName}`;
+		const inputFilePath = `./${folderPath}/${fileName}`;
 		const intermediateOutputFilePath = `./output/intermediate/${fileName}Intermediate`;
 		const finalOutputFilePath = `./output/${fileName}Output`;
 
