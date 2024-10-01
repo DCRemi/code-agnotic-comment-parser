@@ -12,8 +12,8 @@ const fs = require("fs");
 // const inputFilePath = "./sampleData/test.js"
 const inputFileName = "contextSetup.ts";
 const inputFilePath = `./input/${inputFileName}`;
-const outputFilePath = "./output/jsCommentExtractedOutput";
-const finalOutputFilePath = `./output/finalOutput`;
+const intermediateOutputFilePath = "./output/jsCommentExtractedOutput";
+const finalOutputFilePath = `./output/${inputFileName}Output`;
 
 // #region run
 /** STEP 1 : Get file content */
@@ -41,7 +41,7 @@ jsCommentsBlocksCleaned.forEach((element, index) => {
 });
 
 /** STEP 5 : Write intermediary json to file */
-JSONToFile(genericGlobalComments, outputFilePath);
+JSONToFile(genericGlobalComments, intermediateOutputFilePath);
 
 /** STEP 6 :  extract tag specific data */
 const finalJson = extractTagSpecificData(inputFileName, genericGlobalComments);
