@@ -95,10 +95,9 @@ export const getTagDataFromBlock = function (
  * @returns json structured with all the known tags and their parameter to be used as documentation
  */
 export const extractTagSpecificData = function (fileName: string, genericGlobalComments: GenericGlobalComments) {
-	const fileComments: FileCommentExtract = { fileName, folderNames: [], commentBlocks: [] };
-	console.log(genericGlobalComments);
+	const fileComments: FileCommentExtract = { fileName, folderNames: [], commentBlocks: [] };	
 	genericGlobalComments.genericCommentBlocks.forEach((genericCommentBlock) => {
-		const commentBlock: CommentBlock = { blocNumber: genericCommentBlock.blocNumber, folder: "" };
+		const commentBlock: CommentBlock = { blocNumber: genericCommentBlock.blocNumber, folder: "none" };
 		genericCommentBlock.genericTagSentences.forEach((genericTagSentence) => {
 			const typeRegex = /\{.*\}/;
 			switch (genericTagSentence.tag) {
@@ -111,9 +110,9 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 					commentBlock.folder = genericTagSentence.tag_content.trim();
 					break;
 				case "@param":
-					const param_type = genericTagSentence.tag_content.match(typeRegex)[0];
 					let paramTag: ParamTag;
-					if (param_type) {
+					if (genericTagSentence.tag_content.match(typeRegex)) {
+						const param_type = genericTagSentence.tag_content.match(typeRegex)[0];
 						const param_name_desc = genericTagSentence.tag_content.substring(param_type.length).trim();
 						const param_name = param_name_desc.match(/\w+/)[0];
 						paramTag = {
@@ -135,9 +134,9 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 					commentBlock.paramTags ? commentBlock.paramTags.push(paramTag) : (commentBlock.paramTags = [paramTag]);
 					break;
 				case "@todo":
-					const todo_type = genericTagSentence.tag_content.match(typeRegex)[0];
 					let todoTag: TodoTag;
-					if (todo_type) {
+					if (genericTagSentence.tag_content.match(typeRegex)) {
+						const todo_type = genericTagSentence.tag_content.match(typeRegex)[0]
 						todoTag = {
 							todo_type,
 							todo_text: genericTagSentence.tag_content.substring(todo_type.length).trim()
@@ -179,6 +178,7 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 					break;
 				default:
 					const genericTag: GenericTag = {
+						tag: genericTagSentence.tag,
 						content: genericTagSentence.tag_content
 					};
 					// if the descriptionTags array doesn't exist, can't use push but need to initialize it
