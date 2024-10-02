@@ -45,31 +45,44 @@ In that way it is easy to follow change made on the code and to update the comme
 
 ## Blocks
 There is 2 types of blocks 
-* Folder blocks : use to define the folder that will belong to the file 
-* Step definition blocks : use to define the documentation that describe a step definition 
+* Folder blocks : use to define the folder that will belong to the file (contains folder name tag)
+* Step definition blocks : use to define the documentation that describe a step definition (contains stepdef tag)
 
 
 ## Tags
 ## Tags type
 ### Simple tag
-These tag only necessite 
+These tag only necessite to put the tag name followed by text 
+ex : description / folder name 
 
-
+### Complexe tag
+These tag necessite to complete the tag with some variable after it
+ex : param / todo
+If the variable are not correctly set an error will appear on the console. However if the param is not set it will take the value none and all the text will go in the content.
 
 # Tags
 ## Tags
 ### Folder tags
 @folderName (Simple tag)
 > Create a folder for the file
+> @folderName name of the folder 
 
 @memberof (Simple tag)
 > Add the comment block to the folder 
+> @memberof name of an existing folder in the file
+\* if the folder name doesn't exist it will be treated as a generic tag 
 
 ### Code tags
 @stepdef (Simple tag)
-> Give 
+> will be used as a title of the comment block
+> usually it is a copy of the step definition text
 
-param
+@param (complexe tag)
+> will be used to describe the parameter used in the step definition 
+> It is composed of 2 parameters :
+param type : after the tag and between {}
+param name : 1st word after the param type
+> example : @param {string} name it will be used to pass the name of the user to ...
 
 
 ### Description tags
@@ -80,6 +93,8 @@ see (Simple tag)
 todo 
 
 
+#Example : 
+/code
 
 
 
