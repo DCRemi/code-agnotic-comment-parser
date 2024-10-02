@@ -43,7 +43,7 @@ In each block tags are added to specify the type of content for the documentatio
 \* as this "tool" doesn't take into account the code itself, the comment blocks can be written where ever you want. However it is a good practice to put for each step definition the block above.
 In that way it is easy to follow change made on the code and to update the comment accordingly.
 
-## II.2. Blocks
+### II.2. Blocks
 There is 2 types of blocks 
 * Folder blocks : use to define the folder that will belong to the file (contains folder name tag)
 * Step definition blocks : use to define the documentation that describe a step definition (contains stepdef tag)
@@ -63,36 +63,64 @@ If the variable are not correctly set an error will appear on the console. Howev
 ### III.1. Folder tags
 @folderName (Simple tag)
 > Create a folder for the file
+> 
 > @folderName name of the folder 
 
 @memberof (Simple tag)
-> Add the comment block to the folder 
+> Add the comment block to the folder
+> 
 > @memberof name of an existing folder in the file
 \* if the folder name doesn't exist it will be treated as a generic tag 
 
 ### III.2. Code tags
 @stepdef (Simple tag)
-> will be used as a title of the comment block
-> usually it is a copy of the step definition text
+> will be used as a title of the comment block. Usually it is a copy of the step definition text
+> 
+> @stepdef The user clicks on ... 
 
 @param (complexe tag)
 > will be used to describe the parameter used in the step definition 
+>
 > It is composed of 2 parameters :
-param type : after the tag and between {}
-param name : 1st word after the param type
+
+* param type : after the tag and between {}
+* param name : 1st word after the param type
+
 > example : @param {string} name it will be used to pass the name of the user to ...
 
 
 ### III.3. Description tags
-descr (Simple tag)
-see (Simple tag)
+@description (Simple tag)
+> Use to add a description to explain more in details the step definition
+> 
+> @description this step def is used to make the user clicks ...
+
+@see (Simple tag)
+> Use to add a link to a docuementation or website
+> 
+> not working now
 
 ### III.4. Other tags
-todo 
+@todo 
+> will be used to point some improvement or other task that can be made on the code / the doc ...
+>
+> It is composed with 1 parameter :
+
+* todo type : after the tag and between {}
+
+  
+> example : @todo {CODE} Factorize ...
+>
+> example : @todo {DOC} List the value that can be use in this param
+
+### III.5. Generic tag 
+All tag that are not recognized by the "tool" will be marked as generic tag.
+They will be displayed with the name of the tag and the text as content
 
 
 # IV. Example : 
 /code
+
 
 
 
