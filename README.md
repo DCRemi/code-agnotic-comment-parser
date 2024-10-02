@@ -26,7 +26,7 @@ In resume it is a really simplify jsdoc that doesn't care about your code but on
 It could even be used for all language or type of document
 
 
-# Code folders
+# I. Code folders
 * Input will contain the files to go accross to create the documentation
 * Output will contains for each file the comment tags extract.
 * src/ressources
@@ -34,8 +34,8 @@ It could even be used for all language or type of document
   * command to extract and parse the data
 * extractJsComments, main code
 
-# How it works
-## Global structure
+# II. How it works
+### II.1. Global structure
 This works wit comment blocks > Each comment blocks will produce a documentation block.
 A comment block start with /** and end with */ (like jsdoc comments).
 In each block tags are added to specify the type of content for the documentation.
@@ -43,26 +43,24 @@ In each block tags are added to specify the type of content for the documentatio
 \* as this "tool" doesn't take into account the code itself, the comment blocks can be written where ever you want. However it is a good practice to put for each step definition the block above.
 In that way it is easy to follow change made on the code and to update the comment accordingly.
 
-## Blocks
+## II.2. Blocks
 There is 2 types of blocks 
 * Folder blocks : use to define the folder that will belong to the file (contains folder name tag)
 * Step definition blocks : use to define the documentation that describe a step definition (contains stepdef tag)
 
 
-## Tags
-## Tags type
-### Simple tag
+### II.3. Tags type
+#### Simple tag
 These tag only necessite to put the tag name followed by text 
 ex : description / folder name 
 
-### Complexe tag
+#### Complexe tag
 These tag necessite to complete the tag with some variable after it
 ex : param / todo
 If the variable are not correctly set an error will appear on the console. However if the param is not set it will take the value none and all the text will go in the content.
 
-# Tags
-## Tags
-### Folder tags
+# III. Tags
+### III.1. Folder tags
 @folderName (Simple tag)
 > Create a folder for the file
 > @folderName name of the folder 
@@ -72,7 +70,7 @@ If the variable are not correctly set an error will appear on the console. Howev
 > @memberof name of an existing folder in the file
 \* if the folder name doesn't exist it will be treated as a generic tag 
 
-### Code tags
+### III.2. Code tags
 @stepdef (Simple tag)
 > will be used as a title of the comment block
 > usually it is a copy of the step definition text
@@ -85,15 +83,15 @@ param name : 1st word after the param type
 > example : @param {string} name it will be used to pass the name of the user to ...
 
 
-### Description tags
+### III.3. Description tags
 descr (Simple tag)
 see (Simple tag)
 
-### Other tags
+### III.4. Other tags
 todo 
 
 
-#Example : 
+# IV. Example : 
 /code
 
 
