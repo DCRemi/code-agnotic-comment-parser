@@ -61,21 +61,21 @@ If the variable are not correctly set an error will appear on the console. Howev
 
 # III. Tags
 ### III.1. Folder tags
-@folderName (Simple tag)
+**@folderName** (Simple tag)
 > Create a folder for the file<br /> 
 > @folderName name of the folder 
 
-@memberof (Simple tag)
+**@memberof** (Simple tag)
 > Add the comment block to the folder <br /> 
 > @memberof name of an existing folder in the file
 \* if the folder name doesn't exist it will be treated as a generic tag 
 
 ### III.2. Code tags
-@stepdef (Simple tag)
+**@stepdef** (Simple tag)
 > will be used as a title of the comment block. Usually it is a copy of the step definition text<br /> 
 > @stepdef The user clicks on ... 
 
-@param (complexe tag)
+**@param** (Complexe tag)
 > will be used to describe the parameter used in the step definition <br />
 > It is composed of 2 parameters :
 
@@ -86,16 +86,16 @@ If the variable are not correctly set an error will appear on the console. Howev
 
 
 ### III.3. Description tags
-@description (Simple tag)
+**@description** (Simple tag)
 > Use to add a description to explain more in details the step definition<br /> 
 > @description this step def is used to make the user clicks ...
 
-@see (Simple tag)
+**@see** (Simple tag)
 > Use to add a link to a docuementation or website<br /> 
 > not working now
 
 ### III.4. Other tags
-@todo 
+**@todo** (Complexe tag)
 > will be used to point some improvement or other task that can be made on the code / the doc ...<br />
 > It is composed with 1 parameter :
 
@@ -105,6 +105,7 @@ If the variable are not correctly set an error will appear on the console. Howev
 > example : @todo {DOC} List the value that can be use in this param
 
 ### III.5. Generic tag 
+**@whatEver** (Simple tag)
 All tag that are not recognized by the "tool" will be marked as generic tag.<br />
 They will be displayed with the name of the tag and the text as content
 
