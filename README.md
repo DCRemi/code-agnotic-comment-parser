@@ -1,3 +1,4 @@
+
 # Introduction
 ### What it does  
 It takes files and extract specific structured comment to create a documentation.<br />
@@ -26,13 +27,20 @@ In resume it is a really simplify jsdoc that doesn't care about your code but on
 It could even be used for all language or type of document
 
 
-# I. Code folders
+# I. How to run 
+### I.1. Code folders
 * Input will contain the files to go accross to create the documentation
 * Output will contains for each file the comment tags extract.
 * src/ressources
   * interface for the object used
   * command to extract and parse the data
 * extractJsComments, main code
+
+### I.2. Run 
+Add in the input folder the files you want to treat.<br />
+Run the script extractComment <br/>
+`npm run extractComment`
+
 
 # II. How it works
 ### II.1. Global structure
