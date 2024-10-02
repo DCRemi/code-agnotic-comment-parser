@@ -26,7 +26,7 @@ In resume it is a really simplify jsdoc that doesn't care about your code but on
 It could even be used for all language or type of document
 
 
-# Folders
+# Code folders
 * Input will contain the files to go accross to create the documentation
 * Output will contains for each file the comment tags extract.
 * src/ressources
@@ -34,19 +34,47 @@ It could even be used for all language or type of document
   * command to extract and parse the data
 * extractJsComments, main code
 
+# How it works
+## Global structure
+This works wit comment blocks > Each comment blocks will produce a documentation block.
+A comment block start with /** and end with */ (like jsdoc comments).
+In each block tags are added to specify the type of content for the documentation.
+
+\* as this "tool" doesn't take into account the code itself, the comment blocks can be written where ever you want. However it is a good practice to put for each step definition the block above.
+In that way it is easy to follow change made on the code and to update the comment accordingly.
+
+## Blocks
+There is 2 types of blocks 
+* Folder blocks : use to define the folder that will belong to the file 
+* Step definition blocks : use to define the documentation that describe a step definition 
+
+
+## Tags
+## Tags type
+### Simple tag
+These tag only necessite 
+
+
+
 # Tags
-
+## Tags
 ### Folder tags
+@folderName (Simple tag)
+> Create a folder for the file
 
+@memberof (Simple tag)
+> Add the comment block to the folder 
 
 ### Code tags
-Step def
+@stepdef (Simple tag)
+> Give 
+
 param
 
 
 ### Description tags
-descr
-see
+descr (Simple tag)
+see (Simple tag)
 
 ### Other tags
 todo 
