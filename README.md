@@ -105,7 +105,7 @@ If the variable are not correctly set an error will appear on the console. Howev
 > example : @todo {DOC} List the value that can be use in this param
 
 ### III.5. Generic tag 
-**@whatEver** (Simple tag)
+**@whatEver** (Simple tag)<br />
 All tag that are not recognized by the "tool" will be marked as generic tag.<br />
 They will be displayed with the name of the tag and the text as content
 
