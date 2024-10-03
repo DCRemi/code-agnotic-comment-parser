@@ -14,7 +14,7 @@ const fs = require("fs");
 const folderPath = "input";
 const filesPaths: string[] = [];
 
-console.log(getAllFilePathFromDir(folderPath, filesPaths));
+getAllFilePathFromDir(folderPath, filesPaths);
 
 filesPaths.forEach((filePath) => {
 	const fileName = filePath.split(/input\/(.*)\.ts/)[1];
