@@ -13,6 +13,7 @@ import {
 	TodoTag
 } from "./interfaces";
 const fs = require("fs");
+var path = require("path");
 
 /**
  * Extract from a file the jsComment starting /** and ending with wildcard/
@@ -87,7 +88,6 @@ export const getTagDataFromBlock = function (
 	});
 	return genericTagSentences;
 };
-
 /**
  * construct from a Generic global comment a structured json with different tags and their parameters
  * @param {string} fileName name of the file the comments comes from
@@ -199,3 +199,14 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
  * @param filename
  */
 export const JSONToFile = (obj, filename) => fs.writeFileSync(`${filename}.json`, JSON.stringify(obj, null, 2));
+
+export function getAllFilePathFromDir(folderPath: string, filesPaths?: string[]): string[] {
+	fs.readdirSync(folderPath).forEach((element) => {
+		if (fs.statSync(path.join(folderPath, element)).isDirectory()) {
+			getAllFilePathFromDir(path.join(folderPath, element), filesPaths);
+		} else {
+			filesPaths.push(path.join(folderPath, element));
+		}
+	});
+	return filesPaths;
+}
