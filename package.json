@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"format": "prettier -w .",
-		"extractComment" : "npx ts-node ./src/extractJsComment.ts"
+		"extractComment": "npx ts-node ./src/extractJsComment.ts"
 	},
 	"author": "",
 	"license": "ISC",
