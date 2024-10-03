@@ -145,7 +145,7 @@ They will be displayed with the name of the tag and the text as content
 # IV. Example :
 ```
 /**
- * @stepDef the user HCP clicks on the {element}
+ * @stepDef the user clicks on the {element}
  * @memberof 1_generic_Click
  * @description Clicks on an element + verify that it is te only one in the page
  * @param {string} element - element's name
