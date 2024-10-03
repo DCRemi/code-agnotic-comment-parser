@@ -10,6 +10,7 @@
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {
+		"node-pandoc": "^0.3.0",
 		"prettier": "^2.8.4"
 	},
 	"dependencies": {
