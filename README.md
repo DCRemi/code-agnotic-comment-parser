@@ -145,6 +145,11 @@ They will be displayed with the name of the tag and the text as content
 # IV. Example :
 ```
 /**
+ * @folderName 1_generic_Click
+ * @description These steps are used to do basic click action
+ */
+
+/**
  * @stepDef the user clicks on the {element}
  * @memberof 1_generic_Click
  * @description Clicks on an element + verify that it is te only one in the page
