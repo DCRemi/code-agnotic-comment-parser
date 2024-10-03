@@ -1,0 +1,364 @@
+/* Styles for documentation content. Overrides the base JSDoc theme. */
+
+:root {
+	--spacing-toggle-box-spacing: 2.4rem;
+	--size-toggle-box-icon: 16px;
+	--spacing-toggle-box-icon-margin: 0.8rem;
+}
+
+.toggle-all {
+	cursor: pointer;
+	float: right;
+	margin-top: 0.5rem;
+}
+
+.description {
+	margin-bottom: 2em;
+	margin-top: 0;
+}
+
+/* For class and namespace pages */
+.class-description,
+/* For module pages */
+.container-overview > .description {
+	margin-bottom: 1em;
+	margin-top: 1em;
+}
+
+.class-description:empty {
+	margin: 0;
+}
+
+.page-title__variation {
+	display: none;
+}
+
+.signature-attributes {
+	font-size: 75%;
+	font-style: italic;
+}
+
+.page-title__attribs {
+	color: var(--color-placeholder);
+}
+
+.page-title__attribs a {
+	color: var(--color-placeholder) !important; /* stylelint-disable-line declaration-no-important */
+	text-decoration: none;
+}
+
+.page-title__name {
+	word-wrap: break-word;
+}
+
+.clear {
+	clear: both;
+}
+
+.important {
+	color: var(--color-destructive);
+	font-weight: var(--font-weight-bold);
+}
+
+.yes-def {
+	text-indent: -1000px;
+}
+
+.type-signature {
+	color: var(--color-placeholder);
+}
+
+/* Style attributes (e.g. 'static', 'protected') to look like chips. */
+.type-signature__attrib {
+	background-color: var(--background-color-transparent);
+	color: var(--color-subtle);
+	display: inline-flex;
+	max-width: var(--size-3200);
+	margin-left: var(--spacing-50);
+	font-size: var(--font-size-x-small);
+	border: var(--border-subtle);
+	border-radius: var(--border-radius-pill);
+	padding: 0 var(--spacing-50);
+	line-height: var(--line-height-medium);
+}
+
+/* Make static, protected, and private a bit bolder. */
+.type-signature__attrib--static,
+.type-signature__attrib--protected,
+.type-signature__attrib--private {
+	background-color: var(--background-color-notice-subtle);
+	border-color: var(--border-color-notice);
+}
+
+.details {
+	margin-top: 14px;
+	border-left: var(--border-width-thick) var(--border-style-base) var(--border-color-light);
+}
+
+.details dt {
+	padding-left: 10px;
+	padding-top: 6px;
+}
+
+.details dd {
+	/* Add some space between the border-left and the dd text. */
+	margin-left: 10px;
+}
+
+.details ul {
+	list-style: none none;
+	margin: 0;
+}
+
+.details li {
+	padding-top: 6px;
+	word-wrap: break-word;
+}
+
+.details pre.prettyprint {
+	margin: 0;
+}
+
+.details .object-value {
+	padding-top: 0;
+}
+
+.sourcefile {
+	width: 80%;
+	border: var(--border-width-base) var(--border-style-base) var(--border-color-light);
+	overflow: auto;
+}
+
+.prettyprint.sourcefile {
+	width: inherit;
+}
+
+.sourcefile code {
+	color: var(--color-subtle);
+	display: block;
+	margin: 0;
+	padding: 4px 12px;
+	font-size: 100%;
+	line-height: 18px;
+}
+
+.prettyprint code span.line {
+	display: inline-block;
+}
+
+.prettyprint.linenums {
+	padding-left: 70px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.prettyprint.linenums ol {
+	padding-left: 0;
+}
+
+.prettyprint.linenums li {
+	border-left: 3px var(--border-style-base) var(--border-color-light);
+	margin: 0;
+}
+
+.prettyprint.linenums li * {
+	-webkit-user-select: text;
+	-moz-user-select: text;
+	-ms-user-select: text;
+	user-select: text;
+}
+
+.prettyprint.linenums li.selected,
+.prettyprint.linenums li.selected * {
+	background-color: #ffffe0; /* CSS `lightyellow` */
+}
+
+/* Add horizontal scroll for tables. */
+.props-wrapper,
+.params-wrapper {
+	/* Ensure the div isn't wider than the table. */
+	display: inline-block;
+	max-width: 100%;
+	overflow-x: auto;
+	margin: 1em 0;
+	border: var(--border-base);
+	border-collapse: collapse;
+}
+
+.props,
+.params {
+	background-color: var(--background-color-interactive-subtle);
+	color: var(--color-base);
+	border-collapse: collapse;
+}
+
+.props > * > tr > th,
+.props > * > tr > td,
+.params > * > tr > th,
+.params > * > tr > td {
+	vertical-align: top;
+	border-right: var(--border-base);
+	border-bottom: var(--border-base);
+	padding: 0.2em 0.4em;
+}
+
+.props > * > tr > th,
+.params > * > tr > th {
+	background-color: var(--background-color-interactive);
+	text-align: center;
+}
+
+.props > thead > tr > th,
+.params > thead > tr > th {
+	text-align: left;
+}
+
+.props > * > tr:last-child > th,
+.props > * > tr:last-child > td,
+.params > * > tr:last-child > th,
+.params > * > tr:last-child > td {
+	border-bottom: 0;
+}
+
+.props > * > tr > th:last-child,
+.props > * > tr > td:last-child,
+.params > * > tr > th:last-child,
+.params > * > tr > td:last-child {
+	border-right: 0;
+}
+
+.params .name,
+.props .name,
+.name code {
+	color: var(--color-subtle);
+}
+
+.name a {
+	color: var(--color-placeholder);
+}
+
+.name__function-name {
+	/* Names may be long, e.g. mw.widgets.ComplexnamespaceInputWidget. */
+	word-break: break-all;
+}
+
+.params td.description > p:first-child,
+.props td.description > p:first-child {
+	margin-top: 0;
+	padding-top: 0;
+}
+
+.params td.description > p:last-child,
+.props td.description > p:last-child {
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.params h5,
+.props h5 {
+	margin-top: 0;
+	/* Vertically align headings in tables with other cells by reinstating body `line-height`. */
+	line-height: 1.6;
+}
+
+.disabled {
+	color: var(--color-disabled);
+}
+
+/* Details element used for accordion sections. */
+/* Add divider as a border of the member element, since it needs to come after
+the description that displays when the details element is closed. */
+.member--has-toggle-box {
+	padding-bottom: var(--spacing-toggle-box-spacing);
+	border-bottom: var(--border-subtle);
+}
+
+/* Not all member elements have toggle-boxes, and not all toggle-boxes are part of member elements.
+We need this margin top on both for consistency. */
+.member:not(.member--has-toggle-box) {
+	margin-top: var(--spacing-toggle-box-spacing);
+}
+
+/* The details element. */
+.toggle-box {
+	margin-top: var(--spacing-toggle-box-spacing);
+}
+
+/* Remove the browser-specific marker from the summary element. */
+.toggle-box summary::marker,
+.toggle-box summary::-webkit-details-marker {
+	display: none;
+}
+
+/* Support: Firefox: Remove the browser-specific marker. */
+.toggle-box > summary {
+	list-style-type: none;
+}
+
+.toggle-box summary {
+	display: flex;
+}
+
+.toggle-box summary:hover {
+	cursor: var(--cursor-base--hover);
+}
+
+/* Add a custom icon. */
+.toggle-box summary::before {
+	display: inline-block;
+	flex-shrink: 0;
+	content: "";
+	background-image: url(./expand.svg);
+	background-repeat: no-repeat;
+	background-size: contain;
+	width: var(--size-toggle-box-icon);
+	height: var(--size-toggle-box-icon);
+	margin-right: var(--spacing-toggle-box-icon-margin);
+}
+
+.toggle-box[open] summary::before {
+	background-image: url(./collapse.svg);
+}
+
+.toggle-box .name {
+	/* Remove margin on the heading element. */
+	margin: 0;
+}
+
+/* Standalone descrioption that appears when the details element is closed. */
+.summary {
+	/* keep same margin-top as description */
+	margin-top: 0.8rem;
+	/* lesser margin-bottom than description to keep page compact */
+	margin-bottom: 0;
+}
+
+/* Align the details content (and the standalone description that appears
+when the box is closed) with the summary label. */
+.toggle-box .long,
+.toggle-box ~ .summary {
+	margin-left: calc(var(--size-toggle-box-icon) + var(--spacing-toggle-box-icon-margin));
+}
+
+/* Hide standalone description when the details element is open. */
+.toggle-box[open] ~ .summary {
+	display: none;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+	.details dt {
+		width: 120px;
+		float: left;
+	}
+
+	.details dd {
+		margin-left: 90px;
+	}
+
+	.details li {
+		margin-left: 30px;
+	}
+}
