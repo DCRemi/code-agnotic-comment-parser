@@ -143,6 +143,7 @@ All tag that are not recognized by the "tool" will be marked as generic tag.<br 
 They will be displayed with the name of the tag and the text as content
 
 # IV. Example :
+
 ```
 /**
  * @folderName 1_generic_Click
@@ -169,7 +170,7 @@ When("the user clicks on the {string}", (element: string) => {
  * @see README.md (see home page)
  * @example the user clicks on the "user list table row" in a random position
  * Will open a random user from the list
- * @todo {SIMPLE} Rephrase to align all random steps (click children ...) 
+ * @todo {SIMPLE} Rephrase to align all random steps (click children ...)
  */
 When("the user clicks on the {string} in a random position", (element: string) => {
 	cy.dataCy(camelize(element)).yieldRandom().click();
