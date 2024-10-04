@@ -1,33 +1,24 @@
 <!DOCTYPE html>
-<!--[if lte IE 8]><html lang="en" class="js-off lte-ie8"><![endif]-->
-<!--[if IE 9]>    <html lang="en" class="js-off ie9"><![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!-->
 <html lang="en" class="js-off">
-	<!--<![endif]-->
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
 		<title>Home, , JSDoc</title>
-		<script>
-			document.documentElement.className = document.documentElement.className.replace(/\bjs-off\b/, "js-on"); // no BEM notation thx to IE
-		</script>
-		<!--[if lt IE 9]>
-			<script>
-				window.html5 = { shivCSS: false };
-			</script>
-			<script src="wmf/js/vendor/ie/html5shiv-3.7.3.min.js"></script>
-			<script src="wmf/js/vendor/ie/respond-1.4.2.min.js"></script>
-		<![endif]-->
+		<!-- Link  -->
 		<link rel="stylesheet" href="styles/jsdoc-wmf-theme.css" />
-		<script src="scripts/lib/prettify/prettify.js"></script>
-		<script src="scripts/lib/prettify/lang-css.js"></script>
 		<link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css" />
 		<link type="text/css" rel="stylesheet" href="styles/copy-code.css" />
-		<link rel="preload" href="wmf/fonts/Charter_regular.woff2" as="font" type="font/woff2" crossorigin="" />
-		<link rel="preload" href="wmf/fonts/Lato_regular.woff2" as="font" type="font/woff2" crossorigin="" />
+		<!-- <link rel="preload" href="wmf/fonts/Charter_regular.woff2" as="font" type="font/woff2" crossorigin="" /> -->
+		<!-- <link rel="preload" href="wmf/fonts/Lato_regular.woff2" as="font" type="font/woff2" crossorigin="" /> -->
 		<link rel="preload" href="styles/collapse.svg" as="image" />
+
+		<!-- Scripts -->
+		<script type="module" src="https://cdn.jsdelivr.net/npm/zero-md@3?register"></script>
+
+		<!-- <script src="scripts/lib/prettify/prettify.js"></script>
+		<script src="scripts/lib/prettify/lang-css.js"></script>
 		<script src="scripts/fonts-loader.js" async=""></script>
-		<script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@1/src/zero-md.min.js"></script>
+		<script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@1/src/zero-md.min.js"></script> -->
 	</head>
 
 	<body class="page--home">
@@ -56,9 +47,10 @@
 						placeholder="Search"
 					/>
 				</div>
-				<script src="lunr-data.js"></script>
-				<script src="scripts/lib/lunr.js"></script>
-				<script src="scripts/lunrSearch.js"></script>
+				<!-- Scripts -->
+				<!-- <script src="lunr-data.js"></script> -->
+				<!-- <script src="scripts/lib/lunr.js"></script> -->
+				<!-- <script src="scripts/lunrSearch.js"></script> -->
 			</div>
 		</header>
 		<div class="page">
@@ -76,11 +68,13 @@
 				</div>
 				<div class="flex-col flex-col--end">
 					<main id="content" class="content" role="main">
-						<section>
-							<article>
-								<!-- README -->
-							</article>
-						</section>
+						<!-- README -->
+						<h1>
+							READ ME
+							<br />
+							<br />
+						</h1>
+						<zero-md src="input/README.md"></zero-md>
 					</main>
 				</div>
 			</div>
@@ -91,12 +85,13 @@
 			</div>
 		</footer>
 
-		<script src="scripts/redirect.js"></script>
+		<!-- Script  -->
+		<!-- <script src="scripts/redirect.js"></script>
 		<script>
 			prettyPrint();
 		</script>
 		<script src="scripts/linenumber.js"></script>
 		<script src="scripts/copy-code.js"></script>
-		<script src="scripts/open-member.js"></script>
+		<script src="scripts/open-member.js"></script> -->
 	</body>
 </html>

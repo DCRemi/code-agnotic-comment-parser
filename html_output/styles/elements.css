@@ -48,7 +48,8 @@ h1 {
 	border-bottom: var(--border-width-heading) var(--border-style-base) var(--border-color-light);
 	margin-top: 0;
 	padding-bottom: 2px;
-	font-size: 2.4rem;
+	font-size: 5rem;
+	font: bold;
 }
 
 h2 {

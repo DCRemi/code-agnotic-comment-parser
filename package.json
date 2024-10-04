@@ -5,12 +5,15 @@
 	"main": "index.js",
 	"scripts": {
 		"format": "prettier -w .",
-		"extractComment": "npx ts-node ./src/extractJsComment.ts"
+		"doc:generate": "run-s doc:*",
+		"doc:extract": "npx ts-node ./src/extractJsComment.ts",
+		"doc:ToHtml": "run-s docToHtml:*",
+		"docToHtml:copyInput": "cp -r ./input/* ./html_output/input/json",
+		"docToHtml:convertREADME": "node ./html_output/convertREADME.js"
 	},
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {
-		"node-pandoc": "^0.3.0",
 		"prettier": "^2.8.4"
 	},
 	"dependencies": {
