@@ -200,7 +200,17 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
  */
 export const JSONToFile = (obj, filename) => fs.writeFileSync(`${filename}.json`, JSON.stringify(obj, null, 2));
 
-export function getAllFilePathFromDir(folderPath: string, filesPaths?: string[]): string[] {
+/**
+ * Recursive command that go through a folder and all its sub-folder to list all files path
+ *
+ * @param {string} folderPath to go through
+ * @param {string[]} filesPaths this should be declared outside the call of this command to allows the recursivity
+ * @example const folderPath = "input";
+ * const filesPaths: string[] = [];
+ * getAllFilePathFromDir(folderPath, filesPaths);
+ * filesPaths.forEach((filePath) => {...}
+ */
+export function getAllFilePathFromDir(folderPath: string, filesPaths?: string[]) {
 	fs.readdirSync(folderPath).forEach((element) => {
 		if (fs.statSync(path.join(folderPath, element)).isDirectory()) {
 			getAllFilePathFromDir(path.join(folderPath, element), filesPaths);
@@ -208,5 +218,4 @@ export function getAllFilePathFromDir(folderPath: string, filesPaths?: string[])
 			filesPaths.push(path.join(folderPath, element));
 		}
 	});
-	return filesPaths;
 }
