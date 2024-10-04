@@ -5,15 +5,16 @@
 	"main": "index.js",
 	"scripts": {
 		"format": "prettier -w .",
-		"doc:generate": "run-s doc:*",
+		"generate:doc": "run-s doc:*",
 		"doc:extract": "npx ts-node ./src/extractJsComment.ts",
 		"doc:ToHtml": "run-s docToHtml:*",
-		"docToHtml:copyInput": "cp -r ./input/* ./html_output/input/json",
-		"docToHtml:convertREADME": "node ./html_output/convertREADME.js"
+		"predocToHtml:createHtmlStruct": "cp -r ./output/* ./html_output/input/json",
+		"docToHtml:createHtmlStruct": "node ./src/createHtmlStruct.ts"
 	},
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {
+		"npm-run-all": "^4.1.5",
 		"prettier": "^2.8.4"
 	},
 	"dependencies": {
