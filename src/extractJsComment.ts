@@ -18,7 +18,6 @@ getAllFilePathFromDir(folderPath, filesPaths);
 
 filesPaths.forEach((filePath) => {
 	const fileName = filePath.split(/input\/(.*)\.ts/)[1];
-	console.log("file name " + fileName);
 	const intermediateOutputFilePath = `./output/intermediate/${fileName}Intermediate`;
 	const finalOutputFilePath = `./output/${fileName}Output`;
 

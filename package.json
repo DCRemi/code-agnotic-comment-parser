@@ -8,8 +8,7 @@
 		"generate:doc": "run-s doc:*",
 		"doc:extract": "npx ts-node ./src/extractJsComment.ts",
 		"doc:ToHtml": "run-s docToHtml:*",
-		"predocToHtml:createHtmlStruct": "cp -r ./output/* ./html_output/input/json",
-		"docToHtml:createHtmlStruct": "node ./src/createHtmlStruct.ts"
+		"docToHtml:createHtmlStruct": "npx ts-node ./src/createHtmlStruct.ts"
 	},
 	"author": "",
 	"license": "ISC",
