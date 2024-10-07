@@ -3,5 +3,7 @@ node_modules
 package-lock.json
 output/
 html_output/input/json
+html_output/html_pages
 Archive
 input/*
+docs
