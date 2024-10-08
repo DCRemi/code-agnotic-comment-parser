@@ -239,12 +239,7 @@ export function getAllFilePathFromDir(folderPath: string, filesPaths?: string[])
  * this will create :
  * ./outputPath/test.html and ./outputPath/folder/file.html  and ./outputPath/folder2/test2.html
  */
-export function copyFilesStructToHtml(
-	filesPaths: string[],
-	sourcePath: string,
-	destinationPath: string,
-	template: string
-) {
+export function copyFilesStructToHtml(filesPaths: string[], sourcePath: string, destinationPath: string) {
 	filesPaths.forEach((filePath) => {
 		const fileName = path.basename(filePath).replace(path.extname(filePath), "");
 		const fileFolderPath = path.dirname(filePath);
@@ -255,6 +250,6 @@ export function copyFilesStructToHtml(
 		if (!fs.existsSync(destinationFolder)) {
 			fs.mkdirSync(destinationFolder);
 		}
-		HtmlToFile(template, destinationFile);
+		HtmlToFile("", destinationFile);
 	});
 }
