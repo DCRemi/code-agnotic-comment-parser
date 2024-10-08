@@ -1,0 +1,16 @@
+{
+  "commentBlocks": [
+    {
+      "blockName": "toto",
+      "blockDesc": "c'est toto"
+    },
+    {
+      "blockName": "tata",
+      "blockDesc": "c'est tata"
+    },
+    {
+      "blockName": "titi",
+      "blockDesc": "c'est titi"
+    }
+  ]
+}

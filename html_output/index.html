@@ -1,23 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-		<title>Folder page</title>
-		<!-- Link  -->
-		<link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css" />
-		<link type="text/css" rel="stylesheet" href="styles/copy-code.css" />
-		<!-- <link rel="preload" href="wmf/fonts/Charter_regular.woff2" as="font" type="font/woff2" crossorigin="" />
-        <link rel="preload" href="wmf/fonts/Lato_regular.woff2" as="font" type="font/woff2" crossorigin="" /> -->
-		<link rel="preload" href="styles/collapse.svg" as="image" />
-		<link rel="stylesheet" href="styles/jsdoc-wmf-theme.css" />
-		<!-- Scripts -->
-		<script>
-			document.documentElement.className = document.documentElement.className.replace(/\bjs-off\b/, "js-on"); // no BEM notation thx to IE
-		</script>
-		<script src="scripts/lib/prettify/prettify.js"></script>
-		<script src="scripts/lib/prettify/lang-css.js"></script>
-		<script src="scripts/fonts-loader.js" async=""></script>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Template</title>
+		<script src="scriptBlock.js" defer></script>
 	</head>
-	<body></body>
+	<body>
+		<section>
+			<div id="FileDesc">
+				<h1>var = File Name</h1>
+
+				<p>var = File desc</p>
+			</div>
+			<div id="Block">
+				<div id="BlockDesc">
+					<h2>var = Folder name</h2>
+					<p>var = Folder desc</p>
+				</div>
+				<div id="BlockStepDefs">
+					<div id="Block1">
+						<div id="BlockDef">
+							<h2>Step def name</h2>
+							<p>Step def desc</p>
+						</div>
+						<div id="BlockParam">
+							<p>Step def param</p>
+						</div>
+						<div id="BlockEx">
+							<p>Step def ex</p>
+						</div>
+						<div id="BlockTODO">
+							<p>Step def todo</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</body>
 </html>
