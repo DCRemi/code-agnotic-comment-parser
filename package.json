@@ -8,8 +8,8 @@
 		"generate:doc": "run-s doc:*",
 		"doc:extract": "npx ts-node ./src/extractJsComment.ts",
 		"doc:ToHtml": "run-s docToHtml:*",
-		"predocToHtml:createHtmlStruct": "cp -r ./output/* ./html_output/input/json",
-		"docToHtml:createHtmlStruct": "npx ts-node ./src/createHtmlStruct.ts"
+		"docToHtml:createHtmlStruct": "npx ts-node ./src/createHtmlStruct.ts",
+		"resetFolders": "rm -rf json_output/* html_output/html_pages/*"
 	},
 	"author": "",
 	"license": "ISC",

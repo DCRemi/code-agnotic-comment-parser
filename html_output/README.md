@@ -1,4 +1,5 @@
 # Introduction
+This is a code agnostic comment with tag parser.
 
 ### What it does
 
@@ -57,7 +58,8 @@ This works wit comment blocks > Each comment blocks will produce a documentation
 A comment block start with /\*_ and end with _/ (like jsdoc comments).<br />
 In each block tags are added to specify the type of content for the documentation.<br />
 
-\* as this "tool" doesn't take into account the code itself, the comment blocks can be written where ever you want. However it is a good practice to put for each step definition the block above.<br />
+\* as this "tool" doesn't take into account the code itself, the comment blocks can be written where ever you want. <br/>
+However it is a good practice to put for each step definition the block above.<br />
 In that way it is easy to follow change made on the code and to update the comment accordingly.
 
 ### II.2. Blocks
@@ -143,6 +145,36 @@ They will be displayed with the name of the tag and the text as content
 
 # IV. Example :
 
-/code
+```
+/**
+ * @folderName 1_generic_Click
+ * @description These steps are used to do basic click action
+ */
 
-todo
+/**
+ * @stepDef the user clicks on the {element}
+ * @memberof 1_generic_Click
+ * @description Clicks on an element + verify that it is te only one in the page
+ * @param {string} element - element's name
+ * @see README.md (see home page)
+ * @example the user clicks on the "user list add user button"
+ */
+When("the user clicks on the {string}", (element: string) => {
+	cy.dataCy(camelize(element)).click();
+});
+
+/**
+ * @stepDef the user clicks on the {element} in a random position
+ * @memberof 1_generic_Click
+ * @description Clicks on a random element of this type
+ * @param {string} element - element's name
+ * @see README.md (see home page)
+ * @example the user clicks on the "user list table row" in a random position
+ * Will open a random user from the list
+ * @todo {SIMPLE} Rephrase to align all random steps (click children ...)
+ */
+When("the user clicks on the {string} in a random position", (element: string) => {
+	cy.dataCy(camelize(element)).yieldRandom().click();
+});
+
+```
