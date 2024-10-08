@@ -1,10 +1,18 @@
-node_modules
+# classic ignore folders
 .vscode
+node_modules
 package-lock.json
-output/
-html_output/input/json
-html_output/html_pages
+
+#Specific 
 Archive
-input/*
 docs
-archive_styles
+
+# exclude data folders
+json_output/*
+html_output/html_pages/*
+input/*
+
+# exception to the rule
+!json_output/.gitkeep
+!html_output/html_pages/.gitkeep
+!input/.gitkeep
