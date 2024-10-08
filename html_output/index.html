@@ -1,97 +1,23 @@
 <!DOCTYPE html>
-<html lang="en" class="js-off">
+<html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-		<title>Home, , JSDoc</title>
+		<title>Folder page</title>
 		<!-- Link  -->
-		<link rel="stylesheet" href="styles/jsdoc-wmf-theme.css" />
 		<link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css" />
 		<link type="text/css" rel="stylesheet" href="styles/copy-code.css" />
-		<!-- <link rel="preload" href="wmf/fonts/Charter_regular.woff2" as="font" type="font/woff2" crossorigin="" /> -->
-		<!-- <link rel="preload" href="wmf/fonts/Lato_regular.woff2" as="font" type="font/woff2" crossorigin="" /> -->
+		<!-- <link rel="preload" href="wmf/fonts/Charter_regular.woff2" as="font" type="font/woff2" crossorigin="" />
+        <link rel="preload" href="wmf/fonts/Lato_regular.woff2" as="font" type="font/woff2" crossorigin="" /> -->
 		<link rel="preload" href="styles/collapse.svg" as="image" />
-
+		<link rel="stylesheet" href="styles/jsdoc-wmf-theme.css" />
 		<!-- Scripts -->
-		<script type="module" src="https://cdn.jsdelivr.net/npm/zero-md@3?register"></script>
-
-		<!-- <script src="scripts/lib/prettify/prettify.js"></script>
+		<script>
+			document.documentElement.className = document.documentElement.className.replace(/\bjs-off\b/, "js-on"); // no BEM notation thx to IE
+		</script>
+		<script src="scripts/lib/prettify/prettify.js"></script>
 		<script src="scripts/lib/prettify/lang-css.js"></script>
 		<script src="scripts/fonts-loader.js" async=""></script>
-		<script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@1/src/zero-md.min.js"></script> -->
 	</head>
-
-	<body class="page--home">
-		<header id="header" class="header" role="banner">
-			<div class="content-box">
-				<a href="#content" class="is-aural is-focusable">Jump to content</a>
-				<a href="#nav--main" class="is-aural is-focusable">Jump to navigation</a>
-				<div class="header__title">
-					<span class="site-title"
-						><a href="./"><span class="site-logo"></span></a
-					></span>
-					<label class="btn--nav-main" for="trigger--nav-main" aria-hidden="true" title="Show main menu">
-						<i></i> <span>Menu</span>
-					</label>
-				</div>
-				<div id="search-container" class="search-container">
-					<input
-						type="search"
-						id="lunr-search"
-						class="search-input"
-						role="combobox"
-						aria-autocomplete="list"
-						aria-controls="search-results"
-						aria-expanded="false"
-						aria-activedescendant="selected-search-result"
-						placeholder="Search"
-					/>
-				</div>
-				<!-- Scripts -->
-				<!-- <script src="lunr-data.js"></script> -->
-				<!-- <script src="scripts/lib/lunr.js"></script> -->
-				<!-- <script src="scripts/lunrSearch.js"></script> -->
-			</div>
-		</header>
-		<div class="page">
-			<div class="content-box flex-cols">
-				<div class="flex-col flex-col--start">
-					<input type="checkbox" id="trigger--nav-main" class="trigger--nav-main" />
-					<nav id="nav--main" class="nav nav--main" role="navigation">
-						<ol>
-							<li class="nav__item is-on"><a href="index.html">Home</a></li>
-							<li class="nav__item">
-								<a>Folder</a>
-							</li>
-						</ol>
-					</nav>
-				</div>
-				<div class="flex-col flex-col--end">
-					<main id="content" class="content" role="main">
-						<!-- README -->
-						<h1>
-							READ ME
-							<br />
-							<br />
-						</h1>
-						<zero-md src="input/README.md"></zero-md>
-					</main>
-				</div>
-			</div>
-		</div>
-		<footer id="footer" class="footer">
-			<div class="content-box">
-				<p>test</p>
-			</div>
-		</footer>
-
-		<!-- Script  -->
-		<!-- <script src="scripts/redirect.js"></script>
-		<script>
-			prettyPrint();
-		</script>
-		<script src="scripts/linenumber.js"></script>
-		<script src="scripts/copy-code.js"></script>
-		<script src="scripts/open-member.js"></script> -->
-	</body>
+	<body></body>
 </html>
