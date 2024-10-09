@@ -102,9 +102,10 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 	const fileComments: FileCommentExtract = { fileName, interactionTypes: [], commentBlocks: [] };
 
 	genericGlobalComments.genericCommentBlocks.forEach((genericCommentBlock) => {
-		//******** if it is an interactionTypes block >> not checking all tags /
+		// If it is an interactionTypes block >> not checking all tags
 		if (genericCommentBlock.genericTagSentences[0].tag == "@interactionTypes") {
 			let interactionType: InteractionType;
+			// if the tag contains a type into {type}
 			if (genericCommentBlock.genericTagSentences[0].tag_content.match(typeRegex)) {
 				const interactionTypeName = genericCommentBlock.genericTagSentences[0].tag_content.match(typeRegex)[0];
 				interactionType = {
@@ -113,7 +114,9 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 						.substring(interactionTypeName.length)
 						.trim()
 				};
-			} else {
+			}
+			// if the tag doesn't contain a type into it will put none
+			else {
 				interactionType = {
 					interactionTypeName: "none",
 					interactionTypeDesc: genericCommentBlock.genericTagSentences[0].tag_content
@@ -122,7 +125,7 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 			// if the todoTags array doesn't exist, can't use push but need to initialize it
 			fileComments.interactionTypes.push(interactionType);
 		}
-		//******** if it is an interactionTypes block check tags /
+		// If it is an interactionTypes block check tags /
 		else {
 			const commentBlock: CommentBlock = { blocNumber: genericCommentBlock.blocNumber, stepType: "Missing" };
 
@@ -138,6 +141,8 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 						break;
 					case "@param":
 						let paramTag: ParamTag;
+						// if the tag contains a type into {type}
+
 						if (genericTagSentence.tag_content.match(typeRegex)) {
 							const param_type = genericTagSentence.tag_content.match(typeRegex)[0];
 							const param_name_desc = genericTagSentence.tag_content.substring(param_type.length).trim();
@@ -147,7 +152,9 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 								param_name,
 								param_desc: param_name_desc.substring(param_name.length).trim()
 							};
-						} else {
+						}
+						// if the tag doesn't contain a type into it will put none
+						else {
 							paramTag = {
 								param_type: "none",
 								param_name: "none",
@@ -162,13 +169,16 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 						break;
 					case "@todo":
 						let todoTag: TodoTag;
+						// if the tag contains a type into {type}
 						if (genericTagSentence.tag_content.match(typeRegex)) {
 							const todo_type = genericTagSentence.tag_content.match(typeRegex)[0];
 							todoTag = {
 								todo_type,
 								todo_text: genericTagSentence.tag_content.substring(todo_type.length).trim()
 							};
-						} else {
+						}
+						// if the tag doesn't contain a type into it will put none
+						else {
 							todoTag = {
 								todo_type: "none",
 								todo_text: genericTagSentence.tag_content
@@ -224,20 +234,6 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 };
 
 /**
- * Write a json object in a file
- * @param obj json object to save in a file
- * @param filename
- */
-export const JSONToFile = (obj, filename) => fs.writeFileSync(`${filename}.json`, JSON.stringify(obj, null, 2));
-
-/**
- * Write a json object in a file
- * @param obj json object to save in a file
- * @param filename
- */
-export const HtmlToFile = (obj, filename) => fs.writeFileSync(`${filename}.html`, obj);
-
-/**
  * Recursive command that go through a folder and all its sub-folder to list all files path
  *
  * @param {string} folderPath to go through
@@ -256,6 +252,7 @@ export function getAllFilePathFromDir(folderPath: string, filesPaths?: string[])
 		}
 	});
 }
+
 /**
  * Copy a files and folder structure from a source path to an destination path
  * it copies the folder structure and create for each file an html file
@@ -288,3 +285,17 @@ export function copyFilesStructToHtml(filesPaths: string[], sourcePath: string, 
 		HtmlToFile("", destinationFile);
 	});
 }
+
+/**
+ * Write a json object in a file
+ * @param obj json object to save in a file
+ * @param filename
+ */
+export const JSONToFile = (obj, filename) => fs.writeFileSync(`${filename}.json`, JSON.stringify(obj, null, 2));
+
+/**
+ * Write a json object in a file
+ * @param obj json object to save in a file
+ * @param filename
+ */
+export const HtmlToFile = (obj, filename) => fs.writeFileSync(`${filename}.html`, obj);
