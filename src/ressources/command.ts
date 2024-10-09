@@ -136,8 +136,8 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 						break;
 					case "@stepDef":
 						commentBlock.stepDef = genericTagSentence.tag_content.trim();
-					case "@interactionTypeMember":
-						commentBlock.interactionTypeMember = genericTagSentence.tag_content.trim();
+					case "@memberof":
+						commentBlock.memberof = genericTagSentence.tag_content.trim();
 						break;
 					case "@param":
 						let paramTag: ParamTag;

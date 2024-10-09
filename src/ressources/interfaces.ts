@@ -61,7 +61,7 @@ export interface CommentBlock {
 	blocNumber: number;
 	// stepType: "Given" | "When" | "Then" | "interactionTypeBlock" | "Missing";
 	stepType: string;
-	interactionTypeMember?: string;
+	memberof?: string;
 	stepDef?: string;
 	paramTags?: ParamTag[];
 	descriptionTags?: DescriptionTag[];
