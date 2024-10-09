@@ -95,19 +95,19 @@ export const getTagDataFromBlock = function (
  * @returns json structured with all the known tags and their parameter to be used as documentation
  */
 export const extractTagSpecificData = function (fileName: string, genericGlobalComments: GenericGlobalComments) {
-	const fileComments: FileCommentExtract = { fileName, folderNames: [], commentBlocks: [] };
+	const fileComments: FileCommentExtract = { fileName, interactionTypes: [], commentBlocks: [] };
 	genericGlobalComments.genericCommentBlocks.forEach((genericCommentBlock) => {
 		const commentBlock: CommentBlock = { blocNumber: genericCommentBlock.blocNumber };
 		genericCommentBlock.genericTagSentences.forEach((genericTagSentence) => {
 			const typeRegex = /\{.*\}/;
 			switch (genericTagSentence.tag) {
-				case "@folderName":
-					fileComments.folderNames.push(genericTagSentence.tag_content.trim());
+				case "@interactionTypes":
+					fileComments.interactionTypes.push(genericTagSentence.tag_content.trim());
 					break;
 				case "@stepDef":
 					commentBlock.stepDef = genericTagSentence.tag_content.trim();
 				case "@memberof":
-					commentBlock.folder = genericTagSentence.tag_content.trim();
+					commentBlock.interactionType = genericTagSentence.tag_content.trim();
 					break;
 				case "@param":
 					let paramTag: ParamTag;
@@ -243,8 +243,8 @@ export function copyFilesStructToHtml(filesPaths: string[], sourcePath: string, 
 	filesPaths.forEach((filePath) => {
 		const fileName = path.basename(filePath).replace(path.extname(filePath), "");
 		const fileFolderPath = path.dirname(filePath);
-		const folderName = fileFolderPath.replace(sourcePath, "");
-		const destinationFolder = destinationPath + folderName;
+		const interactionTypes = fileFolderPath.replace(sourcePath, "");
+		const destinationFolder = destinationPath + interactionTypes;
 		const destinationFile = "./" + destinationFolder + "/" + fileName;
 
 		if (!fs.existsSync(destinationFolder)) {
