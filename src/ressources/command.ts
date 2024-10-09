@@ -96,7 +96,7 @@ export const extractGenericTagBlock = function (
  * @returns json structured with all the known tags and their parameter to be used as documentation
  */
 export const extractTagSpecificData = function (fileName: string, genericGlobalComments: GenericGlobalComments) {
-	const typeRegex = /\{.*\}/;
+	const typeRegex = /\{(.*)\}/;
 
 	// Initialize the file
 	const fileComments: FileCommentExtract = { fileName, interactionTypes: [], commentBlocks: [] };
@@ -107,11 +107,11 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 			let interactionType: InteractionType;
 			// if the tag contains a type into {type}
 			if (genericCommentBlock.genericTagSentences[0].tag_content.match(typeRegex)) {
-				const interactionTypeName = genericCommentBlock.genericTagSentences[0].tag_content.match(typeRegex)[0];
+				const interactionTypeName = genericCommentBlock.genericTagSentences[0].tag_content.match(typeRegex);
 				interactionType = {
-					interactionTypeName,
+					interactionTypeName: interactionTypeName[1],
 					interactionTypeDesc: genericCommentBlock.genericTagSentences[0].tag_content
-						.substring(interactionTypeName.length)
+						.substring(interactionTypeName[0].length)
 						.trim()
 				};
 			}
@@ -144,11 +144,11 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 						// if the tag contains a type into {type}
 
 						if (genericTagSentence.tag_content.match(typeRegex)) {
-							const param_type = genericTagSentence.tag_content.match(typeRegex)[0];
-							const param_name_desc = genericTagSentence.tag_content.substring(param_type.length).trim();
+							const param_type = genericTagSentence.tag_content.match(typeRegex);
+							const param_name_desc = genericTagSentence.tag_content.substring(param_type[0].length).trim();
 							const param_name = param_name_desc.match(/\w+/)[0];
 							paramTag = {
-								param_type,
+								param_type: param_type[1],
 								param_name,
 								param_desc: param_name_desc.substring(param_name.length).trim()
 							};
@@ -171,10 +171,10 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 						let todoTag: TodoTag;
 						// if the tag contains a type into {type}
 						if (genericTagSentence.tag_content.match(typeRegex)) {
-							const todo_type = genericTagSentence.tag_content.match(typeRegex)[0];
+							const todo_type = genericTagSentence.tag_content.match(typeRegex);
 							todoTag = {
-								todo_type,
-								todo_text: genericTagSentence.tag_content.substring(todo_type.length).trim()
+								todo_type: todo_type[1],
+								todo_text: genericTagSentence.tag_content.substring(todo_type[0].length).trim()
 							};
 						}
 						// if the tag doesn't contain a type into it will put none
