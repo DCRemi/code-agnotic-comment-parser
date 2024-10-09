@@ -1,7 +1,7 @@
 import {
 	extractTagSpecificData,
 	extractJsComContent,
-	getTagDataFromBlock,
+	extractGenericTagBlock,
 	getTagIndex,
 	JSONToFile,
 	removeJsComBoundary,
@@ -42,7 +42,7 @@ filesPaths.forEach((filePath) => {
 	jsCommentsBlocksCleaned.forEach((element, index) => {
 		genericGlobalComments.genericCommentBlocks[index] = {
 			blocNumber: index + 1,
-			genericTagSentences: getTagDataFromBlock(element, getTagIndex(element))
+			genericTagSentences: extractGenericTagBlock(element, getTagIndex(element))
 		};
 	});
 

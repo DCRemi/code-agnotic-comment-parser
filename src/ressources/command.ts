@@ -3,10 +3,10 @@ import {
 	DescriptionTag,
 	ExampleTag,
 	FileCommentExtract,
-	GenericCommentBlock,
 	GenericGlobalComments,
 	GenericTag,
 	GenericTagSentence,
+	InteractionType,
 	ParamTag,
 	SeeTag,
 	TagIndex,
@@ -65,7 +65,7 @@ export const getTagIndex = function (jsCommentBlock: string): TagIndex[] {
  * @param {TagIndex[]} jsBlockTagsIndex array of tags to extract
  * @returns array of GenericTagSentence that contains the tag and its content
  */
-export const getTagDataFromBlock = function (
+export const extractGenericTagBlock = function (
 	jsCommentBlock: string,
 	jsBlockTagsIndex: TagIndex[]
 ): GenericTagSentence[] {
@@ -88,6 +88,7 @@ export const getTagDataFromBlock = function (
 	});
 	return genericTagSentences;
 };
+
 /**
  * construct from a Generic global comment a structured json with different tags and their parameters
  * @param {string} fileName name of the file the comments comes from
@@ -96,18 +97,35 @@ export const getTagDataFromBlock = function (
  */
 export const extractTagSpecificData = function (fileName: string, genericGlobalComments: GenericGlobalComments) {
 	const fileComments: FileCommentExtract = { fileName, interactionTypes: [], commentBlocks: [] };
+
 	genericGlobalComments.genericCommentBlocks.forEach((genericCommentBlock) => {
-		const commentBlock: CommentBlock = { blocNumber: genericCommentBlock.blocNumber };
+		const commentBlock: CommentBlock = { blocNumber: genericCommentBlock.blocNumber, stepType: "Missing" };
+
 		genericCommentBlock.genericTagSentences.forEach((genericTagSentence) => {
 			const typeRegex = /\{.*\}/;
 			switch (genericTagSentence.tag) {
 				case "@interactionTypes":
-					fileComments.interactionTypes.push(genericTagSentence.tag_content.trim());
+					let interactionType: InteractionType;
+					if (genericTagSentence.tag_content.match(typeRegex)) {
+						const interactionTypeName = genericTagSentence.tag_content.match(typeRegex)[0];
+						interactionType = {
+							interactionTypeName,
+							interactionTypeDesc: genericTagSentence.tag_content.substring(interactionTypeName.length).trim()
+						};
+					} else {
+						interactionType = {
+							interactionTypeName: "none",
+							interactionTypeDesc: genericTagSentence.tag_content
+						};
+					}
+					break;
+				case "@stepType":
+					commentBlock.stepType = genericTagSentence.tag_content.trim();
 					break;
 				case "@stepDef":
 					commentBlock.stepDef = genericTagSentence.tag_content.trim();
-				case "@memberof":
-					commentBlock.interactionType = genericTagSentence.tag_content.trim();
+				case "@interactionTypeMember":
+					commentBlock.interactionTypeMember = genericTagSentence.tag_content.trim();
 					break;
 				case "@param":
 					let paramTag: ParamTag;

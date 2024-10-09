@@ -52,13 +52,16 @@ export interface TodoTag {
 	todo_text: string;
 }
 
-export interface interactionTypeTag {
-	interactionType_name: string;
+export interface InteractionType {
+	interactionTypeName: string;
+	interactionTypeDesc: string;
 }
 
 export interface CommentBlock {
 	blocNumber: number;
-	interactionType?: string;
+	// stepType: "Given" | "When" | "Then" | "interactionTypeBlock" | "Missing";
+	stepType: string;
+	interactionTypeMember?: string;
 	stepDef?: string;
 	paramTags?: ParamTag[];
 	descriptionTags?: DescriptionTag[];
@@ -71,5 +74,5 @@ export interface CommentBlock {
 export interface FileCommentExtract {
 	fileName: string;
 	commentBlocks: CommentBlock[];
-	interactionTypes?: string[];
+	interactionTypes?: interactionType[];
 }
