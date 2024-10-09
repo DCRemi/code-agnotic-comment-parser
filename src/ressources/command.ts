@@ -247,6 +247,11 @@ export function copyFilesStructToHtml(filesPaths: string[], sourcePath: string, 
 		const destinationFolder = destinationPath + interactionTypes;
 		const destinationFile = "./" + destinationFolder + "/" + fileName;
 
+		// Create output folder if it doesn't exist
+		if (!fs.existsSync(destinationPath)) {
+			fs.mkdirSync(destinationPath);
+		}
+
 		if (!fs.existsSync(destinationFolder)) {
 			fs.mkdirSync(destinationFolder);
 		}
