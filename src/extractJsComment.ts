@@ -18,9 +18,8 @@ getAllFilePathFromDir(folderPath, filesPaths);
 
 filesPaths.forEach((filePath) => {
 	const fileName = filePath.split(/input\/(.*)\.ts/)[1];
-	console.log("file name " + fileName);
-	const intermediateOutputFilePath = `./output/intermediate/${fileName}Intermediate`;
-	const finalOutputFilePath = `./output/${fileName}Output`;
+	const intermediateOutputFilePath = `./json_output/intermediate/${fileName}Intermediate`;
+	const finalOutputFilePath = `./json_output/${fileName}Output`;
 
 	// #region run
 	/** STEP 1 : Get file content */
@@ -48,10 +47,10 @@ filesPaths.forEach((filePath) => {
 	});
 
 	// #region intermediate extract
-	// if(intermediateOutputFilePath.match(/\.\/output\/intermediate\/\w*\//)) // not a root file
+	// if(intermediateOutputFilePath.match(/\.\/json_output\/intermediate\/\w*\//)) // not a root file
 	// {
-	// 	if (!fs.existsSync(intermediateOutputFilePath.match(/\.\/output\/intermediate\/\w*\//)[0])){
-	// 		fs.mkdirSync(intermediateOutputFilePath.match(/\.\/output\/intermediate\/\w*\//)[0]);
+	// 	if (!fs.existsSync(intermediateOutputFilePath.match(/\.\/json_output\/intermediate\/\w*\//)[0])){
+	// 		fs.mkdirSync(intermediateOutputFilePath.match(/\.\/json_output\/intermediate\/\w*\//)[0]);
 	// 	}
 	// }
 	// JSONToFile(genericGlobalComments, intermediateOutputFilePath);
@@ -61,10 +60,10 @@ filesPaths.forEach((filePath) => {
 	const finalJson = extractTagSpecificData(fileName, genericGlobalComments);
 
 	/** STEP 6 : Write final json to file */
-	if (finalOutputFilePath.match(/\.\/output\/\w*\//)) {
+	if (finalOutputFilePath.match(/\.\/json_output\/\w*\//)) {
 		// not a root file
-		if (!fs.existsSync(finalOutputFilePath.match(/\.\/output\/\w*\//)[0])) {
-			fs.mkdirSync(finalOutputFilePath.match(/\.\/output\/\w*\//)[0]);
+		if (!fs.existsSync(finalOutputFilePath.match(/\.\/json_output\/\w*\//)[0])) {
+			fs.mkdirSync(finalOutputFilePath.match(/\.\/json_output\/\w*\//)[0]);
 		}
 	}
 	JSONToFile(finalJson, finalOutputFilePath);

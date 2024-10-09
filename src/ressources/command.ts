@@ -13,7 +13,7 @@ import {
 	TodoTag
 } from "./interfaces";
 const fs = require("fs");
-var path = require("path");
+const path = require("path");
 
 /**
  * Extract from a file the jsComment starting /** and ending with wildcard/
@@ -201,6 +201,13 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 export const JSONToFile = (obj, filename) => fs.writeFileSync(`${filename}.json`, JSON.stringify(obj, null, 2));
 
 /**
+ * Write a json object in a file
+ * @param obj json object to save in a file
+ * @param filename
+ */
+export const HtmlToFile = (obj, filename) => fs.writeFileSync(`${filename}.html`, obj);
+
+/**
  * Recursive command that go through a folder and all its sub-folder to list all files path
  *
  * @param {string} folderPath to go through
@@ -217,5 +224,32 @@ export function getAllFilePathFromDir(folderPath: string, filesPaths?: string[])
 		} else {
 			filesPaths.push(path.join(folderPath, element));
 		}
+	});
+}
+/**
+ * Copy a files and folder structure from a source path to an destination path
+ * it copies the folder structure and create for each file an html file
+ * @param filesPaths lists of source files path
+ * @param sourcePath path that will be removed to create the output structure (! without the / at the end)
+ * @param destinationPath path from where the output structure will be created (! without the / at the end)
+ *
+ * @example createFolderStructure(filesPaths, "inputPath", "outputPath");
+ * from filesPaths =
+ * ["inputPath/test.json","inputPath/folder/file.json","inputPath/folder2/test2.txt"]
+ * this will create :
+ * ./outputPath/test.html and ./outputPath/folder/file.html  and ./outputPath/folder2/test2.html
+ */
+export function copyFilesStructToHtml(filesPaths: string[], sourcePath: string, destinationPath: string) {
+	filesPaths.forEach((filePath) => {
+		const fileName = path.basename(filePath).replace(path.extname(filePath), "");
+		const fileFolderPath = path.dirname(filePath);
+		const folderName = fileFolderPath.replace(sourcePath, "");
+		const destinationFolder = destinationPath + folderName;
+		const destinationFile = "./" + destinationFolder + "/" + fileName;
+
+		if (!fs.existsSync(destinationFolder)) {
+			fs.mkdirSync(destinationFolder);
+		}
+		HtmlToFile("", destinationFile);
 	});
 }
