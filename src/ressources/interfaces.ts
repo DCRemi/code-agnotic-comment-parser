@@ -74,5 +74,5 @@ export interface CommentBlock {
 export interface FileCommentExtract {
 	fileName: string;
 	commentBlocks: CommentBlock[];
-	interactionTypes?: interactionType[];
+	interactionTypes?: InteractionType[];
 }
