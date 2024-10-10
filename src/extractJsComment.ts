@@ -40,10 +40,12 @@ filesPaths.forEach((filePath) => {
 		genericCommentBlocks
 	};
 	jsCommentsBlocksCleaned.forEach((element, index) => {
-		genericGlobalComments.genericCommentBlocks[index] = {
-			blocNumber: index + 1,
-			genericTagSentences: extractGenericTagBlock(element, getTagIndex(element))
-		};
+		if (getTagIndex(element).length !== 0) {
+			genericGlobalComments.genericCommentBlocks[index] = {
+				blocNumber: index + 1,
+				genericTagSentences: extractGenericTagBlock(element, getTagIndex(element))
+			};
+		}
 	});
 
 	// #region intermediate extract
