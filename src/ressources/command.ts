@@ -105,7 +105,7 @@ export const extractGenericTagBlock = function (
 export const extractTagSpecificData = function (fileName: string, genericGlobalComments: GenericGlobalComments) {
 
 	// Initialize the file
-	const fileComments: FileCommentExtract = { fileName, interactionTypes: [], commentBlocks: [] };
+	const fileComments: FileCommentExtract = { fileName, fileDesc: "empty file description", interactionTypes: [], commentBlocks: [] };
 
 	const fileTagType = ["@fileDesc", "@interactionTypes"]
 

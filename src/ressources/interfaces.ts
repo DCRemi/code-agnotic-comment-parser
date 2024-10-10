@@ -73,7 +73,7 @@ export interface CommentBlock {
 
 export interface FileCommentExtract {
 	fileName: string;
-	fileDesc?: string;
+	fileDesc: string;
 	interactionTypes?: InteractionType[];
 	commentBlocks: CommentBlock[];
 
