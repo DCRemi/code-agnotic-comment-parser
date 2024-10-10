@@ -183,6 +183,7 @@ export const extractBlockTagData = function (genericCommentBlock: GenericComment
 				break;
 			case "@stepDef":
 				commentBlock.stepDef = genericTagSentence.tag_content.trim();
+				break;
 			case "@memberof":
 				commentBlock.memberof = genericTagSentence.tag_content.trim();
 				break;
