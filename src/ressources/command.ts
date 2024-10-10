@@ -101,7 +101,6 @@ export const extractGenericTagBlock = function (
  * @returns json structured with all the known tags and their parameter to be used as documentation
  */
 export const extractTagSpecificData = function (fileName: string, genericGlobalComments: GenericGlobalComments) {
-	const typeRegex = /\{(.*)\}/;
 
 	// Initialize the file
 	const fileComments: FileCommentExtract = { fileName, interactionTypes: [], commentBlocks: [] };
@@ -109,113 +108,12 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 	genericGlobalComments.genericCommentBlocks.forEach((genericCommentBlock) => {
 		// If it is an interactionTypes block >> not checking all tags
 		if (["@fileDesc", "@interactionTypes"].includes(genericCommentBlock.genericTagSentences[0].tag)) {
-			const interactionType = extractFileTagData(genericCommentBlock)
-			fileComments.interactionTypes.push(interactionType);
-
+			fileComments.interactionTypes.push(extractFileTagData(genericCommentBlock));
 		}
 		// If it is an interactionTypes block check tags /
 		else {
-			const commentBlock: CommentBlock = { blocNumber: genericCommentBlock.blocNumber, stepType: "Missing" };
 
-			genericCommentBlock.genericTagSentences.forEach((genericTagSentence) => {
-				switch (genericTagSentence.tag) {
-					case "@stepType":
-						commentBlock.stepType = genericTagSentence.tag_content.trim();
-						break;
-					case "@stepDef":
-						commentBlock.stepDef = genericTagSentence.tag_content.trim();
-					case "@memberof":
-						commentBlock.memberof = genericTagSentence.tag_content.trim();
-						break;
-					case "@param":
-						let paramTag: ParamTag;
-						// if the tag contains a type into {type}
-
-						if (genericTagSentence.tag_content.match(typeRegex)) {
-							const param_type = genericTagSentence.tag_content.match(typeRegex);
-							const param_name_desc = genericTagSentence.tag_content.substring(param_type[0].length).trim();
-							const param_name = param_name_desc.match(/\w+/)[0];
-							paramTag = {
-								param_type: param_type[1],
-								param_name,
-								param_desc: param_name_desc.substring(param_name.length).trim()
-							};
-						}
-						// if the tag doesn't contain a type into it will put none
-						else {
-							paramTag = {
-								param_type: "none",
-								param_name: "none",
-								param_desc: genericTagSentence.tag_content
-							};
-							console.error(
-								"error : the param tag config is missing missing {param_type} param_name description (see documentation)"
-							);
-						}
-						// if the paramTags array doesn't exist, can't use push but need to initialize it
-						commentBlock.paramTags ? commentBlock.paramTags.push(paramTag) : (commentBlock.paramTags = [paramTag]);
-						break;
-					case "@todo":
-						let todoTag: TodoTag;
-						// if the tag contains a type into {type}
-						if (genericTagSentence.tag_content.match(typeRegex)) {
-							const todo_type = genericTagSentence.tag_content.match(typeRegex);
-							todoTag = {
-								todo_type: todo_type[1],
-								todo_text: genericTagSentence.tag_content.substring(todo_type[0].length).trim()
-							};
-						}
-						// if the tag doesn't contain a type into it will put none
-						else {
-							todoTag = {
-								todo_type: "none",
-								todo_text: genericTagSentence.tag_content
-							};
-							console.error(
-								"error : the todo tag config is missing missing {todo_type} description (see documentation)"
-							);
-						}
-						// if the todoTags array doesn't exist, can't use push but need to initialize it
-						commentBlock.todoTags ? commentBlock.todoTags.push(todoTag) : (commentBlock.todoTags = [todoTag]);
-						break;
-					case "@description":
-						const descriptionTag: DescriptionTag = {
-							description: genericTagSentence.tag_content
-						};
-						// if the descriptionTags array doesn't exist, can't use push but need to initialize it
-						commentBlock.descriptionTags
-							? commentBlock.descriptionTags.push(descriptionTag)
-							: (commentBlock.descriptionTags = [descriptionTag]);
-						break;
-					case "@see":
-						const seeTag: SeeTag = {
-							see_content: genericTagSentence.tag_content
-						};
-						// if the seeTags array doesn't exist, can't use push but need to initialize it
-						commentBlock.seeTags ? commentBlock.seeTags.push(seeTag) : (commentBlock.seeTags = [seeTag]);
-						break;
-					case "@example":
-						const exampleTag: ExampleTag = {
-							example_content: genericTagSentence.tag_content
-						};
-						// if the exampleTag array doesn't exist, can't use push but need to initialize it
-						commentBlock.exampleTags
-							? commentBlock.exampleTags.push(exampleTag)
-							: (commentBlock.exampleTags = [exampleTag]);
-						break;
-					default:
-						const genericTag: GenericTag = {
-							tag: genericTagSentence.tag,
-							content: genericTagSentence.tag_content
-						};
-						// if the descriptionTags array doesn't exist, can't use push but need to initialize it
-						commentBlock.genericTags
-							? commentBlock.genericTags.push(genericTag)
-							: (commentBlock.genericTags = [genericTag]);
-						break;
-				}
-			});
-			fileComments.commentBlocks.push(commentBlock);
+			fileComments.commentBlocks.push(extractBlockTagData(genericCommentBlock));
 		}
 	});
 	return fileComments;
@@ -251,6 +149,111 @@ export const extractFileTagData = function (genericCommentBlock: GenericCommentB
 	}
 }
 
+export const extractBlockTagData = function (genericCommentBlock: GenericCommentBlock): CommentBlock {
+	const typeRegex = /\{(.*)\}/;
+
+	const commentBlock: CommentBlock = { blocNumber: genericCommentBlock.blocNumber, stepType: "Missing" };
+
+	genericCommentBlock.genericTagSentences.forEach((genericTagSentence) => {
+		switch (genericTagSentence.tag) {
+			case "@stepType":
+				commentBlock.stepType = genericTagSentence.tag_content.trim();
+				break;
+			case "@stepDef":
+				commentBlock.stepDef = genericTagSentence.tag_content.trim();
+			case "@memberof":
+				commentBlock.memberof = genericTagSentence.tag_content.trim();
+				break;
+			case "@param":
+				let paramTag: ParamTag;
+				// if the tag contains a type into {type}
+
+				if (genericTagSentence.tag_content.match(typeRegex)) {
+					const param_type = genericTagSentence.tag_content.match(typeRegex);
+					const param_name_desc = genericTagSentence.tag_content.substring(param_type[0].length).trim();
+					const param_name = param_name_desc.match(/\w+/)[0];
+					paramTag = {
+						param_type: param_type[1],
+						param_name,
+						param_desc: param_name_desc.substring(param_name.length).trim()
+					};
+				}
+				// if the tag doesn't contain a type into it will put none
+				else {
+					paramTag = {
+						param_type: "none",
+						param_name: "none",
+						param_desc: genericTagSentence.tag_content
+					};
+					console.error(
+						"error : the param tag config is missing missing {param_type} param_name description (see documentation)"
+					);
+				}
+				// if the paramTags array doesn't exist, can't use push but need to initialize it
+				commentBlock.paramTags ? commentBlock.paramTags.push(paramTag) : (commentBlock.paramTags = [paramTag]);
+				break;
+			case "@todo":
+				let todoTag: TodoTag;
+				// if the tag contains a type into {type}
+				if (genericTagSentence.tag_content.match(typeRegex)) {
+					const todo_type = genericTagSentence.tag_content.match(typeRegex);
+					todoTag = {
+						todo_type: todo_type[1],
+						todo_text: genericTagSentence.tag_content.substring(todo_type[0].length).trim()
+					};
+				}
+				// if the tag doesn't contain a type into it will put none
+				else {
+					todoTag = {
+						todo_type: "none",
+						todo_text: genericTagSentence.tag_content
+					};
+					console.error(
+						"error : the todo tag config is missing missing {todo_type} description (see documentation)"
+					);
+				}
+				// if the todoTags array doesn't exist, can't use push but need to initialize it
+				commentBlock.todoTags ? commentBlock.todoTags.push(todoTag) : (commentBlock.todoTags = [todoTag]);
+				break;
+			case "@description":
+				const descriptionTag: DescriptionTag = {
+					description: genericTagSentence.tag_content
+				};
+				// if the descriptionTags array doesn't exist, can't use push but need to initialize it
+				commentBlock.descriptionTags
+					? commentBlock.descriptionTags.push(descriptionTag)
+					: (commentBlock.descriptionTags = [descriptionTag]);
+				break;
+			case "@see":
+				const seeTag: SeeTag = {
+					see_content: genericTagSentence.tag_content
+				};
+				// if the seeTags array doesn't exist, can't use push but need to initialize it
+				commentBlock.seeTags ? commentBlock.seeTags.push(seeTag) : (commentBlock.seeTags = [seeTag]);
+				break;
+			case "@example":
+				const exampleTag: ExampleTag = {
+					example_content: genericTagSentence.tag_content
+				};
+				// if the exampleTag array doesn't exist, can't use push but need to initialize it
+				commentBlock.exampleTags
+					? commentBlock.exampleTags.push(exampleTag)
+					: (commentBlock.exampleTags = [exampleTag]);
+				break;
+			default:
+				const genericTag: GenericTag = {
+					tag: genericTagSentence.tag,
+					content: genericTagSentence.tag_content
+				};
+				// if the descriptionTags array doesn't exist, can't use push but need to initialize it
+				commentBlock.genericTags
+					? commentBlock.genericTags.push(genericTag)
+					: (commentBlock.genericTags = [genericTag]);
+				break;
+		}
+	});
+	return commentBlock
+}
 
 
 /* -------------------------------------------------------------------------- */
