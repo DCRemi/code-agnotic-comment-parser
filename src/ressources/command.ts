@@ -94,8 +94,10 @@ export const extractGenericTagBlock = function (
 	return genericTagSentences;
 };
 
+/* ---------------------------- Extract Tags data --------------------------- */
+
 /**
- * construct from a Generic global comment a structured json with different tags and their parameters
+ * @description Construct from a Generic global comment a structured json with different tags and their parameters
  * @param {string} fileName name of the file the comments comes from
  * @param {GenericGlobalComments} genericGlobalComments array of tags extracted
  * @returns json structured with all the known tags and their parameter to be used as documentation
@@ -105,50 +107,70 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 	// Initialize the file
 	const fileComments: FileCommentExtract = { fileName, interactionTypes: [], commentBlocks: [] };
 
-	genericGlobalComments.genericCommentBlocks.forEach((genericCommentBlock) => {
-		// If it is an interactionTypes block >> not checking all tags
-		if (["@fileDesc", "@interactionTypes"].includes(genericCommentBlock.genericTagSentences[0].tag)) {
-			fileComments.interactionTypes.push(extractFileTagData(genericCommentBlock));
-		}
-		// If it is an interactionTypes block check tags /
-		else {
+	const fileTagType = ["@fileDesc", "@interactionTypes"]
 
+	genericGlobalComments.genericCommentBlocks.forEach((genericCommentBlock) => {
+		// If the 1st tag is a file tag it will treat only this tag and add it to the file data
+		if (fileTagType.includes(genericCommentBlock.genericTagSentences[0].tag)) {
+
+			// fileComments.interactionTypes.push(
+			extractFileTagData(fileComments, genericCommentBlock)
+			// );
+
+		}
+		// If it is not a file tag it will iterate on the tags and extract all data
+		else {
 			fileComments.commentBlocks.push(extractBlockTagData(genericCommentBlock));
 		}
 	});
 	return fileComments;
 };
 
-export const extractFileTagData = function (genericCommentBlock: GenericCommentBlock) {
-	{
-		const typeRegex = /\{(.*)\}/;
+/**
+ * @description Treat file related block when the tag is fileDesc or interactionsTypes
+ * @param {FileCommentExtract} fileComments FileCommentExtract where the data will be added
+ * @param {GenericGlobalComment} genericCommentBlock comment block that contains the file tag
+ * @returns FileCommentExtract modified 
+ */
+export const extractFileTagData = function (fileComments: FileCommentExtract, genericCommentBlock: GenericCommentBlock): FileCommentExtract {
+	const typeRegex = /\{(.*)\}/;
 
-		// swithch
-
-		//case interactionType
-		let interactionType: InteractionType;
-		// if the tag contains a type into {type}
-		if (genericCommentBlock.genericTagSentences[0].tag_content.match(typeRegex)) {
-			const interactionTypeName = genericCommentBlock.genericTagSentences[0].tag_content.match(typeRegex);
-			interactionType = {
-				interactionTypeName: interactionTypeName[1],
-				interactionTypeDesc: genericCommentBlock.genericTagSentences[0].tag_content
-					.substring(interactionTypeName[0].length)
-					.trim()
-			};
-		}
-		// if the tag doesn't contain a type into it will put none
-		else {
-			interactionType = {
-				interactionTypeName: "none",
-				interactionTypeDesc: genericCommentBlock.genericTagSentences[0].tag_content
-			};
-		}
-		// if the todoTags array doesn't exist, can't use push but need to initialize it
-		return interactionType
+	switch (genericCommentBlock.genericTagSentences[0].tag) {
+		case "@fileDesc":
+			fileComments.fileDesc = genericCommentBlock.genericTagSentences[0].tag_content
+			return fileComments
+		case "@interactionTypes":
+			let interactionType: InteractionType;
+			// if the tag contains a type into {type}
+			if (genericCommentBlock.genericTagSentences[0].tag_content.match(typeRegex)) {
+				const interactionTypeName = genericCommentBlock.genericTagSentences[0].tag_content.match(typeRegex);
+				interactionType = {
+					interactionTypeName: interactionTypeName[1],
+					interactionTypeDesc: genericCommentBlock.genericTagSentences[0].tag_content
+						.substring(interactionTypeName[0].length)
+						.trim()
+				};
+			}
+			// if the tag doesn't contain a type into it will put none
+			else {
+				interactionType = {
+					interactionTypeName: "none",
+					interactionTypeDesc: genericCommentBlock.genericTagSentences[0].tag_content
+				};
+			}
+			fileComments.interactionTypes.push(interactionType)
+			return fileComments
+		default:
+			//
+			break;
 	}
 }
 
+/**
+ * @description Treat block tag, iterate on all tag of the blocks to extract all data 
+ * @param {GenericGlobalComment} genericCommentBlock comment block that contains the file tag
+ * @returns CommentBlock extracted data
+ */
 export const extractBlockTagData = function (genericCommentBlock: GenericCommentBlock): CommentBlock {
 	const typeRegex = /\{(.*)\}/;
 
