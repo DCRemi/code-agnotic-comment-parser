@@ -3,6 +3,7 @@ import {
 	DescriptionTag,
 	ExampleTag,
 	FileCommentExtract,
+	GenericCommentBlock,
 	GenericGlobalComments,
 	GenericTag,
 	GenericTagSentence,
@@ -14,6 +15,10 @@ import {
 } from "./interfaces";
 const fs = require("fs");
 const path = require("path");
+
+/* -------------------------------------------------------------------------- */
+/*                               Extract JS data                              */
+/* -------------------------------------------------------------------------- */
 
 /**
  * Extract from a file the jsComment starting /** and ending with wildcard/
@@ -103,27 +108,10 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 
 	genericGlobalComments.genericCommentBlocks.forEach((genericCommentBlock) => {
 		// If it is an interactionTypes block >> not checking all tags
-		if (genericCommentBlock.genericTagSentences[0].tag == "@interactionTypes") {
-			let interactionType: InteractionType;
-			// if the tag contains a type into {type}
-			if (genericCommentBlock.genericTagSentences[0].tag_content.match(typeRegex)) {
-				const interactionTypeName = genericCommentBlock.genericTagSentences[0].tag_content.match(typeRegex);
-				interactionType = {
-					interactionTypeName: interactionTypeName[1],
-					interactionTypeDesc: genericCommentBlock.genericTagSentences[0].tag_content
-						.substring(interactionTypeName[0].length)
-						.trim()
-				};
-			}
-			// if the tag doesn't contain a type into it will put none
-			else {
-				interactionType = {
-					interactionTypeName: "none",
-					interactionTypeDesc: genericCommentBlock.genericTagSentences[0].tag_content
-				};
-			}
-			// if the todoTags array doesn't exist, can't use push but need to initialize it
+		if (["@fileDesc", "@interactionTypes"].includes(genericCommentBlock.genericTagSentences[0].tag)) {
+			const interactionType = extractFileTagData(genericCommentBlock)
 			fileComments.interactionTypes.push(interactionType);
+
 		}
 		// If it is an interactionTypes block check tags /
 		else {
@@ -232,6 +220,42 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 	});
 	return fileComments;
 };
+
+export const extractFileTagData = function (genericCommentBlock: GenericCommentBlock) {
+	{
+		const typeRegex = /\{(.*)\}/;
+
+		// swithch
+
+		//case interactionType
+		let interactionType: InteractionType;
+		// if the tag contains a type into {type}
+		if (genericCommentBlock.genericTagSentences[0].tag_content.match(typeRegex)) {
+			const interactionTypeName = genericCommentBlock.genericTagSentences[0].tag_content.match(typeRegex);
+			interactionType = {
+				interactionTypeName: interactionTypeName[1],
+				interactionTypeDesc: genericCommentBlock.genericTagSentences[0].tag_content
+					.substring(interactionTypeName[0].length)
+					.trim()
+			};
+		}
+		// if the tag doesn't contain a type into it will put none
+		else {
+			interactionType = {
+				interactionTypeName: "none",
+				interactionTypeDesc: genericCommentBlock.genericTagSentences[0].tag_content
+			};
+		}
+		// if the todoTags array doesn't exist, can't use push but need to initialize it
+		return interactionType
+	}
+}
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                         File and folder management                         */
+/* -------------------------------------------------------------------------- */
 
 /**
  * Recursive command that go through a folder and all its sub-folder to list all files path
