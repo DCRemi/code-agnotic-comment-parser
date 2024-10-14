@@ -39,9 +39,9 @@ filesPaths.forEach((filePath) => {
 	const fileHtmlInteractionTypes = createHtmlInteractionType(interactionTypeJsonBlocks);
 	fileHtmlBlocks += fileHtmlInteractionTypes;
 	fileHtmlBlocks += `
-			<div class="pagetitle">
-				<h2>Steps</h2>
-			</div>
+		<div class="pagetitle">
+			<h2>Steps</h2>
+		</div>
 		`;
 
 	commentJsonBlocks.forEach((commentBlock: CommentBlock) => {

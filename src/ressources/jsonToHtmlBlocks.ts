@@ -15,9 +15,9 @@ export function createHtmlFileDesc(fileData: FileCommentExtract): string {
 export function createHtmlInteractionType(interactionTypes: InteractionType[]): string {
 	if (interactionTypes.length > 0) {
 		var htmlBlocks: string = `
-			<div class="pagetitle" id="interActionTypes">
-				<h2>Interaction types </h2>
-			</div>
+		<div class="pagetitle" id="interActionTypes">
+			<h2>Interaction types </h2>
+		</div>
 	`;
 		interactionTypes.forEach((interactionType) => {
 			var interactionTypeName = interactionType.interactionTypeName;
@@ -42,15 +42,23 @@ export function createDefHtmlBlock(commentBlock: CommentBlock): string {
 	var stepDefName = commentBlock.stepDef;
 	var stepDefDesc = commentBlock.descriptionTags ? commentBlock.descriptionTags[0].description : "";
 	var stepDefMemberOf = commentBlock.memberof;
-
-	const htmlBlock = `
-		<div class="stepDefinition" id="BlockDef">
-			<h3>${stepDefName}</h3>
-			<p>${stepDefDesc}</p>
-			<p><br/> Member of : ${stepDefMemberOf}</p>
-		</div>
+	var htmlBlock: string;
+	if (stepDefMemberOf) {
+		htmlBlock = `
+			<div class="stepDefinition" id="BlockDef">
+				<h3>${stepDefName}</h3>
+				<p>${stepDefDesc}</p>
+				<p><b>Member of : </b>${stepDefMemberOf}</p>
+			</div>
 `;
-
+	} else {
+		htmlBlock = `
+			<div class="stepDefinition" id="BlockDef">
+				<h3>${stepDefName}</h3>
+				<p>${stepDefDesc}</p>
+			</div>
+		`;
+	}
 	return htmlBlock;
 }
 
@@ -60,27 +68,29 @@ export function createParamHtmlBlock(commentBlock: CommentBlock): string {
 
 		commentBlock.paramTags.forEach((paramTag) => {
 			htmlParamBlock += `
-			<tr>
-				<th>${paramTag.param_name}</th>
-				<td>${paramTag.param_type}</td>
-				<td>${paramTag.param_desc}</td>
-			</tr>
+						<tr>
+							<th>${paramTag.param_name}</th>
+							<td>${paramTag.param_type}</td>
+							<td>${paramTag.param_desc}</td>
+						</tr>
 			`;
 		});
 
 		const htmlBlock: string = `
-			<table class="table">
-			<thead>
-				<tr>
-				<th scope="col">Name</th>
-				<th scope="col">Type</th>
-				<th scope="col">Description</th>
-				</tr>
-			</thead>
-				<tbody>
+			<div id="BlockParam">
+				<table class="table">
+					<thead>
+						<tr>
+						<th scope="col">Name</th>
+						<th scope="col">Type</th>
+						<th scope="col">Description</th>
+						</tr>
+					</thead>
+					<tbody>
 						${htmlParamBlock}
-				</tbody>
-			</table>
+					</tbody>
+				</table>
+			</div>
 			`;
 		return htmlBlock;
 	} else {
@@ -95,9 +105,9 @@ export function createExampleHtmlBlock(commentBlock: CommentBlock): string {
 	}
 
 	const htmlBlock = `
-		<div id="BlockParam">
-			<p>${stepDefExample}</p>
-		</div>
+			<div id="BlockExample">
+				<p>${stepDefExample}</p>
+			</div>
 `;
 	return htmlBlock;
 }
@@ -108,25 +118,27 @@ export function createToDoHtmlBlock(commentBlock: CommentBlock): string {
 
 		commentBlock.todoTags.forEach((todoTag) => {
 			htmlTodoBlock += `
-			<tr>
-				<th>${todoTag.todo_type.toUpperCase()}</th>
-				<td>${todoTag.todo_text}</td>
-			</tr>
+						<tr>
+							<th>${todoTag.todo_type.toUpperCase()}</th>
+							<td>${todoTag.todo_text}</td>
+						</tr>
 			`;
 		});
 
 		const htmlBlock: string = `
-			<table class="table">
-			<thead>
-				<tr>
-				<th scope="col">Type</th>
-				<th scope="col">Description</th>
-				</tr>
-			</thead>
-				<tbody>
+			<div id="BlockToDo">
+				<table class="table">
+					<thead>
+						<tr>
+						<th scope="col">Type</th>
+						<th scope="col">Description</th>
+						</tr>
+					</thead>
+					<tbody>
 						${htmlTodoBlock}
-				</tbody>
-			</table>
+					</tbody>
+				</table>
+			</div>
 			`;
 		return htmlBlock;
 	} else {
@@ -141,13 +153,12 @@ export function createStepDefHtmlBlock(
 	todoBlock: string
 ): string {
 	const htmlBlock = `
-	<div id="commentBlock">
-		${defBlock ? defBlock : ""}
-		<br/>
-		${paramBlock ? paramBlock : ""}
-		${exampleBlock ? exampleBlock : ""}
-		${todoBlock ? todoBlock : ""}
-	</div>
+		<div id="commentBlock">
+			${defBlock ? defBlock : ""}
+			${paramBlock ? paramBlock : ""}
+			${exampleBlock ? exampleBlock : ""}
+			${todoBlock ? todoBlock : ""}
+		</div>
 `;
 	return htmlBlock;
 }
