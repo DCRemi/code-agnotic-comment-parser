@@ -1,4 +1,5 @@
 # Introduction
+
 This is a code agnostic comment with tag parser.
 
 ### What it does
@@ -43,21 +44,23 @@ It could even be used for all language or type of document
   - command to extract and parse the data
 - extractJsComments, main code
 - json_output will contains for each file the comment tags extract as json format
-- html_output will contains for each file the corresponding html file 
-
+- html_output will contains for each file the corresponding html file
 
 ### I.2. Run
 
 Add in the input folder the files you want to treat.<br />
 
 #### Extract json file from comment
+
 `npm run doc:extract`
 <br/>
 
 #### Create the full html folder
+
 `npm run docToHtml:createHtmlStruct`
 
 #### Extract json file from comment then create the html files
+
 `npm run generate:doc`
 
 # II. How it works
@@ -77,7 +80,7 @@ In that way it is easy to follow change made on the code and to update the comme
 There is 2 types of blocks
 
 - File blocks : use to define the folder that will belong to the file
-  - These blocks can have only one tag  @fileDesc or @interactionTypes
+  - These blocks can have only one tag @fileDesc or @interactionTypes
 - Step definition blocks : use to define the documentation that describe a step definition (contains stepdef tag)
 
 ### II.3. Tags type
@@ -98,10 +101,12 @@ If the variable are not correctly set an error will appear on the console. Howev
 ### III.1. File tags
 
 **@fileDesc** (Simple tag)
+
 > Add a description to the file <br />
 > NEED TO BE UNIQUE and the only tag in the block<br />
 
 **@interactionTypes** (complexe tag)
+
 > Create groupe of step definition<br />
 > NEED TO BE THE ONLY TAG IN THE BLOCK<br />
 
@@ -109,10 +114,11 @@ If the variable are not correctly set an error will appear on the console. Howev
 
 - interactionType name : after the tag and between {}
 
-/**
- * @interactionTypes {1_generic_Click}
- * These steps are used to do basic actions click, type ...
- */
+/\*\*
+
+- @interactionTypes {1_generic_Click}
+- These steps are used to do basic actions click, type ...
+  \*/
 
 > example :@interactionTypes {1_generic_Click} These steps are used to do basic actions click, type ...<br />
 
@@ -122,7 +128,6 @@ If the variable are not correctly set an error will appear on the console. Howev
 > @memberof name of an existing interactionType in the file \* if the interactionType name doesn't exist it will be treated as a generic tag
 
 ### III.2. Code tags
-
 
 **@stepType** (Simple tag)
 
