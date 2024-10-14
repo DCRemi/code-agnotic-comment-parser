@@ -1,38 +1,91 @@
-import { CommentBlock } from "./interfaces";
+import { CommentBlock, FileCommentExtract, InteractionType } from "./interfaces";
 
-export function createDefBlock(commentBlock: CommentBlock): string {
+export function createHtmlFileDesc(fileData: FileCommentExtract): string {
+	var fileName = fileData.fileName;
+	var fileDesc = fileData.fileDesc;
+	const htmlBlock = `
+	<div id="BlockDef">
+		<h1>${fileName}</h1>
+		<p>${fileDesc}</p>
+	</div>
+`;
+	return htmlBlock;
+}
+
+export function createHtmlInteractionType(interactionTypes: InteractionType[]): string {
+	var htmlBlocks: string = `
+		<div id="BlockDef">
+			<h2>Interaction types </h2>
+		</div>
+	`;
+	interactionTypes.forEach((interactionType) => {
+		var interactionTypeName = interactionType.interactionTypeName;
+		var interactionTypeDesc = interactionType.interactionTypeDesc;
+		const htmlBlock = `
+		<div id="BlockDef">
+			<h3>${interactionTypeName}</h3>
+			<p>${interactionTypeDesc}</p>
+		</div>
+	`;
+		htmlBlocks += "<br/>" + htmlBlock;
+
+		// htmlBlocks.push(htmlBlock);
+	});
+
+	return htmlBlocks;
+}
+
+export function createDefHtmlBlock(commentBlock: CommentBlock): string {
 	var stepDefName = commentBlock.stepDef;
 	var stepDefDesc = commentBlock.descriptionTags ? commentBlock.descriptionTags[0].description : "";
+	var stepDefMemberOf = commentBlock.memberof;
 
 	const htmlBlock = `
 		<div id="BlockDef">
-			<h2>${stepDefName}</h2>
+			<h3>${stepDefName}</h3>
 			<p>${stepDefDesc}</p>
+			<p><br/> Member of : ${stepDefMemberOf}</p>
 		</div>
 `;
 
 	return htmlBlock;
 }
 
-export function createParamBlock(commentBlock: CommentBlock): string {
-	var stepDefParam: string = "";
+export function createParamHtmlBlock(commentBlock: CommentBlock): string {
 	if (commentBlock.paramTags) {
-		stepDefParam =
-			commentBlock.paramTags[0].param_type +
-			" \n" +
-			commentBlock.paramTags[0].param_name +
-			" \n" +
-			commentBlock.paramTags[0].param_desc;
+		var htmlParamBlock: string = "";
+
+		commentBlock.paramTags.forEach((paramTag) => {
+			htmlParamBlock += `
+			<tr>
+				<th>${paramTag.param_name}</th>
+				<td>${paramTag.param_type}</td>
+				<td>${paramTag.param_desc}</td>
+			</tr>
+			`;
+		});
+
+		const htmlBlock: string = `
+			<table class="table">
+			<thead>
+				<tr>
+				<th scope="col">Name</th>
+				<th scope="col">Type</th>
+				<th scope="col">Description</th>
+				</tr>
+			</thead>
+				<tbody>
+						${htmlParamBlock}
+				</tbody>
+			</table>
+			`;
+		return htmlBlock;
+	} else {
+		return "";
 	}
-	const htmlBlock = `
-		<div id="BlockParam">
-			<p>${stepDefParam}</p>
-		</div>
-`;
-	return htmlBlock;
 }
 
-export function createExampleBlock(commentBlock: CommentBlock): string {
+export function createExampleHtmlBlock(commentBlock: CommentBlock): string {
 	var stepDefExample: string = "";
 	if (commentBlock.exampleTags) {
 		stepDefExample = commentBlock.exampleTags[0].example_content;
@@ -46,22 +99,39 @@ export function createExampleBlock(commentBlock: CommentBlock): string {
 	return htmlBlock;
 }
 
-export function createToDoBlock(commentBlock: CommentBlock): string {
-	var stepDefToDo: string = "";
+export function createToDoHtmlBlock(commentBlock: CommentBlock): string {
 	if (commentBlock.todoTags) {
-		stepDefToDo =
-			commentBlock.todoTags[0].todo_type.toUpperCase() + "   text   : " + commentBlock.todoTags[0].todo_text;
-	}
+		var htmlTodoBlock: string = "";
 
-	const htmlBlock = `
-		<div id="BlockParam">
-			<p>${stepDefToDo}</p>
-		</div>
-`;
-	return htmlBlock;
+		commentBlock.todoTags.forEach((todoTag) => {
+			htmlTodoBlock += `
+			<tr>
+				<th>${todoTag.todo_type.toUpperCase()}</th>
+				<td>${todoTag.todo_text}</td>
+			</tr>
+			`;
+		});
+
+		const htmlBlock: string = `
+			<table class="table">
+			<thead>
+				<tr>
+				<th scope="col">Type</th>
+				<th scope="col">Description</th>
+				</tr>
+			</thead>
+				<tbody>
+						${htmlTodoBlock}
+				</tbody>
+			</table>
+			`;
+		return htmlBlock;
+	} else {
+		return "";
+	}
 }
 
-export function createStepDefBlock(
+export function createStepDefHtmlBlock(
 	defBlock: string,
 	paramBlock: string,
 	exampleBlock: string,
