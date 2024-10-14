@@ -1,10 +1,11 @@
 # To do
 
-- param / To do Step def > shape
+- table >> nice admin
+  ajout un peu de css
+- \n to br
 - expand step def
 - Sort by given ...
 - Sort by interaction types
-- example : code format see read me
 - dynamic navigation depending on files
 
 # Introduction

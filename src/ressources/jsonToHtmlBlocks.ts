@@ -48,7 +48,7 @@ export function createDefHtmlBlock(commentBlock: CommentBlock): string {
 			<div class="stepDefinition" id="BlockDef">
 				<h3>${stepDefName}</h3>
 				<p>${stepDefDesc}</p>
-				<p><b>Member of : </b>${stepDefMemberOf}</p>
+				<p><h4>Member of : </h4>${stepDefMemberOf}</p>
 			</div>
 `;
 	} else {
@@ -77,7 +77,8 @@ export function createParamHtmlBlock(commentBlock: CommentBlock): string {
 		});
 
 		const htmlBlock: string = `
-			<div id="BlockParam">
+			<div class="stepDefinition" id="BlockParam">
+				<h4>Parameters : </h4>
 				<table class="table">
 					<thead>
 						<tr>
@@ -105,8 +106,15 @@ export function createExampleHtmlBlock(commentBlock: CommentBlock): string {
 	}
 
 	const htmlBlock = `
-			<div id="BlockExample">
-				<p>${stepDefExample}</p>
+			<div class="stepDefinition" id="BlockExample">
+				<h4>Example :</h4>
+				<div class="card">
+					<div class="card-body">
+						<code class="hljs">
+							${stepDefExample}
+						</code>
+					</div>
+				</div>
 			</div>
 `;
 	return htmlBlock;
@@ -126,7 +134,8 @@ export function createToDoHtmlBlock(commentBlock: CommentBlock): string {
 		});
 
 		const htmlBlock: string = `
-			<div id="BlockToDo">
+			<div class="stepDefinition" id="BlockToDo">
+				<h4>To Do : </h4>				
 				<table class="table">
 					<thead>
 						<tr>
