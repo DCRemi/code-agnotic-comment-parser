@@ -63,22 +63,30 @@ h6 {
 
 .pagetitle h1 {
 	font-size: 50px;
-	margin-bottom: 0;
+	margin-bottom: 0.4em;
 	font-weight: 600;
 	color: rgb(103, 171, 5);
 }
 
 .pagetitle h2 {
 	font-size: 35px;
-	margin-bottom: 0;
+	margin-top: 1.2em;
+	margin-bottom: 0.6em;
 	font-weight: 600;
 	color: rgb(164, 227, 51);
+}
+
+.pagetitle h3 {
+	font-size: 20px;
+	margin-bottom: 0;
+	margin-top: 0.4em;
+	color: black;
 }
 
 .stepDefinition h3 {
 	font-size: 20px;
 	margin-bottom: 0;
-	margin-top: 500;
+	margin-top: 0.4em;
 	font-weight: 600;
 	color: black;
 }

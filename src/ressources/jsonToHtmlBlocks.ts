@@ -4,33 +4,31 @@ export function createHtmlFileDesc(fileData: FileCommentExtract): string {
 	var fileName = fileData.fileName;
 	var fileDesc = fileData.fileDesc;
 	const htmlBlock = `
-	<div class="pagetitle">
-		<h1>${fileName}</h1>
-		<br />
-		<p>${fileDesc}</p>
-	</div>
+		<div class="pagetitle">
+			<h1>${fileName}</h1>
+			<p>${fileDesc}</p>
+		</div>
 `;
 	return htmlBlock;
 }
 
 export function createHtmlInteractionType(interactionTypes: InteractionType[]): string {
-	if (interactionTypes) {
+	if (interactionTypes.length > 0) {
 		var htmlBlocks: string = `
-		<div id="BlockDef">
-			<h2>Interaction types </h2>
-		</div>
+			<div class="pagetitle" id="interActionTypes">
+				<h2>Interaction types </h2>
+			</div>
 	`;
 		interactionTypes.forEach((interactionType) => {
 			var interactionTypeName = interactionType.interactionTypeName;
 			var interactionTypeDesc = interactionType.interactionTypeDesc;
 			const htmlBlock = `
-		<div id="BlockDef">
+		<div class="pagetitle" id="BlockDef">
 			<h3>${interactionTypeName}</h3>
 			<p>${interactionTypeDesc}</p>
 		</div>
 	`;
-			htmlBlocks += "<br/>" + htmlBlock;
-
+			htmlBlocks += htmlBlock;
 			// htmlBlocks.push(htmlBlock);
 		});
 
