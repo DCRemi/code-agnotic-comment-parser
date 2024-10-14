@@ -1,10 +1,12 @@
 import {
-	createDefBlock,
-	createExampleBlock,
+	createDefHtmlBlock,
+	createExampleHtmlBlock,
+	createHtmlFileDesc,
 	createHtmlFile,
-	createParamBlock,
-	createStepDefBlock,
-	createToDoBlock
+	createParamHtmlBlock,
+	createStepDefHtmlBlock,
+	createToDoHtmlBlock,
+	createHtmlInteractionType
 } from "./ressources/jsonToHtmlBlocks";
 import { copyFilesStructToHtml, getAllFilePathFromDir, HtmlToFile } from "./ressources/command";
 import { CommentBlock } from "./ressources/interfaces";
@@ -23,25 +25,31 @@ copyFilesStructToHtml(filesPaths, sourcePathName, destinationPath);
 
 //#endregion
 
-const filePath = "./json_output/contextSetupOutput.json";
-// filesPaths.forEach((filePath) => {
+// const filePath = "./json_output/storageOutput.json";
+filesPaths.forEach((filePath) => {
+	const fileJsonData = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+	const commentJsonBlocks = fileJsonData.commentBlocks;
+	const interactionTypeJsonBlocks = fileJsonData.interactionTypes;
 
-const jsonData = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-var commentBlocks: string;
-// console.log(jsonData);
-jsonData.commentBlocks.forEach((commentBlock: CommentBlock) => {
-	// console.log(commentBlock);
+	var fileHtmlBlocks: string = "";
 
-	const defBlock = createDefBlock(commentBlock);
-	const paramBlock = createParamBlock(commentBlock);
-	const exampleBlock = createExampleBlock(commentBlock);
-	const todoBlock = createToDoBlock(commentBlock);
+	const fileHtmlDesc = createHtmlFileDesc(fileJsonData);
+	fileHtmlBlocks = fileHtmlDesc;
 
-	const bloc = createStepDefBlock(defBlock, paramBlock, exampleBlock, todoBlock);
-	commentBlocks += "<br/><br/>" + bloc;
-	// });
-	const htmlFile = createHtmlFile(commentBlocks);
-	// const htmlFile = createHtmlFile(commentBlocks);
-	HtmlToFile(htmlFile, "html_output/index");
+	const fileHtmlInteractionTypes = createHtmlInteractionType(interactionTypeJsonBlocks);
+	fileHtmlBlocks += "<br/>" + fileHtmlInteractionTypes;
+	fileHtmlBlocks += "<br/><h2>Steps</h2>";
+
+	commentJsonBlocks.forEach((commentBlock: CommentBlock) => {
+		const defHtmlBlock = createDefHtmlBlock(commentBlock);
+		const paramHtmlBlock = createParamHtmlBlock(commentBlock);
+		const exampleHtmlBlock = createExampleHtmlBlock(commentBlock);
+		const todoHtmlBlock = createToDoHtmlBlock(commentBlock);
+		const bloc = createStepDefHtmlBlock(defHtmlBlock, paramHtmlBlock, exampleHtmlBlock, todoHtmlBlock);
+		fileHtmlBlocks += bloc + "<br/><br/>";
+	});
+
+	const htmlFile = createHtmlFile(fileHtmlBlocks);
+
+	HtmlToFile(htmlFile, `html_output/html_pages/${path.basename(filePath).replace(path.extname(filePath), "")}`);
 });
-// });
