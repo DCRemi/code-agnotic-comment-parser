@@ -52,13 +52,16 @@ export interface TodoTag {
 	todo_text: string;
 }
 
-export interface FolderTag {
-	folder_name: string;
+export interface InteractionType {
+	interactionTypeName: string;
+	interactionTypeDesc: string;
 }
 
 export interface CommentBlock {
 	blocNumber: number;
-	folder?: string;
+	// stepType: "Given" | "When" | "Then" | "interactionTypeBlock" | "Missing";
+	stepType: string;
+	memberof?: string;
 	stepDef?: string;
 	paramTags?: ParamTag[];
 	descriptionTags?: DescriptionTag[];
@@ -70,6 +73,8 @@ export interface CommentBlock {
 
 export interface FileCommentExtract {
 	fileName: string;
+	fileDesc: string;
+	interactionTypes?: InteractionType[];
 	commentBlocks: CommentBlock[];
-	folderNames?: string[];
+
 }

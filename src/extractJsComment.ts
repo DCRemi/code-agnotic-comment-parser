@@ -1,7 +1,7 @@
 import {
 	extractTagSpecificData,
 	extractJsComContent,
-	getTagDataFromBlock,
+	extractGenericTagBlock,
 	getTagIndex,
 	JSONToFile,
 	removeJsComBoundary,
@@ -40,10 +40,12 @@ filesPaths.forEach((filePath) => {
 		genericCommentBlocks
 	};
 	jsCommentsBlocksCleaned.forEach((element, index) => {
-		genericGlobalComments.genericCommentBlocks[index] = {
-			blocNumber: index + 1,
-			genericTagSentences: getTagDataFromBlock(element, getTagIndex(element))
-		};
+		if (getTagIndex(element).length !== 0) {
+			genericGlobalComments.genericCommentBlocks[index] = {
+				blocNumber: index + 1,
+				genericTagSentences: extractGenericTagBlock(element, getTagIndex(element))
+			};
+		}
 	});
 
 	// #region intermediate extract
@@ -60,6 +62,11 @@ filesPaths.forEach((filePath) => {
 	const finalJson = extractTagSpecificData(fileName, genericGlobalComments);
 
 	/** STEP 6 : Write final json to file */
+	// Create output folder if it doesn't exist
+	if (!fs.existsSync("./json_output")) {
+		fs.mkdirSync("./json_output");
+	}
+
 	if (finalOutputFilePath.match(/\.\/json_output\/\w*\//)) {
 		// not a root file
 		if (!fs.existsSync(finalOutputFilePath.match(/\.\/json_output\/\w*\//)[0])) {

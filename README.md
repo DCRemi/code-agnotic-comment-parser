@@ -38,17 +38,27 @@ It could even be used for all language or type of document
 ### I.1. Code folders
 
 - Input will contain the files to go accross to create the documentation
-- Output will contains for each file the comment tags extract.
 - src/ressources
   - interface for the object used
   - command to extract and parse the data
 - extractJsComments, main code
+- json_output will contains for each file the comment tags extract as json format
+- html_output will contains for each file the corresponding html file 
+
 
 ### I.2. Run
 
 Add in the input folder the files you want to treat.<br />
-Run the script extractComment <br/>
-`npm run extractComment`
+
+#### Extract json file from comment
+`npm run doc:extract`
+<br/>
+
+#### Create the full html folder
+`npm run docToHtml:createHtmlStruct`
+
+#### Extract json file from comment then create the html files
+`npm run generate:doc`
 
 # II. How it works
 
@@ -66,7 +76,8 @@ In that way it is easy to follow change made on the code and to update the comme
 
 There is 2 types of blocks
 
-- Folder blocks : use to define the folder that will belong to the file (contains folder name tag)
+- File blocks : use to define the folder that will belong to the file
+  - These blocks can have only one tag  @fileDesc or @interactionTypes
 - Step definition blocks : use to define the documentation that describe a step definition (contains stepdef tag)
 
 ### II.3. Tags type
@@ -84,21 +95,42 @@ If the variable are not correctly set an error will appear on the console. Howev
 
 # III. Tags
 
-### III.1. Folder tags
+### III.1. File tags
 
-**@folderName** (Simple tag)
+**@fileDesc** (Simple tag)
+> Add a description to the file <br />
+> NEED TO BE UNIQUE and the only tag in the block<br />
 
-> Create a folder for the file<br />
-> @folderName name of the folder
+**@interactionTypes** (complexe tag)
+> Create groupe of step definition<br />
+> NEED TO BE THE ONLY TAG IN THE BLOCK<br />
+
+> It is composed with 1 parameter :
+
+- interactionType name : after the tag and between {}
+
+/**
+ * @interactionTypes {1_generic_Click}
+ * These steps are used to do basic actions click, type ...
+ */
+
+> example :@interactionTypes {1_generic_Click} These steps are used to do basic actions click, type ...<br />
 
 **@memberof** (Simple tag)
 
-> Add the comment block to the folder <br />
-> @memberof name of an existing folder in the file \* if the folder name doesn't exist it will be treated as a generic tag
+> Add the comment block to an interactionType <br />
+> @memberof name of an existing interactionType in the file \* if the interactionType name doesn't exist it will be treated as a generic tag
 
 ### III.2. Code tags
 
-**@stepdef** (Simple tag)
+
+**@stepType** (Simple tag)
+
+> will be used to regroup the step type together<br />
+> Values are : Given / When / Then <br />
+> @stepdef TWhen
+
+**@stepDef** (Simple tag)
 
 > will be used as a title of the comment block. Usually it is a copy of the step definition text<br />
 > @stepdef The user clicks on ...
@@ -147,11 +179,12 @@ They will be displayed with the name of the tag and the text as content
 
 ```
 /**
- * @folderName 1_generic_Click
- * @description These steps are used to do basic click action
+ * @interactionType 1_generic_Click
+ * These steps are used to do basic click action
  */
 
 /**
+ * @stepType When
  * @stepDef the user clicks on the {element}
  * @memberof 1_generic_Click
  * @description Clicks on an element + verify that it is te only one in the page
@@ -164,6 +197,7 @@ When("the user clicks on the {string}", (element: string) => {
 });
 
 /**
+ * @stepType When
  * @stepDef the user clicks on the {element} in a random position
  * @memberof 1_generic_Click
  * @description Clicks on a random element of this type
