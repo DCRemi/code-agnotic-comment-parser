@@ -1,3 +1,11 @@
+# To do
+
+- dynamic navigation depending on files
+- expand step def
+- Sort by given ...
+- Sort by interaction types
+- example : code format see read me
+
 # Introduction
 
 This is a code agnostic comment with tag parser.
