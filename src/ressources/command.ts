@@ -7,6 +7,7 @@ import {
 	GenericGlobalComments,
 	GenericTag,
 	GenericTagSentence,
+	InteractionType,
 	ParamTag,
 	SeeTag,
 	TagIndex,
@@ -14,6 +15,10 @@ import {
 } from "./interfaces";
 const fs = require("fs");
 const path = require("path");
+
+/* -------------------------------------------------------------------------- */
+/*                               Extract JS data                              */
+/* -------------------------------------------------------------------------- */
 
 /**
  * Extract from a file the jsComment starting /** and ending with wildcard/
@@ -65,7 +70,7 @@ export const getTagIndex = function (jsCommentBlock: string): TagIndex[] {
  * @param {TagIndex[]} jsBlockTagsIndex array of tags to extract
  * @returns array of GenericTagSentence that contains the tag and its content
  */
-export const getTagDataFromBlock = function (
+export const extractGenericTagBlock = function (
 	jsCommentBlock: string,
 	jsBlockTagsIndex: TagIndex[]
 ): GenericTagSentence[] {
@@ -88,124 +93,195 @@ export const getTagDataFromBlock = function (
 	});
 	return genericTagSentences;
 };
+
+/* ---------------------------- Extract Tags data --------------------------- */
+
 /**
- * construct from a Generic global comment a structured json with different tags and their parameters
+ * @description Construct from a Generic global comment a structured json with different tags and their parameters
  * @param {string} fileName name of the file the comments comes from
  * @param {GenericGlobalComments} genericGlobalComments array of tags extracted
  * @returns json structured with all the known tags and their parameter to be used as documentation
  */
 export const extractTagSpecificData = function (fileName: string, genericGlobalComments: GenericGlobalComments) {
-	const fileComments: FileCommentExtract = { fileName, folderNames: [], commentBlocks: [] };
+
+	// Initialize the file
+	const fileComments: FileCommentExtract = { fileName, fileDesc: "empty file description", interactionTypes: [], commentBlocks: [] };
+
+	const fileTagType = ["@fileDesc", "@interactionTypes"]
+
 	genericGlobalComments.genericCommentBlocks.forEach((genericCommentBlock) => {
-		const commentBlock: CommentBlock = { blocNumber: genericCommentBlock.blocNumber };
-		genericCommentBlock.genericTagSentences.forEach((genericTagSentence) => {
-			const typeRegex = /\{.*\}/;
-			switch (genericTagSentence.tag) {
-				case "@folderName":
-					fileComments.folderNames.push(genericTagSentence.tag_content.trim());
-					break;
-				case "@stepDef":
-					commentBlock.stepDef = genericTagSentence.tag_content.trim();
-				case "@memberof":
-					commentBlock.folder = genericTagSentence.tag_content.trim();
-					break;
-				case "@param":
-					let paramTag: ParamTag;
-					if (genericTagSentence.tag_content.match(typeRegex)) {
-						const param_type = genericTagSentence.tag_content.match(typeRegex)[0];
-						const param_name_desc = genericTagSentence.tag_content.substring(param_type.length).trim();
-						const param_name = param_name_desc.match(/\w+/)[0];
-						paramTag = {
-							param_type,
-							param_name,
-							param_desc: param_name_desc.substring(param_name.length).trim()
-						};
-					} else {
-						paramTag = {
-							param_type: "none",
-							param_name: "none",
-							param_desc: genericTagSentence.tag_content
-						};
-						console.error(
-							"error : the param tag config is missing missing {param_type} param_name description (see documentation)"
-						);
-					}
-					// if the paramTags array doesn't exist, can't use push but need to initialize it
-					commentBlock.paramTags ? commentBlock.paramTags.push(paramTag) : (commentBlock.paramTags = [paramTag]);
-					break;
-				case "@todo":
-					let todoTag: TodoTag;
-					if (genericTagSentence.tag_content.match(typeRegex)) {
-						const todo_type = genericTagSentence.tag_content.match(typeRegex)[0];
-						todoTag = {
-							todo_type,
-							todo_text: genericTagSentence.tag_content.substring(todo_type.length).trim()
-						};
-					} else {
-						todoTag = {
-							todo_type: "none",
-							todo_text: genericTagSentence.tag_content
-						};
-						console.error("error : the todo tag config is missing missing {todo_type} description (see documentation)");
-					}
-					// if the todoTags array doesn't exist, can't use push but need to initialize it
-					commentBlock.todoTags ? commentBlock.todoTags.push(todoTag) : (commentBlock.todoTags = [todoTag]);
-					break;
-				case "@description":
-					const descriptionTag: DescriptionTag = {
-						description: genericTagSentence.tag_content
-					};
-					// if the descriptionTags array doesn't exist, can't use push but need to initialize it
-					commentBlock.descriptionTags
-						? commentBlock.descriptionTags.push(descriptionTag)
-						: (commentBlock.descriptionTags = [descriptionTag]);
-					break;
-				case "@see":
-					const seeTag: SeeTag = {
-						see_content: genericTagSentence.tag_content
-					};
-					// if the seeTags array doesn't exist, can't use push but need to initialize it
-					commentBlock.seeTags ? commentBlock.seeTags.push(seeTag) : (commentBlock.seeTags = [seeTag]);
-					break;
-				case "@example":
-					const exampleTag: ExampleTag = {
-						example_content: genericTagSentence.tag_content
-					};
-					// if the exampleTag array doesn't exist, can't use push but need to initialize it
-					commentBlock.exampleTags
-						? commentBlock.exampleTags.push(exampleTag)
-						: (commentBlock.exampleTags = [exampleTag]);
-					break;
-				default:
-					const genericTag: GenericTag = {
-						tag: genericTagSentence.tag,
-						content: genericTagSentence.tag_content
-					};
-					// if the descriptionTags array doesn't exist, can't use push but need to initialize it
-					commentBlock.genericTags
-						? commentBlock.genericTags.push(genericTag)
-						: (commentBlock.genericTags = [genericTag]);
-					break;
-			}
-		});
-		fileComments.commentBlocks.push(commentBlock);
+		// If the 1st tag is a file tag it will treat only this tag and add it to the file data
+		if (fileTagType.includes(genericCommentBlock.genericTagSentences[0].tag)) {
+
+			// fileComments.interactionTypes.push(
+			extractFileTagData(fileComments, genericCommentBlock)
+			// );
+
+		}
+		// If it is not a file tag it will iterate on the tags and extract all data
+		else {
+			fileComments.commentBlocks.push(extractBlockTagData(genericCommentBlock));
+		}
 	});
 	return fileComments;
 };
 
 /**
- * Write a json object in a file
- * @param obj json object to save in a file
- * @param filename
+ * @description Treat file related block when the tag is fileDesc or interactionsTypes
+ * @param {FileCommentExtract} fileComments FileCommentExtract where the data will be added
+ * @param {GenericGlobalComment} genericCommentBlock comment block that contains the file tag
+ * @returns FileCommentExtract modified 
  */
-export const JSONToFile = (obj, filename) => fs.writeFileSync(`${filename}.json`, JSON.stringify(obj, null, 2));
+export const extractFileTagData = function (fileComments: FileCommentExtract, genericCommentBlock: GenericCommentBlock): FileCommentExtract {
+	const typeRegex = /\{(.*)\}/;
+
+	switch (genericCommentBlock.genericTagSentences[0].tag) {
+		case "@fileDesc":
+			fileComments.fileDesc = genericCommentBlock.genericTagSentences[0].tag_content
+			return fileComments
+		case "@interactionTypes":
+			let interactionType: InteractionType;
+			// if the tag contains a type into {type}
+			if (genericCommentBlock.genericTagSentences[0].tag_content.match(typeRegex)) {
+				const interactionTypeName = genericCommentBlock.genericTagSentences[0].tag_content.match(typeRegex);
+				interactionType = {
+					interactionTypeName: interactionTypeName[1],
+					interactionTypeDesc: genericCommentBlock.genericTagSentences[0].tag_content
+						.substring(interactionTypeName[0].length)
+						.trim()
+				};
+			}
+			// if the tag doesn't contain a type into it will put none
+			else {
+				interactionType = {
+					interactionTypeName: "none",
+					interactionTypeDesc: genericCommentBlock.genericTagSentences[0].tag_content
+				};
+			}
+			fileComments.interactionTypes.push(interactionType)
+			return fileComments
+		default:
+			//
+			break;
+	}
+}
 
 /**
- * Write a json object in a file
- * @param obj json object to save in a file
- * @param filename
+ * @description Treat block tag, iterate on all tag of the blocks to extract all data 
+ * @param {GenericGlobalComment} genericCommentBlock comment block that contains the file tag
+ * @returns CommentBlock extracted data
  */
-export const HtmlToFile = (obj, filename) => fs.writeFileSync(`${filename}.html`, obj);
+export const extractBlockTagData = function (genericCommentBlock: GenericCommentBlock): CommentBlock {
+	const typeRegex = /\{(.*)\}/;
+
+	const commentBlock: CommentBlock = { blocNumber: genericCommentBlock.blocNumber, stepType: "Missing" };
+
+	genericCommentBlock.genericTagSentences.forEach((genericTagSentence) => {
+		switch (genericTagSentence.tag) {
+			case "@stepType":
+				commentBlock.stepType = genericTagSentence.tag_content.trim();
+				break;
+			case "@stepDef":
+				commentBlock.stepDef = genericTagSentence.tag_content.trim();
+				break;
+			case "@memberof":
+				commentBlock.memberof = genericTagSentence.tag_content.trim();
+				break;
+			case "@param":
+				let paramTag: ParamTag;
+				// if the tag contains a type into {type}
+
+				if (genericTagSentence.tag_content.match(typeRegex)) {
+					const param_type = genericTagSentence.tag_content.match(typeRegex);
+					const param_name_desc = genericTagSentence.tag_content.substring(param_type[0].length).trim();
+					const param_name = param_name_desc.match(/\w+/)[0];
+					paramTag = {
+						param_type: param_type[1],
+						param_name,
+						param_desc: param_name_desc.substring(param_name.length).trim()
+					};
+				}
+				// if the tag doesn't contain a type into it will put none
+				else {
+					paramTag = {
+						param_type: "none",
+						param_name: "none",
+						param_desc: genericTagSentence.tag_content
+					};
+					console.error(
+						"error : the param tag config is missing missing {param_type} param_name description (see documentation)"
+					);
+				}
+				// if the paramTags array doesn't exist, can't use push but need to initialize it
+				commentBlock.paramTags ? commentBlock.paramTags.push(paramTag) : (commentBlock.paramTags = [paramTag]);
+				break;
+			case "@todo":
+				let todoTag: TodoTag;
+				// if the tag contains a type into {type}
+				if (genericTagSentence.tag_content.match(typeRegex)) {
+					const todo_type = genericTagSentence.tag_content.match(typeRegex);
+					todoTag = {
+						todo_type: todo_type[1],
+						todo_text: genericTagSentence.tag_content.substring(todo_type[0].length).trim()
+					};
+				}
+				// if the tag doesn't contain a type into it will put none
+				else {
+					todoTag = {
+						todo_type: "none",
+						todo_text: genericTagSentence.tag_content
+					};
+					console.error(
+						"error : the todo tag config is missing missing {todo_type} description (see documentation)"
+					);
+				}
+				// if the todoTags array doesn't exist, can't use push but need to initialize it
+				commentBlock.todoTags ? commentBlock.todoTags.push(todoTag) : (commentBlock.todoTags = [todoTag]);
+				break;
+			case "@description":
+				const descriptionTag: DescriptionTag = {
+					description: genericTagSentence.tag_content
+				};
+				// if the descriptionTags array doesn't exist, can't use push but need to initialize it
+				commentBlock.descriptionTags
+					? commentBlock.descriptionTags.push(descriptionTag)
+					: (commentBlock.descriptionTags = [descriptionTag]);
+				break;
+			case "@see":
+				const seeTag: SeeTag = {
+					see_content: genericTagSentence.tag_content
+				};
+				// if the seeTags array doesn't exist, can't use push but need to initialize it
+				commentBlock.seeTags ? commentBlock.seeTags.push(seeTag) : (commentBlock.seeTags = [seeTag]);
+				break;
+			case "@example":
+				const exampleTag: ExampleTag = {
+					example_content: genericTagSentence.tag_content
+				};
+				// if the exampleTag array doesn't exist, can't use push but need to initialize it
+				commentBlock.exampleTags
+					? commentBlock.exampleTags.push(exampleTag)
+					: (commentBlock.exampleTags = [exampleTag]);
+				break;
+			default:
+				const genericTag: GenericTag = {
+					tag: genericTagSentence.tag,
+					content: genericTagSentence.tag_content
+				};
+				// if the descriptionTags array doesn't exist, can't use push but need to initialize it
+				commentBlock.genericTags
+					? commentBlock.genericTags.push(genericTag)
+					: (commentBlock.genericTags = [genericTag]);
+				break;
+		}
+	});
+	return commentBlock
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                         File and folder management                         */
+/* -------------------------------------------------------------------------- */
 
 /**
  * Recursive command that go through a folder and all its sub-folder to list all files path
@@ -226,6 +302,7 @@ export function getAllFilePathFromDir(folderPath: string, filesPaths?: string[])
 		}
 	});
 }
+
 /**
  * Copy a files and folder structure from a source path to an destination path
  * it copies the folder structure and create for each file an html file
@@ -243,9 +320,14 @@ export function copyFilesStructToHtml(filesPaths: string[], sourcePath: string, 
 	filesPaths.forEach((filePath) => {
 		const fileName = path.basename(filePath).replace(path.extname(filePath), "");
 		const fileFolderPath = path.dirname(filePath);
-		const folderName = fileFolderPath.replace(sourcePath, "");
-		const destinationFolder = destinationPath + folderName;
+		const interactionTypes = fileFolderPath.replace(sourcePath, "");
+		const destinationFolder = destinationPath + interactionTypes;
 		const destinationFile = "./" + destinationFolder + "/" + fileName;
+
+		// Create output folder if it doesn't exist
+		if (!fs.existsSync(destinationPath)) {
+			fs.mkdirSync(destinationPath);
+		}
 
 		if (!fs.existsSync(destinationFolder)) {
 			fs.mkdirSync(destinationFolder);
@@ -253,3 +335,17 @@ export function copyFilesStructToHtml(filesPaths: string[], sourcePath: string, 
 		HtmlToFile("", destinationFile);
 	});
 }
+
+/**
+ * Write a json object in a file
+ * @param obj json object to save in a file
+ * @param filename
+ */
+export const JSONToFile = (obj, filename) => fs.writeFileSync(`${filename}.json`, JSON.stringify(obj, null, 2));
+
+/**
+ * Write a json object in a file
+ * @param obj json object to save in a file
+ * @param filename
+ */
+export const HtmlToFile = (obj, filename) => fs.writeFileSync(`${filename}.html`, obj);
