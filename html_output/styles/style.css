@@ -55,17 +55,32 @@ h6 {
 }
 
 /*--------------------------------------------------------------
-  # Page Title
+  # Page Titles
   --------------------------------------------------------------*/
 .pagetitle {
 	margin-bottom: 10px;
 }
 
 .pagetitle h1 {
-	font-size: 24px;
+	font-size: 50px;
 	margin-bottom: 0;
 	font-weight: 600;
 	color: rgb(103, 171, 5);
+}
+
+.pagetitle h2 {
+	font-size: 35px;
+	margin-bottom: 0;
+	font-weight: 600;
+	color: rgb(164, 227, 51);
+}
+
+.stepDefinition h3 {
+	font-size: 20px;
+	margin-bottom: 0;
+	margin-top: 500;
+	font-weight: 600;
+	color: black;
 }
 
 /*--------------------------------------------------------------

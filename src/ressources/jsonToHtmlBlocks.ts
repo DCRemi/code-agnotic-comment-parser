@@ -4,8 +4,9 @@ export function createHtmlFileDesc(fileData: FileCommentExtract): string {
 	var fileName = fileData.fileName;
 	var fileDesc = fileData.fileDesc;
 	const htmlBlock = `
-	<div id="BlockDef">
+	<div class="pagetitle">
 		<h1>${fileName}</h1>
+		<br />
 		<p>${fileDesc}</p>
 	</div>
 `;
@@ -13,26 +14,30 @@ export function createHtmlFileDesc(fileData: FileCommentExtract): string {
 }
 
 export function createHtmlInteractionType(interactionTypes: InteractionType[]): string {
-	var htmlBlocks: string = `
+	if (interactionTypes) {
+		var htmlBlocks: string = `
 		<div id="BlockDef">
 			<h2>Interaction types </h2>
 		</div>
 	`;
-	interactionTypes.forEach((interactionType) => {
-		var interactionTypeName = interactionType.interactionTypeName;
-		var interactionTypeDesc = interactionType.interactionTypeDesc;
-		const htmlBlock = `
+		interactionTypes.forEach((interactionType) => {
+			var interactionTypeName = interactionType.interactionTypeName;
+			var interactionTypeDesc = interactionType.interactionTypeDesc;
+			const htmlBlock = `
 		<div id="BlockDef">
 			<h3>${interactionTypeName}</h3>
 			<p>${interactionTypeDesc}</p>
 		</div>
 	`;
-		htmlBlocks += "<br/>" + htmlBlock;
+			htmlBlocks += "<br/>" + htmlBlock;
 
-		// htmlBlocks.push(htmlBlock);
-	});
+			// htmlBlocks.push(htmlBlock);
+		});
 
-	return htmlBlocks;
+		return htmlBlocks;
+	} else {
+		return "";
+	}
 }
 
 export function createDefHtmlBlock(commentBlock: CommentBlock): string {
@@ -41,7 +46,7 @@ export function createDefHtmlBlock(commentBlock: CommentBlock): string {
 	var stepDefMemberOf = commentBlock.memberof;
 
 	const htmlBlock = `
-		<div id="BlockDef">
+		<div class="stepDefinition" id="BlockDef">
 			<h3>${stepDefName}</h3>
 			<p>${stepDefDesc}</p>
 			<p><br/> Member of : ${stepDefMemberOf}</p>
@@ -205,9 +210,6 @@ export function createHtmlFile(mainHtml: string): string {
 			</ul>
 		</aside>
 		<main id="main" class="main">
-			<div class="pagetitle">
-				Step definitions
-			</div>
 				${mainHtml}	
 			</main>
 	</body>
