@@ -111,21 +111,22 @@ export function createExampleHtmlBlock(commentBlock: CommentBlock): string {
 	var stepDefExample: string = "";
 	if (commentBlock.exampleTags) {
 		stepDefExample = commentBlock.exampleTags[0].example_content;
-	}
-
-	const htmlBlock = `
-			<div class="stepDefinition" id="BlockExample">
-				<h4>Example :</h4>
-				<div class="card">
-					<div class="card-body">
-						<code class="hljs">
-							${stepDefExample.replace(/.\n/g, "<br />")}
-						</code>
-					</div>
+		const htmlBlock = `
+		<div class="stepDefinition" id="BlockExample">
+			<h4>Example :</h4>
+			<div class="card">
+				<div class="card-body">
+					<code class="hljs">
+						${stepDefExample.replace(/.\n/g, "<br />")}
+					</code>
 				</div>
 			</div>
+		</div>
 `;
-	return htmlBlock;
+		return htmlBlock;
+	} else {
+		return "";
+	}
 }
 
 export function createToDoHtmlBlock(commentBlock: CommentBlock): string {
