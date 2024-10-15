@@ -7,7 +7,8 @@
 		"format": "prettier -w .",
 		"generate:doc": "run-s doc:*",
 		"doc:extract": "npx ts-node ./src/extractJsComment.ts",
-		"doc:ToHtml": "npx ts-node ./src/createHtmlStruct.ts",
+		"doc:ToHtmlFolder": "npx ts-node ./src/createHtmlStructure.ts",
+		"doc:ToHtmlFile": "npx ts-node ./src/createHtmlFile.ts",
 		"doc:copyREADME": "cp README.md ./html_output/",
 		"resetFolders": "rm -rf json_output html_output/*Output.html"
 	},
