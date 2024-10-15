@@ -6,7 +6,8 @@ import {
 	createParamHtmlBlock,
 	createStepDefHtmlBlock,
 	createToDoHtmlBlock,
-	createHtmlInteractionType
+	createHtmlInteractionType,
+	createTitleHtmlBlock
 } from "./ressources/jsonToHtmlBlocks";
 import { copyFilesStructToHtml, getAllFilePathFromDir, HtmlToFile } from "./ressources/command";
 import { CommentBlock } from "./ressources/interfaces";
@@ -16,11 +17,11 @@ const path = require("path");
 const folderPath = "./json_output/";
 const filesPaths: string[] = [];
 const sourcePathName = "json_output";
-const destinationPath = "html_output/html_pages";
+const destinationPath = "html_output";
 
 // #region RUN
 /** STEP 1 : Create HTML folder & file structure */
-getAllFilePathFromDir(folderPath, filesPaths);
+getAllFilePathFromDir(folderPath, filesPaths, ".json");
 copyFilesStructToHtml(filesPaths, sourcePathName, destinationPath);
 
 //#endregion
@@ -31,25 +32,47 @@ filesPaths.forEach((filePath) => {
 	const commentJsonBlocks = fileJsonData.commentBlocks;
 	const interactionTypeJsonBlocks = fileJsonData.interactionTypes;
 
-	var fileHtmlBlocks: string = "";
+	var htmlBody: string = "";
 
 	const fileHtmlDesc = createHtmlFileDesc(fileJsonData);
-	fileHtmlBlocks = fileHtmlDesc;
+	htmlBody = fileHtmlDesc;
 
 	const fileHtmlInteractionTypes = createHtmlInteractionType(interactionTypeJsonBlocks);
-	fileHtmlBlocks += "<br/>" + fileHtmlInteractionTypes;
-	fileHtmlBlocks += "<br/><h2>Steps</h2>";
 
+	var htmlCommentBlocks = "";
 	commentJsonBlocks.forEach((commentBlock: CommentBlock) => {
+		const TitleHtmlBlock = createTitleHtmlBlock(commentBlock);
 		const defHtmlBlock = createDefHtmlBlock(commentBlock);
 		const paramHtmlBlock = createParamHtmlBlock(commentBlock);
 		const exampleHtmlBlock = createExampleHtmlBlock(commentBlock);
 		const todoHtmlBlock = createToDoHtmlBlock(commentBlock);
-		const bloc = createStepDefHtmlBlock(defHtmlBlock, paramHtmlBlock, exampleHtmlBlock, todoHtmlBlock);
-		fileHtmlBlocks += bloc + "<br/><br/>";
+		const bloc = createStepDefHtmlBlock(
+			TitleHtmlBlock,
+			defHtmlBlock,
+			paramHtmlBlock,
+			exampleHtmlBlock,
+			todoHtmlBlock,
+			commentBlock.blocNumber
+		);
+		const htmlCommentBlock = `
+			<div class="accordion-item stepDefinition" id="commentBlock${commentBlock.blocNumber - 1}">
+				${bloc}
+			</div>`;
+		htmlCommentBlocks += htmlCommentBlock + "<br/><br/>";
 	});
 
-	const htmlFile = createHtmlFile(fileHtmlBlocks);
+	htmlBody = `
+		${fileHtmlDesc ? fileHtmlDesc : ""}
+		${fileHtmlInteractionTypes ? fileHtmlInteractionTypes : ""}
+		<div class="pagetitle">
+			<h2>Steps</h2>
+		</div>
+		<div class="accordion">
+		${htmlCommentBlocks ? htmlCommentBlocks : ""}
+		</div>
+	`;
 
-	HtmlToFile(htmlFile, `html_output/html_pages/${path.basename(filePath).replace(path.extname(filePath), "")}`);
+	const htmlFile = createHtmlFile(htmlBody);
+
+	HtmlToFile(htmlFile, `html_output/${path.basename(filePath).replace(path.extname(filePath), "")}`);
 });

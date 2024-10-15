@@ -7,6 +7,7 @@ import {
 	removeJsComBoundary,
 	getAllFilePathFromDir
 } from "./ressources/command";
+import { unCamelized } from "./ressources/helpers";
 import { GenericCommentBlock, GenericGlobalComments } from "./ressources/interfaces";
 
 // import fs from "fs";
@@ -14,12 +15,13 @@ const fs = require("fs");
 const folderPath = "input";
 const filesPaths: string[] = [];
 
-getAllFilePathFromDir(folderPath, filesPaths);
+getAllFilePathFromDir(folderPath, filesPaths, ".ts");
 
 filesPaths.forEach((filePath) => {
 	const fileName = filePath.split(/input\/(.*)\.ts/)[1];
 	const intermediateOutputFilePath = `./json_output/intermediate/${fileName}Intermediate`;
 	const finalOutputFilePath = `./json_output/${fileName}Output`;
+	const fileNameUnCamelized = unCamelized(fileName);
 
 	// #region run
 	/** STEP 1 : Get file content */
@@ -59,7 +61,7 @@ filesPaths.forEach((filePath) => {
 	//#endregion
 
 	/** STEP 5 :  extract tag specific data */
-	const finalJson = extractTagSpecificData(fileName, genericGlobalComments);
+	const finalJson = extractTagSpecificData(fileNameUnCamelized, genericGlobalComments);
 
 	/** STEP 6 : Write final json to file */
 	// Create output folder if it doesn't exist

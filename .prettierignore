@@ -1,8 +1,6 @@
 # cypress
 input
-output
-node-modules
-*.old
+node_modules
 .prettierignore
 .prettierrc
 package.json
