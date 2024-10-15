@@ -38,8 +38,17 @@ export function createHtmlInteractionType(interactionTypes: InteractionType[]): 
 	}
 }
 
-export function createDefHtmlBlock(commentBlock: CommentBlock): string {
+export function createTitleHtmlBlock(commentBlock: CommentBlock): string {
 	var stepDefName = commentBlock.stepDef;
+	const htmlBlock = `
+			<div class="stepDefinition" id="BlockDef">
+				<h3>${stepDefName}</h3>
+			</div>
+`;
+	return htmlBlock;
+}
+
+export function createDefHtmlBlock(commentBlock: CommentBlock): string {
 	var stepDefDesc = commentBlock.descriptionTags ? commentBlock.descriptionTags[0].description : "";
 	stepDefDesc = stepDefDesc.replace(/.\n/g, "<br />");
 	var stepDefMemberOf = commentBlock.memberof;
@@ -47,7 +56,6 @@ export function createDefHtmlBlock(commentBlock: CommentBlock): string {
 	if (stepDefMemberOf) {
 		htmlBlock = `
 			<div class="stepDefinition" id="BlockDef">
-				<h3>${stepDefName}</h3>
 				<p>${stepDefDesc}</p>
 				<p><h4>Member of : </h4>${stepDefMemberOf}</p>
 			</div>
@@ -55,7 +63,6 @@ export function createDefHtmlBlock(commentBlock: CommentBlock): string {
 	} else {
 		htmlBlock = `
 			<div class="stepDefinition" id="BlockDef">
-				<h3>${stepDefName}</h3>
 				<p>${stepDefDesc}</p>
 			</div>
 		`;
@@ -157,6 +164,7 @@ export function createToDoHtmlBlock(commentBlock: CommentBlock): string {
 }
 
 export function createStepDefHtmlBlock(
+	TitleBlock: string,
 	defBlock: string,
 	paramBlock: string,
 	exampleBlock: string,
@@ -164,6 +172,7 @@ export function createStepDefHtmlBlock(
 ): string {
 	const htmlBlock = `
 		<div id="commentBlock">
+			${TitleBlock ? TitleBlock : ""}
 			${defBlock ? defBlock : ""}
 			${paramBlock ? paramBlock : ""}
 			${exampleBlock ? exampleBlock : ""}

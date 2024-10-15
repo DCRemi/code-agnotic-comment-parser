@@ -6,7 +6,8 @@ import {
 	createParamHtmlBlock,
 	createStepDefHtmlBlock,
 	createToDoHtmlBlock,
-	createHtmlInteractionType
+	createHtmlInteractionType,
+	createTitleHtmlBlock
 } from "./ressources/jsonToHtmlBlocks";
 import { copyFilesStructToHtml, getAllFilePathFromDir, HtmlToFile } from "./ressources/command";
 import { CommentBlock } from "./ressources/interfaces";
@@ -45,11 +46,12 @@ filesPaths.forEach((filePath) => {
 		`;
 
 	commentJsonBlocks.forEach((commentBlock: CommentBlock) => {
+		const TitleHtmlBlock = createTitleHtmlBlock(commentBlock);
 		const defHtmlBlock = createDefHtmlBlock(commentBlock);
 		const paramHtmlBlock = createParamHtmlBlock(commentBlock);
 		const exampleHtmlBlock = createExampleHtmlBlock(commentBlock);
 		const todoHtmlBlock = createToDoHtmlBlock(commentBlock);
-		const bloc = createStepDefHtmlBlock(defHtmlBlock, paramHtmlBlock, exampleHtmlBlock, todoHtmlBlock);
+		const bloc = createStepDefHtmlBlock(TitleHtmlBlock, defHtmlBlock, paramHtmlBlock, exampleHtmlBlock, todoHtmlBlock);
 		fileHtmlBlocks += bloc + "<br/><br/>";
 	});
 
