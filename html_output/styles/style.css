@@ -87,16 +87,22 @@ h6 {
 	font-size: 22px;
 	margin-top: 0.4em;
 	margin-bottom: 0.6em;
-	font-weight: 520;
+	font-weight: 540;
 	color: black;
 }
 
 .stepDefinition h4 {
-	font-size: 16px;
+	font-size: 18px;
 	margin-top: 2em;
 	margin-bottom: 0.5em;
+	font-weight: 520;
+	color: rgb(103, 171, 5);
+}
+
+.stepDefinition p {
+	font-size: 19px;
+	margin-bottom: 0.5em;
 	font-weight: 480;
-	text-decoration: underline;
 	color: black;
 }
 
@@ -316,19 +322,19 @@ h6 {
 
 .accordion-button:not(.collapsed) {
 	color: #012970;
-	background-color: #f6f9ff;
+	background-color: #27f00c;
 }
 
-.accordion-flush .accordion-button {
+/* .accordion-flush .accordion-button {
 	padding: 15px 0;
 	background: none;
 	border: 0;
-}
+} */
 
-.accordion-flush .accordion-button:not(.collapsed) {
+/* .accordion-flush .accordion-button:not(.collapsed) {
 	box-shadow: none;
 	color: #4154f1;
-}
+} */
 
 .accordion-flush .accordion-body {
 	padding: 0 0 15px 0;
