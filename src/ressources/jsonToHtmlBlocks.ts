@@ -7,8 +7,7 @@ export function createHtmlFileDesc(fileData: FileCommentExtract): string {
 		<div class="pagetitle">
 			<h1>${fileName}</h1>
 			<p>${fileDesc}</p>
-		</div>
-`;
+		</div>`;
 	return htmlBlock;
 }
 
@@ -17,8 +16,7 @@ export function createHtmlInteractionType(interactionTypes: InteractionType[]): 
 		var htmlBlocks: string = `
 		<div class="pagetitle" id="interActionTypes">
 			<h2>Interaction types </h2>
-		</div>
-	`;
+		</div>`;
 		interactionTypes.forEach((interactionType) => {
 			var interactionTypeName = interactionType.interactionTypeName;
 			var interactionTypeDesc = interactionType.interactionTypeDesc.replace(/.\n/g, "<br />");
@@ -26,8 +24,7 @@ export function createHtmlInteractionType(interactionTypes: InteractionType[]): 
 		<div class="pagetitle" id="BlockDef">
 			<h3>${interactionTypeName}</h3>
 			<p>${interactionTypeDesc}</p>
-		</div>
-	`;
+		</div>`;
 			htmlBlocks += htmlBlock;
 			// htmlBlocks.push(htmlBlock);
 		});
@@ -41,10 +38,16 @@ export function createHtmlInteractionType(interactionTypes: InteractionType[]): 
 export function createTitleHtmlBlock(commentBlock: CommentBlock): string {
 	var stepDefName = commentBlock.stepDef;
 	const htmlBlock = `
-			<div class="stepDefinition" id="BlockDef">
-				<h3>${stepDefName}</h3>
-			</div>
-`;
+					<button
+						class="accordion-button collapsed"
+						type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#collapseHeader${commentBlock.blocNumber - 1}"
+						aria-expanded="false"
+						aria-controls="collapseHeader${commentBlock.blocNumber - 1}"
+					>
+						<h3 >${stepDefName}</h3>
+					</button>`;
 	return htmlBlock;
 }
 
@@ -55,17 +58,15 @@ export function createDefHtmlBlock(commentBlock: CommentBlock): string {
 	var htmlBlock: string;
 	if (stepDefMemberOf) {
 		htmlBlock = `
-			<div class="stepDefinition" id="BlockDef">
-				<p>${stepDefDesc}</p>
-				<p><h4>Member of : </h4>${stepDefMemberOf}</p>
-			</div>
-`;
+						<div class="stepDefinition" id="BlockDef">
+							<p>${stepDefDesc}</p>
+							<p><h4>Member of : </h4>${stepDefMemberOf}</p>
+						</div>`;
 	} else {
 		htmlBlock = `
-			<div class="stepDefinition" id="BlockDef">
-				<p>${stepDefDesc}</p>
-			</div>
-		`;
+						<div class="stepDefinition" id="BlockDef">
+							<p>${stepDefDesc}</p>
+						</div>`;
 	}
 	return htmlBlock;
 }
@@ -76,31 +77,29 @@ export function createParamHtmlBlock(commentBlock: CommentBlock): string {
 
 		commentBlock.paramTags.forEach((paramTag) => {
 			htmlParamBlock += `
-						<tr>
-							<th>${paramTag.param_name}</th>
-							<td>${paramTag.param_type}</td>
-							<td>${paramTag.param_desc.replace(/.\n/g, "<br />")}</td>
-						</tr>
-			`;
+									<tr>
+										<th>${paramTag.param_name}</th>
+										<td>${paramTag.param_type}</td>
+										<td>${paramTag.param_desc.replace(/.\n/g, "<br />")}</td>
+									</tr>`;
 		});
 
 		const htmlBlock: string = `
-			<div class="stepDefinition" id="BlockParam">
-				<h4>Parameters : </h4>
-				<table class="table">
-					<thead>
-						<tr>
-						<th scope="col">Name</th>
-						<th scope="col">Type</th>
-						<th scope="col">Description</th>
-						</tr>
-					</thead>
-					<tbody>
-						${htmlParamBlock}
-					</tbody>
-				</table>
-			</div>
-			`;
+						<div class="stepDefinition" id="BlockParam">
+							<h4>Parameters : </h4>
+							<table class="table">
+								<thead>
+									<tr>
+									<th scope="col">Name</th>
+									<th scope="col">Type</th>
+									<th scope="col">Description</th>
+									</tr>
+								</thead>
+								<tbody>
+									${htmlParamBlock}
+								</tbody>
+							</table>
+						</div>`;
 		return htmlBlock;
 	} else {
 		return "";
@@ -112,17 +111,16 @@ export function createExampleHtmlBlock(commentBlock: CommentBlock): string {
 	if (commentBlock.exampleTags) {
 		stepDefExample = commentBlock.exampleTags[0].example_content;
 		const htmlBlock = `
-		<div class="stepDefinition" id="BlockExample">
-			<h4>Example :</h4>
-			<div class="card">
-				<div class="card-body">
-					<code class="hljs">
-						${stepDefExample.replace(/.\n/g, "<br />")}
-					</code>
-				</div>
-			</div>
-		</div>
-`;
+						<div class="stepDefinition" id="BlockExample">
+							<h4>Example :</h4>
+							<div class="card">
+								<div class="card-body">
+									<code class="hljs">
+										${stepDefExample.replace(/.\n/g, "<br />")}
+									</code>
+								</div>
+							</div>
+						</div>`;
 		return htmlBlock;
 	} else {
 		return "";
@@ -135,29 +133,27 @@ export function createToDoHtmlBlock(commentBlock: CommentBlock): string {
 
 		commentBlock.todoTags.forEach((todoTag) => {
 			htmlTodoBlock += `
-						<tr>
-							<th>${todoTag.todo_type.toUpperCase()}</th>
-							<td>${todoTag.todo_text.replace(/.\n/g, "<br />")}</td>
-						</tr>
-			`;
+									<tr>
+										<th>${todoTag.todo_type.toUpperCase()}</th>
+										<td>${todoTag.todo_text.replace(/.\n/g, "<br />")}</td>
+									</tr>`;
 		});
 
 		const htmlBlock: string = `
-			<div class="stepDefinition" id="BlockToDo">
-				<h4>To Do : </h4>				
-				<table class="table">
-					<thead>
-						<tr>
-						<th scope="col">Type</th>
-						<th scope="col">Description</th>
-						</tr>
-					</thead>
-					<tbody>
-						${htmlTodoBlock}
-					</tbody>
-				</table>
-			</div>
-			`;
+						<div class="stepDefinition" id="BlockToDo">
+							<h4>To Do : </h4>				
+							<table class="table">
+								<thead>
+									<tr>
+									<th scope="col">Type</th>
+									<th scope="col">Description</th>
+									</tr>
+								</thead>
+								<tbody>
+									${htmlTodoBlock}
+								</tbody>
+							</table>
+						</div>`;
 		return htmlBlock;
 	} else {
 		return "";
@@ -169,17 +165,22 @@ export function createStepDefHtmlBlock(
 	defBlock: string,
 	paramBlock: string,
 	exampleBlock: string,
-	todoBlock: string
+	todoBlock: string,
+	blocNumber: number
 ): string {
 	const htmlBlock = `
-		<div id="commentBlock">
-			${TitleBlock ? TitleBlock : ""}
-			${defBlock ? defBlock : ""}
-			${paramBlock ? paramBlock : ""}
-			${exampleBlock ? exampleBlock : ""}
-			${todoBlock ? todoBlock : ""}
-		</div>
-`;
+				${TitleBlock ? TitleBlock : ""}
+					<div
+						id="collapseHeader${blocNumber - 1}"
+						class="accordion-body accordion-collapse collapse"
+						aria-labelledby="flush-headingOne"
+						data-bs-parent="#accordionFlushExample"
+					>
+							${defBlock ? defBlock : ""}
+							${paramBlock ? paramBlock : ""}
+							${exampleBlock ? exampleBlock : ""}
+							${todoBlock ? todoBlock : ""}
+					</div>`;
 	return htmlBlock;
 }
 

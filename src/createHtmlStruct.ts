@@ -32,30 +32,47 @@ filesPaths.forEach((filePath) => {
 	const commentJsonBlocks = fileJsonData.commentBlocks;
 	const interactionTypeJsonBlocks = fileJsonData.interactionTypes;
 
-	var fileHtmlBlocks: string = "";
+	var htmlBody: string = "";
 
 	const fileHtmlDesc = createHtmlFileDesc(fileJsonData);
-	fileHtmlBlocks = fileHtmlDesc;
+	htmlBody = fileHtmlDesc;
 
 	const fileHtmlInteractionTypes = createHtmlInteractionType(interactionTypeJsonBlocks);
-	fileHtmlBlocks += fileHtmlInteractionTypes;
-	fileHtmlBlocks += `
-		<div class="pagetitle">
-			<h2>Steps</h2>
-		</div>
-		`;
 
+	var htmlCommentBlocks = "";
 	commentJsonBlocks.forEach((commentBlock: CommentBlock) => {
 		const TitleHtmlBlock = createTitleHtmlBlock(commentBlock);
 		const defHtmlBlock = createDefHtmlBlock(commentBlock);
 		const paramHtmlBlock = createParamHtmlBlock(commentBlock);
 		const exampleHtmlBlock = createExampleHtmlBlock(commentBlock);
 		const todoHtmlBlock = createToDoHtmlBlock(commentBlock);
-		const bloc = createStepDefHtmlBlock(TitleHtmlBlock, defHtmlBlock, paramHtmlBlock, exampleHtmlBlock, todoHtmlBlock);
-		fileHtmlBlocks += bloc + "<br/><br/>";
+		const bloc = createStepDefHtmlBlock(
+			TitleHtmlBlock,
+			defHtmlBlock,
+			paramHtmlBlock,
+			exampleHtmlBlock,
+			todoHtmlBlock,
+			commentBlock.blocNumber
+		);
+		const htmlCommentBlock = `
+			<div class="accordion-item stepDefinition" id="commentBlock${commentBlock.blocNumber - 1}">
+				${bloc}
+			</div>`;
+		htmlCommentBlocks += htmlCommentBlock + "<br/><br/>";
 	});
 
-	const htmlFile = createHtmlFile(fileHtmlBlocks);
+	htmlBody = `
+		${fileHtmlDesc ? fileHtmlDesc : ""}
+		${fileHtmlInteractionTypes ? fileHtmlInteractionTypes : ""}
+		<div class="pagetitle">
+			<h2>Steps</h2>
+		</div>
+		<div class="accordion">
+		${htmlCommentBlocks ? htmlCommentBlocks : ""}
+		</div>
+	`;
+
+	const htmlFile = createHtmlFile(htmlBody);
 
 	HtmlToFile(htmlFile, `html_output/${path.basename(filePath).replace(path.extname(filePath), "")}`);
 });
