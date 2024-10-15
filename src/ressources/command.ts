@@ -103,20 +103,22 @@ export const extractGenericTagBlock = function (
  * @returns json structured with all the known tags and their parameter to be used as documentation
  */
 export const extractTagSpecificData = function (fileName: string, genericGlobalComments: GenericGlobalComments) {
-
 	// Initialize the file
-	const fileComments: FileCommentExtract = { fileName, fileDesc: "empty file description", interactionTypes: [], commentBlocks: [] };
+	const fileComments: FileCommentExtract = {
+		fileName,
+		fileDesc: "empty file description",
+		interactionTypes: [],
+		commentBlocks: []
+	};
 
-	const fileTagType = ["@fileDesc", "@interactionTypes"]
+	const fileTagType = ["@fileDesc", "@interactionTypes"];
 
 	genericGlobalComments.genericCommentBlocks.forEach((genericCommentBlock) => {
 		// If the 1st tag is a file tag it will treat only this tag and add it to the file data
 		if (fileTagType.includes(genericCommentBlock.genericTagSentences[0].tag)) {
-
 			// fileComments.interactionTypes.push(
-			extractFileTagData(fileComments, genericCommentBlock)
+			extractFileTagData(fileComments, genericCommentBlock);
 			// );
-
 		}
 		// If it is not a file tag it will iterate on the tags and extract all data
 		else {
@@ -130,15 +132,18 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
  * @description Treat file related block when the tag is fileDesc or interactionsTypes
  * @param {FileCommentExtract} fileComments FileCommentExtract where the data will be added
  * @param {GenericGlobalComment} genericCommentBlock comment block that contains the file tag
- * @returns FileCommentExtract modified 
+ * @returns FileCommentExtract modified
  */
-export const extractFileTagData = function (fileComments: FileCommentExtract, genericCommentBlock: GenericCommentBlock): FileCommentExtract {
+export const extractFileTagData = function (
+	fileComments: FileCommentExtract,
+	genericCommentBlock: GenericCommentBlock
+): FileCommentExtract {
 	const typeRegex = /\{(.*)\}/;
 
 	switch (genericCommentBlock.genericTagSentences[0].tag) {
 		case "@fileDesc":
-			fileComments.fileDesc = genericCommentBlock.genericTagSentences[0].tag_content
-			return fileComments
+			fileComments.fileDesc = genericCommentBlock.genericTagSentences[0].tag_content;
+			return fileComments;
 		case "@interactionTypes":
 			let interactionType: InteractionType;
 			// if the tag contains a type into {type}
@@ -158,16 +163,16 @@ export const extractFileTagData = function (fileComments: FileCommentExtract, ge
 					interactionTypeDesc: genericCommentBlock.genericTagSentences[0].tag_content
 				};
 			}
-			fileComments.interactionTypes.push(interactionType)
-			return fileComments
+			fileComments.interactionTypes.push(interactionType);
+			return fileComments;
 		default:
 			//
 			break;
 	}
-}
+};
 
 /**
- * @description Treat block tag, iterate on all tag of the blocks to extract all data 
+ * @description Treat block tag, iterate on all tag of the blocks to extract all data
  * @param {GenericGlobalComment} genericCommentBlock comment block that contains the file tag
  * @returns CommentBlock extracted data
  */
@@ -231,9 +236,7 @@ export const extractBlockTagData = function (genericCommentBlock: GenericComment
 						todo_type: "none",
 						todo_text: genericTagSentence.tag_content
 					};
-					console.error(
-						"error : the todo tag config is missing missing {todo_type} description (see documentation)"
-					);
+					console.error("error : the todo tag config is missing missing {todo_type} description (see documentation)");
 				}
 				// if the todoTags array doesn't exist, can't use push but need to initialize it
 				commentBlock.todoTags ? commentBlock.todoTags.push(todoTag) : (commentBlock.todoTags = [todoTag]);
@@ -275,9 +278,8 @@ export const extractBlockTagData = function (genericCommentBlock: GenericComment
 				break;
 		}
 	});
-	return commentBlock
-}
-
+	return commentBlock;
+};
 
 /* -------------------------------------------------------------------------- */
 /*                         File and folder management                         */
@@ -293,12 +295,14 @@ export const extractBlockTagData = function (genericCommentBlock: GenericComment
  * getAllFilePathFromDir(folderPath, filesPaths);
  * filesPaths.forEach((filePath) => {...}
  */
-export function getAllFilePathFromDir(folderPath: string, filesPaths?: string[]) {
+export function getAllFilePathFromDir(folderPath: string, filesPaths?: string[], fileExtenstion?: string) {
 	fs.readdirSync(folderPath).forEach((element) => {
 		if (fs.statSync(path.join(folderPath, element)).isDirectory()) {
 			getAllFilePathFromDir(path.join(folderPath, element), filesPaths);
 		} else {
-			filesPaths.push(path.join(folderPath, element));
+			if (path.extname(element) === fileExtenstion) {
+				filesPaths.push(path.join(folderPath, element));
+			}
 		}
 	});
 }

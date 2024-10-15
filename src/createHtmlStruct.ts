@@ -21,7 +21,7 @@ const destinationPath = "html_output";
 
 // #region RUN
 /** STEP 1 : Create HTML folder & file structure */
-getAllFilePathFromDir(folderPath, filesPaths);
+getAllFilePathFromDir(folderPath, filesPaths, ".json");
 copyFilesStructToHtml(filesPaths, sourcePathName, destinationPath);
 
 //#endregion
