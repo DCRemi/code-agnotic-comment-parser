@@ -298,7 +298,7 @@ export const extractBlockTagData = function (genericCommentBlock: GenericComment
 export function getAllFilePathFromDir(folderPath: string, filesPaths?: string[], fileExtenstion?: string) {
 	fs.readdirSync(folderPath).forEach((element) => {
 		if (fs.statSync(path.join(folderPath, element)).isDirectory()) {
-			getAllFilePathFromDir(path.join(folderPath, element), filesPaths);
+			getAllFilePathFromDir(path.join(folderPath, element), filesPaths, fileExtenstion);
 		} else {
 			if (path.extname(element) === fileExtenstion) {
 				filesPaths.push(path.join(folderPath, element));
