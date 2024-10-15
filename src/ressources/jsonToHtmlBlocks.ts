@@ -2,7 +2,7 @@ import { CommentBlock, FileCommentExtract, InteractionType } from "./interfaces"
 
 export function createHtmlFileDesc(fileData: FileCommentExtract): string {
 	var fileName = fileData.fileName;
-	var fileDesc = fileData.fileDesc;
+	var fileDesc = fileData.fileDesc.replace(/.\n/g, "<br />");
 	const htmlBlock = `
 		<div class="pagetitle">
 			<h1>${fileName}</h1>
@@ -21,7 +21,7 @@ export function createHtmlInteractionType(interactionTypes: InteractionType[]): 
 	`;
 		interactionTypes.forEach((interactionType) => {
 			var interactionTypeName = interactionType.interactionTypeName;
-			var interactionTypeDesc = interactionType.interactionTypeDesc;
+			var interactionTypeDesc = interactionType.interactionTypeDesc.replace(/.\n/g, "<br />");
 			const htmlBlock = `
 		<div class="pagetitle" id="BlockDef">
 			<h3>${interactionTypeName}</h3>
@@ -41,6 +41,7 @@ export function createHtmlInteractionType(interactionTypes: InteractionType[]): 
 export function createDefHtmlBlock(commentBlock: CommentBlock): string {
 	var stepDefName = commentBlock.stepDef;
 	var stepDefDesc = commentBlock.descriptionTags ? commentBlock.descriptionTags[0].description : "";
+	stepDefDesc = stepDefDesc.replace(/.\n/g, "<br />");
 	var stepDefMemberOf = commentBlock.memberof;
 	var htmlBlock: string;
 	if (stepDefMemberOf) {
@@ -71,7 +72,7 @@ export function createParamHtmlBlock(commentBlock: CommentBlock): string {
 						<tr>
 							<th>${paramTag.param_name}</th>
 							<td>${paramTag.param_type}</td>
-							<td>${paramTag.param_desc}</td>
+							<td>${paramTag.param_desc.replace(/.\n/g, "<br />")}</td>
 						</tr>
 			`;
 		});
@@ -111,7 +112,7 @@ export function createExampleHtmlBlock(commentBlock: CommentBlock): string {
 				<div class="card">
 					<div class="card-body">
 						<code class="hljs">
-							${stepDefExample}
+							${stepDefExample.replace(/.\n/g, "<br />")}
 						</code>
 					</div>
 				</div>
@@ -128,7 +129,7 @@ export function createToDoHtmlBlock(commentBlock: CommentBlock): string {
 			htmlTodoBlock += `
 						<tr>
 							<th>${todoTag.todo_type.toUpperCase()}</th>
-							<td>${todoTag.todo_text}</td>
+							<td>${todoTag.todo_text.replace(/.\n/g, "<br />")}</td>
 						</tr>
 			`;
 		});
