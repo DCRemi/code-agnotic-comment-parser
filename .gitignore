@@ -11,10 +11,9 @@ docs
 json_output/*
 html_output/*
 input/*
-
+tmp
 
 # exception to the rule
-!json_output/.gitkeep
 !html_output/styles
 !html_output/index.html
 !input/.gitkeep
