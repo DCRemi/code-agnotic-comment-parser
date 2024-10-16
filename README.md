@@ -1,12 +1,25 @@
 # To do
 
-- table >> nice admin
-  ajout un peu de css
-- \n to br
-- expand step def
-- Sort by given ...
-- Sort by interaction types
-- dynamic navigation depending on files
+NEED
+
+- Generic levels
+- File that allows to make small desc of each levels and list the levels
+
+- Global menu level 1
+- Make navigation menu dynamic (create accoding to html files + layout open page)
+
+- Change for the global org >> Update doc
+
+Improve
+
+- expand todo block
+
+Bonus
+
+- Search & filtering
+- Table css
+- Accordion css
+- Extract values for param
 
 # Introduction
 
