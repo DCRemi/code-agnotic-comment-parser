@@ -25,7 +25,7 @@ if (!fs.existsSync(htmlFilesOutputFolder)) {
 
 levelDefinitionData.level_1s.forEach((level_1) => {
 	/* -------------------------------------------------------------------------- */
-	/*               STEP 2 Create level 1 folders and level 2 files              */
+	/*               STEP 2 Create level 1 folders files						  */
 	/* -------------------------------------------------------------------------- */
 	/* ------------------------- Create level 1 folders ------------------------- */
 	const level1FolderPath = path.join(htmlFilesOutputFolder, level_1.levelName);
@@ -36,15 +36,18 @@ levelDefinitionData.level_1s.forEach((level_1) => {
 	/* -------------------- Create level 2 index files empty -------------------- */
 	HtmlToFile("", level2IndexFilePath);
 
-	/* -------------------------------------------------------------------------- */
-	/*                          Create level 1 index file                         */
-	/* -------------------------------------------------------------------------- */
 	/* -------------- Create html links block to level 1 index.html ------------- */
 	Level2IndexLinks += `
-				<a href="page_trees/${level1FolderPath}/index.html"> ${level_1.levelName} documentation </a>
-				<br />`;
+				<a href="/${level1FolderPath}/index.html">
+					<button type="button" class="btn btn-success btn-lg"> ${level_1.levelName} </button>
+				</a>
+				<br /><br />`;
 });
 
+/* ----------------- Create and write level 1 indexedDB.html ---------------- */
 const level1IndexFile = createLevel1IndexHtml(Level2IndexLinks);
-
 HtmlToFile(level1IndexFile, htmlFilesOutputFolder + "/index");
+
+/* -------------------------------------------------------------------------- */
+/*                   STEP 3 - Create each level 2 html file                   */
+/* -------------------------------------------------------------------------- */
