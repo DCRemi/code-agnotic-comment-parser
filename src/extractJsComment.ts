@@ -3,11 +3,9 @@ import {
 	extractJsComContent,
 	extractGenericTagBlock,
 	getTagIndex,
-	JSONToFile,
-	removeJsComBoundary,
-	getAllFilePathFromDir
-} from "./ressources/command";
-import { unCamelized } from "./ressources/helpers";
+	removeJsComBoundary
+} from "./ressources/commentExtractCommands";
+import { unCamelized, getAllFilePathFromDir, JSONToFile } from "./ressources/helpers";
 import { GenericCommentBlock, GenericGlobalComments } from "./ressources/interfaces";
 
 // import fs from "fs";

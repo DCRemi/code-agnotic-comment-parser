@@ -1,4 +1,7 @@
+import { HtmlToFile } from "./helpers";
 import { CommentBlock, FileCommentExtract, InteractionType } from "./interfaces";
+const fs = require("fs");
+const path = require("path");
 
 export function createHtmlFileDesc(fileData: FileCommentExtract): string {
 	var fileName = fileData.fileName;
@@ -246,4 +249,41 @@ export function createHtmlFile(mainHtml: string): string {
 </html>
 `;
 	return htmlBlock;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                         File and folder management                         */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Copy a files and folder structure from a source path to an destination path
+ * it copies the folder structure and create for each file an html file
+ * @param filesPaths lists of source files path
+ * @param sourcePath path that will be removed to create the output structure (! without the / at the end)
+ * @param destinationPath path from where the output structure will be created (! without the / at the end)
+ *
+ * @example createFolderStructure(filesPaths, "inputPath", "outputPath");
+ * from filesPaths =
+ * ["inputPath/test.json","inputPath/folder/file.json","inputPath/folder2/test2.txt"]
+ * this will create :
+ * ./outputPath/test.html and ./outputPath/folder/file.html  and ./outputPath/folder2/test2.html
+ */
+export function copyFilesStructToHtml(filesPaths: string[], sourcePath: string, destinationPath: string) {
+	filesPaths.forEach((filePath) => {
+		const fileName = path.basename(filePath).replace(path.extname(filePath), "");
+		const fileFolderPath = path.dirname(filePath);
+		const interactionTypes = fileFolderPath.replace(sourcePath, "");
+		const destinationFolder = destinationPath + interactionTypes;
+		const destinationFile = "./" + destinationFolder + "/" + fileName;
+
+		// Create output folder if it doesn't exist
+		if (!fs.existsSync(destinationPath)) {
+			fs.mkdirSync(destinationPath);
+		}
+
+		if (!fs.existsSync(destinationFolder)) {
+			fs.mkdirSync(destinationFolder);
+		}
+		HtmlToFile("", destinationFile);
+	});
 }

@@ -8,8 +8,9 @@ import {
 	createToDoHtmlBlock,
 	createHtmlInteractionType,
 	createTitleHtmlBlock
-} from "./ressources/jsonToHtmlBlocks";
-import { copyFilesStructToHtml, getAllFilePathFromDir, HtmlToFile } from "./ressources/command";
+} from "./ressources/htmlCommands";
+import { copyFilesStructToHtml } from "./ressources/htmlCommands";
+import { getAllFilePathFromDir, HtmlToFile } from "./ressources/helpers";
 import { CommentBlock } from "./ressources/interfaces";
 
 const fs = require("fs");
