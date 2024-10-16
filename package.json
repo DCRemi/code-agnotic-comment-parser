@@ -7,10 +7,10 @@
 		"format": "prettier -w .",
 		"generate:doc": "run-s doc:*",
 		"doc:extract": "npx ts-node ./src/extractJsComment.ts",
-		"doc:ToHtmlFolder": "npx ts-node ./src/createHtmlStructure.ts",
-		"doc:ToHtmlFile": "npx ts-node ./src/createHtmlFile.ts",
+		"doc:createHtmlStruc": "npx ts-node ./src/createHtmlStructure.ts",
+		"doc:createHtmlFiles": "npx ts-node ./src/createHtmlFiles.ts",
 		"doc:copyREADME": "cp README.md ./html_output/",
-		"resetFolders": "rm -rf json_output html_output/*Output.html"
+		"resetFolders": "rm -rf json_output html_output/pages_tree"
 	},
 	"author": "",
 	"license": "ISC",
