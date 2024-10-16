@@ -12,9 +12,14 @@ import { GenericCommentBlock, GenericGlobalComments } from "./ressources/interfa
 
 // import fs from "fs";
 const fs = require("fs");
-const folderPath = "input";
-const filesPaths: string[] = [];
 
+/* ---------------------------- Variables --------------------------- */
+const folderPath = "input";
+
+/* -------------------------------------------------------------------------- */
+/*                         STEP 0 - Get files tree data                       */
+/* -------------------------------------------------------------------------- */
+const filesPaths: string[] = [];
 getAllFilePathFromDir(folderPath, filesPaths, ".ts");
 
 filesPaths.forEach((filePath) => {
@@ -23,20 +28,27 @@ filesPaths.forEach((filePath) => {
 	const finalOutputFilePath = `./json_output/${fileName}Output`;
 	const fileNameUnCamelized = unCamelized(fileName);
 
-	// #region run
-	/** STEP 1 : Get file content */
+	/* -------------------------------------------------------------------------- */
+	/*                        STEP 1 - Read type script file                      */
+	/* -------------------------------------------------------------------------- */
 	const file = fs.readFileSync(filePath, { encoding: "utf-8" });
 
-	/** STEP 2 : Retrieve only js doc style comment between in blocks */
+	/* -------------------------------------------------------------------------- */
+	/*    STEP 2 - Retrieve jsdoc style comment between "slash**"" and "*slash"   */
+	/* -------------------------------------------------------------------------- */
 	const jsCommentsBlocks = extractJsComContent(file);
 
-	/** STEP 3 : Remove start and end indicator of blocks */
+	/* -------------------------------------------------------------------------- */
+	/*          STEP 3 - Remove blocks indicator "slash **" and "*slash"          */
+	/* -------------------------------------------------------------------------- */
 	const jsCommentsBlocksCleaned: string[] = [];
 	jsCommentsBlocks?.forEach((element: string, index: number) => {
 		jsCommentsBlocksCleaned[index] = removeJsComBoundary(element);
 	});
 
-	/** STEP 4 : For each comments block extract tag value and content */
+	/* -------------------------------------------------------------------------- */
+	/*           STEP 4 - For each block extract tag's value and content          */
+	/* -------------------------------------------------------------------------- */
 	const genericCommentBlocks: GenericCommentBlock[] = [];
 	const genericGlobalComments: GenericGlobalComments = {
 		genericCommentBlocks
@@ -60,11 +72,14 @@ filesPaths.forEach((filePath) => {
 	// JSONToFile(genericGlobalComments, intermediateOutputFilePath);
 	//#endregion
 
-	/** STEP 5 :  extract tag specific data */
+	/* -------------------------------------------------------------------------- */
+	/*               STEP - 5 Extract tag data depending on the tag               */
+	/* -------------------------------------------------------------------------- */
 	const finalJson = extractTagSpecificData(fileNameUnCamelized, genericGlobalComments);
 
-	/** STEP 6 : Write final json to file */
-	// Create output folder if it doesn't exist
+	/* -------------------------------------------------------------------------- */
+	/*                        STEP 6 - Create output folder                       */
+	/* -------------------------------------------------------------------------- */
 	if (!fs.existsSync("./json_output")) {
 		fs.mkdirSync("./json_output");
 	}
@@ -75,6 +90,9 @@ filesPaths.forEach((filePath) => {
 			fs.mkdirSync(finalOutputFilePath.match(/\.\/json_output\/\w*\//)[0]);
 		}
 	}
+
+	/* -------------------------------------------------------------------------- */
+	/*                 STEP 7 - Write extracted data in json files                */
+	/* -------------------------------------------------------------------------- */
 	JSONToFile(finalJson, finalOutputFilePath);
-	// #endregion
 });
