@@ -1,5 +1,5 @@
-import { HtmlToFile } from "./helpers";
-import { CommentBlock, FileCommentExtract, InteractionType } from "./interfaces";
+import { HtmlToFile, unCamelized } from "./helpers";
+import { CommentBlock, FileCommentExtract, InteractionType, Level_1 } from "./interfaces";
 const fs = require("fs");
 const path = require("path");
 
@@ -40,14 +40,12 @@ export function copyFilesStructToHtml(filesPaths: string[], sourcePath: string, 
 }
 
 /**
- * Create Level 1 folder, index and html file
- * @export
- * @param {*} htmlFilesOutputFolder
- * @param {*} levelDefinitionData
- * @returns {string[]}
+ * Create level0 index file with link to level 1 index files
+ * @param {string} Level1IndexLinks
+ * @returns {string} Level 0 index file content
  */
-export function createLevel1IndexHtml(Level2IndexLinks): string {
-	const level1IndexHtml = `
+export function createLevel_0_IndexHtml(Level1IndexLinks: string): string {
+	const level0IndexHtml = `
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -86,10 +84,89 @@ export function createLevel1IndexHtml(Level2IndexLinks): string {
 				</div>
 			</div>
 		</header>
+			<aside id="sidebar" class="sidebar">
+				<ul id="sidebar-nav" class="sidebar-nav">
+					${Level1IndexLinks}
+				</ul>
+			</aside>
+		<main id="main" class="main">
+				<div class="pagetitle">
+				<h1>READ ME</h1>
+				<br />
+				<br />
+				<zero-md src="README.md"></zero-md>
+			</div>
+		</main>
+	</body>
+</html>`;
+	// 1 create level 1 folder and for each index file vide pour les lien dans le index du level 1
+	return level0IndexHtml;
+}
+
+/**
+ * Create level1 index file with link to level 2 html files
+ * @param {level_1} level_1
+ * @param {string[]} level1FolderPath
+ * @returns {string} Level 1 index file content
+ */
+export function createLevel_1_IndexHtml(level_1: Level_1, level1FolderPath: string): string {
+	var level2FilePathsLinks = "";
+	level_1.level_2s.forEach((level_2) => {
+		level2FilePathsLinks += `
+				<li class="nav-item">
+					<a href=${path.join(level1FolderPath, level_2.levelName)} class="nav-link">
+						${unCamelized(level_2.levelName)}	
+					</a>
+				</li>`;
+	});
+	const level1IndexHtml = `
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+		<title>Home, Block</title>
+		<link type="text/css" rel="stylesheet" href="../../styles/style.css" />
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+			integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+			crossorigin="anonymous"
+		/>
+		<!-- Script -->
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+			integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+			crossorigin="anonymous"
+		></script>
+		<script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+		<script type="module" src="https://cdn.jsdelivr.net/npm/zero-md@3?register"></script>
+	</head>
+	<body>
+		<header id="header" class="header fixed-top d-flex align-items-center">
+			<div class="d-flex align-items-center justify-content-between">
+				<div class="logo d-flex align-items-center">
+					<a href="../index.html" class="logo d-flex align-items-center">
+						<img
+							src="https://cdn0.iconfinder.com/data/icons/juice/512/juice_cucumber_vegetables_drink-512.png"
+							alt=""
+						/>
+					</a>
+				</div>
+				<div class="logo d-flex align-items-center">
+					<h1 class="d-flex align-items-center">Doc-Parser</h1>
+				</div>
+			</div>
+		</header>
+		<aside id="sidebar" class="sidebar">
+			<ul id="sidebar-nav" class="sidebar-nav">
+				${level2FilePathsLinks}
+			</ul>
+		</aside>
 		<main id="main" class="main">
 			<div class="pagetitle">
-				<!-- link vers les pages de level 1  -->
-				${Level2IndexLinks}
+				<h1>${level_1.levelName}</h1>
+				<p>${level_1.levelDesc}</p>
 			</div>
 		</main>
 	</body>

@@ -1,6 +1,6 @@
 import { HtmlToFile } from "./ressources/helpers";
-import { createLevel1IndexHtml } from "./ressources/htmlCommands";
-import { Level_1, Levels } from "./ressources/interfaces";
+import { createLevel_0_IndexHtml, createLevel_1_IndexHtml } from "./ressources/htmlCommands";
+import { Levels } from "./ressources/interfaces";
 
 const fs = require("fs");
 const path = require("path");
@@ -19,38 +19,40 @@ if (!fs.existsSync(htmlFilesOutputFolder)) {
 	fs.mkdirSync(htmlFilesOutputFolder);
 }
 
+/* -------------------------------------------------------------------------- */
+/*      STEP 2 -  Create files and folders + create html link to level 1      */
+/* -------------------------------------------------------------------------- */
 levelDefinitionData.level_1s.forEach((level_1) => {
-	/* -------------------------------------------------------------------------- */
-	/*               STEP 2 Create level 1 folders files						  */
-	/* -------------------------------------------------------------------------- */
-	/* ------------------------- Create level 1 folders ------------------------- */
+	/* ------------------------- Create Level 1 folders ------------------------- */
 	const level1FolderPath = path.join(htmlFilesOutputFolder, level_1.levelName);
 	if (!fs.existsSync(level1FolderPath)) {
 		fs.mkdirSync(level1FolderPath);
 	}
 
-	const level1IndexFilePath = level1FolderPath + "/index";
-
-	/* ----------------------- Create level 2 files empty ----------------------- */
-	HtmlToFile("", level1IndexFilePath);
-
+	/* -------------------------- Create level 2 files -------------------------- */
 	level_1.level_2s.forEach((level_2) => {
 		const level2FilePath = path.join(level1FolderPath, level_2.levelName);
 		HtmlToFile("", level2FilePath);
 	});
-	/* -------------- Create html links block to level 1 index.html ------------- */
+
+	/* ----------------------- Create Level 1 index files ----------------------- */
+	const level1IndexFilePath = level1FolderPath + "/index";
+	const level1IndexFile = createLevel_1_IndexHtml(level_1, level1FolderPath);
+	HtmlToFile(level1IndexFile, level1IndexFilePath);
+
+	/* ----- Create link to level 1 index file to put in level 0 index file ----- */
 	Level1IndexLinks += `
-				<a href="/${level1FolderPath}/index.html">
-					<button type="button" class="btn btn-success btn-lg"> ${level_1.levelName} </button>
-				</a>
-				<br /><br />`;
+				<li class="nav-item">
+					<a href="/${level1FolderPath}/index.html" class="nav-link">
+					${level_1.levelName}	
+					</a>
+				</li>`;
 });
 
-/* ----------------- Create and write level 1 indexedDB.html ---------------- */
-const level0IndexFile = createLevel1IndexHtml(Level1IndexLinks);
+/* -------------------------------------------------------------------------- */
+/*                     STEP 3 - Create level 0 index file                     */
+/* -------------------------------------------------------------------------- */
+const level0IndexFile = createLevel_0_IndexHtml(Level1IndexLinks);
 HtmlToFile(level0IndexFile, htmlFilesOutputFolder + "/index");
 
-/* -------------------------------------------------------------------------- */
-/*                   STEP 3 - Create each level 2 html file                   */
-/* -------------------------------------------------------------------------- */
 levelDefinitionData.level_1s.forEach((level_1) => {});
