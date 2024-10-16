@@ -7,13 +7,13 @@ export interface Level_3 {
 export interface Level_2 {
 	levelName: string;
 	levelDesc: string;
-	// Level_3s: Level_3[];
+	// level_3s: Level_3[];
 }
 
 export interface Level_1 {
 	levelName: string;
 	levelDesc: string;
-	Level_2s: Level_2[];
+	level_2s: Level_2[];
 }
 
 export interface Levels {

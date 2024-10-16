@@ -14,11 +14,6 @@ var Level2IndexLinks = "";
 /*                  STEP 1 - Read level definition json file                  */
 /* -------------------------------------------------------------------------- */
 const levelDefinitionData: Levels = JSON.parse(fs.readFileSync("input/levelDefinition.json", "utf-8"));
-
-// #region RUN
-
-//#endregion
-
 if (!fs.existsSync(htmlFilesOutputFolder)) {
 	fs.mkdirSync(htmlFilesOutputFolder);
 }
@@ -33,8 +28,12 @@ levelDefinitionData.level_1s.forEach((level_1) => {
 		fs.mkdirSync(level1FolderPath);
 	}
 	const level2IndexFilePath = level1FolderPath + "/index";
-	/* -------------------- Create level 2 index files empty -------------------- */
+	/* ----------------------- Create level 2 files empty ----------------------- */
 	HtmlToFile("", level2IndexFilePath);
+	level_1.level_2s.forEach((level_2) => {
+		const level2FilePath = path.join(level1FolderPath, level_2.levelName);
+		HtmlToFile("", level2FilePath);
+	});
 
 	/* -------------- Create html links block to level 1 index.html ------------- */
 	Level2IndexLinks += `
@@ -44,10 +43,6 @@ levelDefinitionData.level_1s.forEach((level_1) => {
 				<br /><br />`;
 });
 
-/* ----------------- Create and write level 1 indexedDB.html ---------------- */
+/* ----------------- Create and write level 1 index.html ---------------- */
 const level1IndexFile = createLevel1IndexHtml(Level2IndexLinks);
 HtmlToFile(level1IndexFile, htmlFilesOutputFolder + "/index");
-
-/* -------------------------------------------------------------------------- */
-/*                   STEP 3 - Create each level 2 html file                   */
-/* -------------------------------------------------------------------------- */
