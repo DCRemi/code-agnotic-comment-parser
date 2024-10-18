@@ -1,13 +1,12 @@
 import {
-	extractTagSpecificData,
 	extractJsComContent,
 	extractGenericTagBlock,
 	getTagIndex,
 	removeJsComBoundary,
 	extractBlockTagData
 } from "./ressources/commentExtractCommands";
-import { unCamelized, getAllFilePathFromDir, JSONToFile } from "./ressources/helpers";
-import { CommentBlocks, GenericCommentBlock, GenericGlobalComments } from "./ressources/interfaces";
+import { getAllFilePathFromDir, JSONToFile } from "./ressources/helpers";
+import { GenericCommentBlock, GenericGlobalComments } from "./ressources/interfaces";
 
 // import fs from "fs";
 const fs = require("fs");
@@ -29,11 +28,6 @@ if (!fs.existsSync("./json_output")) {
 const outputFilePath = `./json_output/Output`;
 
 filesPaths.forEach((filePath) => {
-	// const fileName = filePath.split(/input\/(.*)\.ts/)[1];
-	// const intermediateOutputFilePath = `./json_output/intermediate/${fileName}Intermediate`;
-	// const finalOutputFilePath = `./json_output/${fileName}Output`;
-	// const fileNameUnCamelized = unCamelized(fileName);
-
 	/* -------------------------------------------------------------------------- */
 	/*                        STEP 1 - Read type script file                      */
 	/* -------------------------------------------------------------------------- */
@@ -68,16 +62,6 @@ filesPaths.forEach((filePath) => {
 		}
 	});
 
-	// #region intermediate extract
-	// if(intermediateOutputFilePath.match(/\.\/json_output\/intermediate\/\w*\//)) // not a root file
-	// {
-	// 	if (!fs.existsSync(intermediateOutputFilePath.match(/\.\/json_output\/intermediate\/\w*\//)[0])){
-	// 		fs.mkdirSync(intermediateOutputFilePath.match(/\.\/json_output\/intermediate\/\w*\//)[0]);
-	// 	}
-	// }
-	// JSONToFile(genericGlobalComments, intermediateOutputFilePath);
-	//#endregion
-
 	/* -------------------------------------------------------------------------- */
 	/*               STEP - 5 Extract tag data depending on the tag               */
 	/* -------------------------------------------------------------------------- */
@@ -85,27 +69,6 @@ filesPaths.forEach((filePath) => {
 	genericGlobalComments.genericCommentBlocks.forEach((genericCommentBlock) => {
 		commentBlocks.push(extractBlockTagData(genericCommentBlock));
 	});
-
-	// const finalJson = extractTagSpecificData(fileNameUnCamelized, genericGlobalComments);
-
-	/* -------------------------------------------------------------------------- */
-	/*                        STEP 6 - Create output folder                       */
-	/* -------------------------------------------------------------------------- */
-	// if (!fs.existsSync("./json_output")) {
-	// 	fs.mkdirSync("./json_output");
-	// }
-
-	// if (finalOutputFilePath.match(/\.\/json_output\/\w*\//)) {
-	// 	// not a root file
-	// 	if (!fs.existsSync(finalOutputFilePath.match(/\.\/json_output\/\w*\//)[0])) {
-	// 		fs.mkdirSync(finalOutputFilePath.match(/\.\/json_output\/\w*\//)[0]);
-	// 	}
-	// }
-
-	/* -------------------------------------------------------------------------- */
-	/*                 STEP 7 - Write extracted data in json files                */
-	/* -------------------------------------------------------------------------- */
-	// JSONToFile(finalJson, finalOutputFilePath);
 });
 
 /* -------------------------------------------------------------------------- */

@@ -1,5 +1,5 @@
 import { HtmlToFile, unCamelized } from "./helpers";
-import { CommentBlock, FileCommentExtract, InteractionType, Level_1 } from "./interfaces";
+import { CommentBlock, Level_1 } from "./interfaces";
 const fs = require("fs");
 const path = require("path");
 
