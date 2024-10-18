@@ -80,9 +80,12 @@ export interface InteractionType {
 }
 
 export interface CommentBlock {
-	blocNumber: number;
+	// blocNumber: number;
+	level1?: string;
+	level2?: string;
+	level3?: string;
 	// stepType: "Given" | "When" | "Then" | "interactionTypeBlock" | "Missing";
-	stepType: string;
+	// stepType: string;
 	memberof?: string;
 	stepDef?: string;
 	paramTags?: ParamTag[];
@@ -91,6 +94,10 @@ export interface CommentBlock {
 	exampleTags?: ExampleTag[];
 	todoTags?: TodoTag[];
 	genericTags?: GenericTag[];
+}
+
+export interface CommentBlocks {
+	commentBlocks: CommentBlock[];
 }
 
 export interface FileCommentExtract {

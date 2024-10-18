@@ -97,6 +97,7 @@ export const extractGenericTagBlock = function (
 /* ---------------------------- Extract Tags data --------------------------- */
 
 /**
+ * @deprecated
  * @description Construct from a Generic global comment a structured json with different tags and their parameters
  * @param {string} fileName name of the file the comments comes from
  * @param {GenericGlobalComments} genericGlobalComments array of tags extracted
@@ -129,6 +130,7 @@ export const extractTagSpecificData = function (fileName: string, genericGlobalC
 };
 
 /**
+ * @deprecated
  * @description Treat file related block when the tag is fileDesc or interactionsTypes
  * @param {FileCommentExtract} fileComments FileCommentExtract where the data will be added
  * @param {GenericGlobalComment} genericCommentBlock comment block that contains the file tag
@@ -179,13 +181,14 @@ export const extractFileTagData = function (
 export const extractBlockTagData = function (genericCommentBlock: GenericCommentBlock): CommentBlock {
 	const typeRegex = /\{(.*)\}/;
 
-	const commentBlock: CommentBlock = { blocNumber: genericCommentBlock.blocNumber, stepType: "Missing" };
+	// const commentBlock: CommentBlock = { blocNumber: genericCommentBlock.blocNumber, stepType: "Missing" };
+	const commentBlock: CommentBlock = {};
 
 	genericCommentBlock.genericTagSentences.forEach((genericTagSentence) => {
 		switch (genericTagSentence.tag) {
-			case "@stepType":
-				commentBlock.stepType = genericTagSentence.tag_content.trim();
-				break;
+			// case "@stepType":
+			// 	commentBlock.stepType = genericTagSentence.tag_content.trim();
+			// 	break;
 			case "@stepDef":
 				commentBlock.stepDef = genericTagSentence.tag_content.trim();
 				break;
