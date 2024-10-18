@@ -1,4 +1,4 @@
-import { HtmlToFile } from "./ressources/helpers";
+import { HtmlToFile, JSONToFile } from "./ressources/helpers";
 import { createLevel_0_IndexHtml, createLevel_1_IndexHtml } from "./ressources/htmlCommands";
 import { Levels } from "./ressources/interfaces";
 
@@ -7,6 +7,7 @@ const path = require("path");
 
 /* -------------------------------- Variables ------------------------------- */
 const htmlOutputFolder = "./html_output";
+const jsonOutputFolder = "./json_output";
 const htmlFilesOutputFolder = path.join(htmlOutputFolder, "pages_tree");
 var Level1IndexLinks = "";
 
@@ -18,32 +19,47 @@ const levelDefinitionData: Levels = JSON.parse(fs.readFileSync("input/levelDefin
 if (!fs.existsSync(htmlFilesOutputFolder)) {
 	fs.mkdirSync(htmlFilesOutputFolder);
 }
+if (!fs.existsSync(jsonOutputFolder)) {
+	fs.mkdirSync(jsonOutputFolder);
+}
 
 /* -------------------------------------------------------------------------- */
 /*      STEP 2 -  Create files and folders + create html link to level 1      */
 /* -------------------------------------------------------------------------- */
 levelDefinitionData.level_1s.forEach((level_1) => {
-	/* ------------------------- Create Level 1 folders ------------------------- */
-	const level1FolderPath = path.join(htmlFilesOutputFolder, level_1.levelName);
-	if (!fs.existsSync(level1FolderPath)) {
-		fs.mkdirSync(level1FolderPath);
+	/* ------------------------- Create Level 1 html folders ------------------------- */
+	const level1HtmlFolderPath = path.join(htmlFilesOutputFolder, level_1.levelName);
+	if (!fs.existsSync(level1HtmlFolderPath)) {
+		fs.mkdirSync(level1HtmlFolderPath);
+	}
+
+	/* ------------------------- Create Level 1 html folders ------------------------- */
+	const level1JsonFolderPath = path.join(jsonOutputFolder, level_1.levelName);
+	if (!fs.existsSync(level1JsonFolderPath)) {
+		fs.mkdirSync(level1JsonFolderPath);
 	}
 
 	/* -------------------------- Create level 2 files -------------------------- */
 	level_1.level_2s.forEach((level_2) => {
-		const level2FilePath = path.join(level1FolderPath, level_2.levelName);
-		HtmlToFile("", level2FilePath);
+		const level2HtmlFilePath = path.join(level1HtmlFolderPath, level_2.levelName);
+		HtmlToFile("", level2HtmlFilePath);
+	});
+
+	/* -------------------------- Create level 2 json files -------------------------- */
+	level_1.level_2s.forEach((level_2) => {
+		const level2JsonFilePath = path.join(level1JsonFolderPath, level_2.levelName);
+		JSONToFile("", level2JsonFilePath);
 	});
 
 	/* ----------------------- Create Level 1 index files ----------------------- */
-	const level1IndexFilePath = level1FolderPath + "/index";
-	const level1IndexFile = createLevel_1_IndexHtml(level_1, level1FolderPath);
+	const level1IndexFilePath = level1HtmlFolderPath + "/index";
+	const level1IndexFile = createLevel_1_IndexHtml(level_1, level1HtmlFolderPath);
 	HtmlToFile(level1IndexFile, level1IndexFilePath);
 
 	/* ----- Create link to level 1 index file to put in level 0 index file ----- */
 	Level1IndexLinks += `
 				<li class="nav-item">
-					<a href="/${level1FolderPath}/index.html" class="nav-link">
+					<a href="/${level1HtmlFolderPath}/index.html" class="nav-link">
 					${level_1.levelName}	
 					</a>
 				</li>`;
