@@ -103,9 +103,6 @@ export const extractBlockTagData = function (genericCommentBlock: GenericComment
 
 	genericCommentBlock.genericTagSentences.forEach((genericTagSentence) => {
 		switch (genericTagSentence.tag) {
-			// case "@stepType":
-			// 	commentBlock.stepType = genericTagSentence.tag_content.trim();
-			// 	break;
 			case "@level1":
 				commentBlock.level1 = genericTagSentence.tag_content.trim();
 				break;
@@ -115,7 +112,6 @@ export const extractBlockTagData = function (genericCommentBlock: GenericComment
 			case "@level3":
 				commentBlock.level3 = genericTagSentence.tag_content.trim();
 				break;
-
 			case "@stepDef":
 				commentBlock.stepDef = genericTagSentence.tag_content.trim();
 				break;
