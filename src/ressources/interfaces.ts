@@ -1,25 +1,3 @@
-// Levels
-export interface Level_3 {
-	levelName: string;
-	levelDesc: string;
-}
-
-export interface Level_2 {
-	levelName: string;
-	levelDesc: string;
-	// level_3s: Level_3[];
-}
-
-export interface Level_1 {
-	levelName: string;
-	levelDesc: string;
-	level_2s: Level_2[];
-}
-
-export interface Levels {
-	level_1s: Level_1[];
-}
-
 // Generic
 export interface TagIndex {
 	tag: string;
@@ -86,4 +64,28 @@ export interface CommentBlock {
 	exampleTags?: ExampleTag[];
 	todoTags?: TodoTag[];
 	genericTags?: GenericTag[];
+}
+
+// Levels
+export interface Level_3 {
+	levelName: string;
+	levelDesc: string;
+}
+
+export interface Level_2 {
+	levelName: string;
+	levelDesc: string;
+	commentBlocks?: CommentBlock[];
+}
+
+export interface Level_1 {
+	levelName: string;
+	levelDesc: string;
+	level_2s: Level_2[];
+	genericLevel1Blocks?: CommentBlock[];
+}
+
+export interface Levels {
+	level_1s: Level_1[];
+	genericBlocks?: CommentBlock[];
 }
