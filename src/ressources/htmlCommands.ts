@@ -1,5 +1,5 @@
-import { HtmlToFile, unCamelized } from "./helpers";
-import { CommentBlock, Level_1 } from "./interfaces";
+import { unCamelized } from "./helpers";
+import { CommentBlock, Level_1, Level_2 } from "./interfaces";
 const fs = require("fs");
 const path = require("path");
 
@@ -76,7 +76,7 @@ export function createLevel_0_IndexHtml(Level1IndexLinks: string): string {
  * @param {string[]} level1FolderPath
  * @returns {string} Level 1 index file content
  */
-export function createLevel_1_IndexHtml(level_1: Level_1, level1FolderPath: string): string {
+export function createLevel_1_IndexHtml(level_1: Level_1): string {
 	var level2FilePathsLinks = "";
 	level_1.level_2s.forEach((level_2) => {
 		level2FilePathsLinks += `
@@ -294,7 +294,7 @@ export function createStepDefHtmlBlock(
 	return htmlBlock;
 }
 
-export function createHtmlFile(mainHtml: string): string {
+export function createHtmlFile(mainHtml: string, level_2: Level_2): string {
 	const htmlBlock = `
 <!DOCTYPE html>
 <html lang="en">
@@ -336,17 +336,7 @@ export function createHtmlFile(mainHtml: string): string {
 		</header>
 		<aside id="sidebar" class="sidebar">
 			<ul id="sidebar-nav" class="sidebar-nav">
-				<li class="nav-item">
-					<a href="ContextSetup.html" class="nav-link"> Context Setup </a>
-				</li>
-				<li class="nav-item">
-					<a href="Navigation.html" class="nav-link collapsed"> Navigation </a>
-				</li>
-				<li class="nav-item">
-					<a href="ListCommon.html" class="nav-link collapsed"> List common </a>
-				</li>
-				<li class="nav-item"><a href="storageOutput.html" class="nav-link collapsed"> Storage </a></li>
-				<li class="nav-item"><a href="genericOutput.html" class="nav-link collapsed"> Generic </a></li>
+				${level_2.htmlNavBar}
 			</ul>
 		</aside>
 		<main id="main" class="main">

@@ -53,7 +53,7 @@ levelDefinitionData.level_1s.forEach((level_1) => {
 
 	/* ----------------------- Create Level 1 index files ----------------------- */
 	const level1IndexFilePath = level1HtmlFolderPath + "/index";
-	const level1IndexFile = createLevel_1_IndexHtml(level_1, level1HtmlFolderPath);
+	const level1IndexFile = createLevel_1_IndexHtml(level_1);
 	HtmlToFile(level1IndexFile, level1IndexFilePath);
 
 	/* ----- Create link to level 1 index file to put in level 0 index file ----- */

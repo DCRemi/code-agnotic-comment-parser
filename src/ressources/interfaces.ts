@@ -76,6 +76,7 @@ export interface Level_2 {
 	levelName: string;
 	levelDesc: string;
 	commentBlocks?: CommentBlock[];
+	htmlNavBar?: string;
 }
 
 export interface Level_1 {

@@ -76,7 +76,7 @@ filesPaths.forEach((filePath) => {
 	/* -------------------------------------------------------------------------- */
 	/*               STEP 5 - Build the html file including the body              */
 	/* -------------------------------------------------------------------------- */
-	const htmlFile = createHtmlFile(htmlBody);
+	const htmlFile = createHtmlFile(htmlBody, fileJsonData);
 
 	/* -------------------------------------------------------------------------- */
 	/*                 STEP 6 - Write the corresponding html file                 */

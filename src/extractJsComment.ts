@@ -5,7 +5,7 @@ import {
 	removeJsComBoundary,
 	extractBlockTagData
 } from "./ressources/commentExtractCommands";
-import { getAllFilePathFromDir, JSONToFile } from "./ressources/helpers";
+import { getAllFilePathFromDir, JSONToFile, unCamelized } from "./ressources/helpers";
 import {
 	CommentBlock,
 	GenericCommentBlock,
@@ -96,11 +96,22 @@ filesPaths.forEach((filePath) => {
 
 		const level1ThatMatch = levelDefinitionData.level_1s.find((level1) => level1.levelName === commentBlock.level1);
 		if (level1ThatMatch) {
+			var level2FilePathsLinks = "";
+			level1ThatMatch.level_2s.forEach((level_2) => {
+				level2FilePathsLinks += `
+							<li class="nav-item">
+								<a href=${level_2.levelName}.html class="nav-link">
+									${unCamelized(level_2.levelName)}	
+								</a>
+							</li>`;
+			});
+			// add on each level 2 block the nav bar menu (used when building html pages)
 			/* ------------- If the level1 written in the tag @level1 exist ------------- */
 			const level2ThatMatch = level1ThatMatch.level_2s.find((level2) => level2.levelName === commentBlock.level2);
 			if (level2ThatMatch) {
 				/* ------------- If the level2 written in the tag @level2 exist ------------- */
 				level2ThatMatch.commentBlocks.push(commentBlock);
+				level2ThatMatch.htmlNavBar = level2FilePathsLinks;
 			} else {
 				/* --------- If the level2 written in the tag @level2 doesn't exist --------- */
 				level1ThatMatch.genericLevel1Blocks.push(commentBlock); //the block is written in the level 1 genric file
