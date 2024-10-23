@@ -2,20 +2,15 @@
 
 NEED
 
-- Global menu level 1
-- Make navigation menu dynamic (create accoding to html files + layout open page)
-
-- Change for the global org >> Update doc
-
 Improve
 
+- Better deal with unknown tags and level > specific page
 - expand todo block
 
 Bonus
 
 - Search & filtering
 - Table css
-- Accordion css
 - Extract values for param
 
 # Introduction
