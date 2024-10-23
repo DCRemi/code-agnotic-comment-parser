@@ -1,47 +1,44 @@
 import {
 	createDefHtmlBlock,
 	createExampleHtmlBlock,
-	createHtmlFileDesc,
 	createHtmlFile,
 	createParamHtmlBlock,
 	createStepDefHtmlBlock,
 	createToDoHtmlBlock,
-	createHtmlInteractionType,
 	createTitleHtmlBlock
 } from "./ressources/htmlCommands";
-import { copyFilesStructToHtml } from "./ressources/htmlCommands";
+// import { copyFilesStructToHtml } from "./ressources/htmlCommands";
 import { getAllFilePathFromDir, HtmlToFile } from "./ressources/helpers";
-import { CommentBlock } from "./ressources/interfaces";
-
+import { CommentBlock, Level_2, Levels } from "./ressources/interfaces";
 const fs = require("fs");
 const path = require("path");
-const folderPath = "./json_output/";
+
+/* ---------------------------- Variables --------------------------- */
+const jsonOutputFolder = "./json_output/";
 const filesPaths: string[] = [];
-const sourcePathName = "json_output";
-const destinationPath = "html_output";
+const destinationPath = "html_output/pages_tree";
 
-// #region RUN
-/** STEP 1 : Create HTML folder & file structure */
-getAllFilePathFromDir(folderPath, filesPaths, ".json");
-copyFilesStructToHtml(filesPaths, sourcePathName, destinationPath);
+/* -------------------------------------------------------------------------- */
+/*                STEP 1 - Create HTML folder & file structure                */
+/* -------------------------------------------------------------------------- */
+getAllFilePathFromDir(jsonOutputFolder, filesPaths, ".json");
 
-//#endregion
-
-// const filePath = "./json_output/storageOutput.json";
 filesPaths.forEach((filePath) => {
-	const fileJsonData = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-	const commentJsonBlocks = fileJsonData.commentBlocks;
-	const interactionTypeJsonBlocks = fileJsonData.interactionTypes;
+	/* -------------------------------------------------------------------------- */
+	/*           STEP 2 - get data for each json file and construct path          */
+	/* -------------------------------------------------------------------------- */
+	const fileJsonData: Level_2 = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+	const commentJsonBlocks = fileJsonData.commentBlocks ? fileJsonData.commentBlocks : [""];
+	const fileLevelPath = filePath.replace("json_output/", "").replace(path.extname(filePath), "");
 
 	var htmlBody: string = "";
 
-	const fileHtmlDesc = createHtmlFileDesc(fileJsonData);
-	htmlBody = fileHtmlDesc;
-
-	const fileHtmlInteractionTypes = createHtmlInteractionType(interactionTypeJsonBlocks);
-
+	/* -------------------------------------------------------------------------- */
+	/*                   STEP 3 - Create the html comment block                   */
+	/* -------------------------------------------------------------------------- */
 	var htmlCommentBlocks = "";
-	commentJsonBlocks.forEach((commentBlock: CommentBlock) => {
+	commentJsonBlocks.forEach((commentBlock: CommentBlock, index) => {
+		/* ------------------------ Build each comment block ------------------------ */
 		const TitleHtmlBlock = createTitleHtmlBlock(commentBlock);
 		const defHtmlBlock = createDefHtmlBlock(commentBlock);
 		const paramHtmlBlock = createParamHtmlBlock(commentBlock);
@@ -53,18 +50,22 @@ filesPaths.forEach((filePath) => {
 			paramHtmlBlock,
 			exampleHtmlBlock,
 			todoHtmlBlock,
-			commentBlock.blocNumber
+			index
 		);
 		const htmlCommentBlock = `
-			<div class="accordion-item stepDefinition" id="commentBlock${commentBlock.blocNumber - 1}">
+			<div class="accordion-item stepDefinition" id="commentBlock${index}">
 				${bloc}
 			</div>`;
+		/* ---------------------- Push to the global html block --------------------- */
 		htmlCommentBlocks += htmlCommentBlock + "<br/><br/>";
 	});
 
+	/* -------------------------------------------------------------------------- */
+	/*                        STEP 4 - Create the html body                       */
+	/* -------------------------------------------------------------------------- */
 	htmlBody = `
-		${fileHtmlDesc ? fileHtmlDesc : ""}
-		${fileHtmlInteractionTypes ? fileHtmlInteractionTypes : ""}
+		${fileJsonData.levelName ? fileJsonData.levelName : ""}
+		${fileJsonData.levelName ? fileJsonData.levelName : ""}
 		<div class="pagetitle">
 			<h2>Steps</h2>
 		</div>
@@ -72,8 +73,13 @@ filesPaths.forEach((filePath) => {
 		${htmlCommentBlocks ? htmlCommentBlocks : ""}
 		</div>
 	`;
-
+	/* -------------------------------------------------------------------------- */
+	/*               STEP 5 - Build the html file including the body              */
+	/* -------------------------------------------------------------------------- */
 	const htmlFile = createHtmlFile(htmlBody);
 
-	HtmlToFile(htmlFile, `html_output/${path.basename(filePath).replace(path.extname(filePath), "")}`);
+	/* -------------------------------------------------------------------------- */
+	/*                 STEP 6 - Write the corresponding html file                 */
+	/* -------------------------------------------------------------------------- */
+	HtmlToFile(htmlFile, `${destinationPath}/${fileLevelPath}`);
 });

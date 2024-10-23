@@ -6,7 +6,7 @@
 	"scripts": {
 		"format": "prettier -w .",
 		"generate:doc": "run-s doc:*",
-		"doc:createLevelStruc": "npx ts-node ./src/createLevelStructure.ts",
+		"doc:createLevelStruct": "npx ts-node ./src/createLevelStructure.ts",
 		"doc:extract": "npx ts-node ./src/extractJsComment.ts",
 		"doc:createHtmlFiles": "npx ts-node ./src/createHtmlFiles.ts",
 		"doc:copyREADME": "cp ./html_output/README.md ./html_output/pages_tree/",

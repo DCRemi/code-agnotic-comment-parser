@@ -124,7 +124,7 @@ filesPaths.forEach((filePath) => {
 
 levelDefinitionData.level_1s.forEach((level1) => {
 	level1.level_2s.forEach((level2) => {
-		JSONToFile(level2.commentBlocks, "./json_output/" + level1.levelName + "/" + level2.levelName);
+		JSONToFile(level2, "./json_output/" + level1.levelName + "/" + level2.levelName);
 	});
 	JSONToFile(level1.genericLevel1Blocks, path.join("./json_output/" + level1.levelName, "generic"));
 });
