@@ -83,10 +83,10 @@ export interface Level_1 {
 	levelName: string;
 	levelDesc: string;
 	level_2s: Level_2[];
-	genericLevel1Blocks?: CommentBlock[];
+	noLevel2Blocks?: CommentBlock[];
 }
 
 export interface Levels {
 	level_1s: Level_1[];
-	genericBlocks?: CommentBlock[];
+	noLevel1Blocks?: CommentBlock[];
 }

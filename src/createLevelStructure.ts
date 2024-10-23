@@ -33,23 +33,23 @@ levelDefinitionData.level_1s.forEach((level_1) => {
 		fs.mkdirSync(level1HtmlFolderPath);
 	}
 
-	/* --------------- Create Level 1 json folders + generic file --------------- */
+	/* --------------- Create Level 1 json folders + noLevel file --------------- */
 	const level1JsonFolderPath = path.join(jsonOutputFolder, level_1.levelName);
 	if (!fs.existsSync(level1JsonFolderPath)) {
 		fs.mkdirSync(level1JsonFolderPath);
 	}
-	JSONToFile("", path.join(jsonOutputFolder, "generic"));
+	JSONToFile("", path.join(jsonOutputFolder, "noLevel"));
 
 	/* -------------------------- Create level 2 html files -------------------------- */
 	level_1.level_2s.forEach((level_2) => {
 		HtmlToFile("", path.join(level1HtmlFolderPath, level_2.levelName));
 	});
 
-	/* ---------------- Create level 2 json files + generic files --------------- */
+	/* ---------------- Create level 2 json files + noLevel files --------------- */
 	level_1.level_2s.forEach((level_2) => {
 		JSONToFile("", path.join(level1JsonFolderPath, level_2.levelName));
 	});
-	JSONToFile("", path.join(level1JsonFolderPath, "generic"));
+	JSONToFile("", path.join(level1JsonFolderPath, "noLevel"));
 
 	/* ----------------------- Create Level 1 index files ----------------------- */
 	const level1IndexFilePath = level1HtmlFolderPath + "/index";

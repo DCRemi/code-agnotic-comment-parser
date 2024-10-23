@@ -34,15 +34,14 @@ getAllFilePathFromDir(folderPath, filesPaths, ".ts");
 const levelDefinitionData: Levels = JSON.parse(fs.readFileSync("input/levelDefinition.json", "utf-8"));
 
 /* ---------------------- Create empty blocks for each ---------------------- */
-levelDefinitionData.genericBlocks = [];
+levelDefinitionData.noLevel1Blocks = [];
 
 levelDefinitionData.level_1s.forEach((level1) => {
-	level1.genericLevel1Blocks = [];
+	level1.noLevel2Blocks = [];
 	level1.level_2s.forEach((level2) => {
 		level2.commentBlocks = [];
 	});
 });
-levelDefinitionData.genericBlocks = [];
 
 /* ----------------------- Create the jsonOutput folder --------------------- */
 if (!fs.existsSync("./json_output")) {
@@ -96,6 +95,7 @@ filesPaths.forEach((filePath) => {
 
 		const level1ThatMatch = levelDefinitionData.level_1s.find((level1) => level1.levelName === commentBlock.level1);
 		if (level1ThatMatch) {
+			/* ----------- Build navbar for level 1 wiht link to level 2 pages ---------- */
 			var level2FilePathsLinks = "";
 			level1ThatMatch.level_2s.forEach((level_2) => {
 				level2FilePathsLinks += `
@@ -105,20 +105,20 @@ filesPaths.forEach((filePath) => {
 								</a>
 							</li>`;
 			});
-			// add on each level 2 block the nav bar menu (used when building html pages)
 			/* ------------- If the level1 written in the tag @level1 exist ------------- */
 			const level2ThatMatch = level1ThatMatch.level_2s.find((level2) => level2.levelName === commentBlock.level2);
 			if (level2ThatMatch) {
 				/* ------------- If the level2 written in the tag @level2 exist ------------- */
 				level2ThatMatch.commentBlocks.push(commentBlock);
+				// add on each level 2 block the nav bar menu (used when building html pages)
 				level2ThatMatch.htmlNavBar = level2FilePathsLinks;
 			} else {
 				/* --------- If the level2 written in the tag @level2 doesn't exist --------- */
-				level1ThatMatch.genericLevel1Blocks.push(commentBlock); //the block is written in the level 1 genric file
+				level1ThatMatch.noLevel2Blocks.push(commentBlock); //the block is written in the level 1 genric file
 			}
 		} else {
 			/* --------- If the level1 written in the tag @level1 doesn't exist --------- */
-			levelDefinitionData.genericBlocks.push(commentBlock); //the block is written in the level "0" genric file
+			levelDefinitionData.noLevel1Blocks.push(commentBlock); //the block is written in the level "0" genric file
 		}
 	});
 
@@ -137,6 +137,6 @@ levelDefinitionData.level_1s.forEach((level1) => {
 	level1.level_2s.forEach((level2) => {
 		JSONToFile(level2, "./json_output/" + level1.levelName + "/" + level2.levelName);
 	});
-	JSONToFile(level1.genericLevel1Blocks, path.join("./json_output/" + level1.levelName, "generic"));
+	JSONToFile(level1.noLevel2Blocks, path.join("./json_output/" + level1.levelName, "noLevel"));
 });
-JSONToFile(levelDefinitionData.genericBlocks, path.join("./json_output", "generic"));
+JSONToFile(levelDefinitionData.noLevel1Blocks, path.join("./json_output", "noLevel"));
