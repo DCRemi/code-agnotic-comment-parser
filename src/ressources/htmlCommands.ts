@@ -1,5 +1,5 @@
-import { HtmlToFile } from "./helpers";
-import { CommentBlock, FileCommentExtract, InteractionType } from "./interfaces";
+import { unCamelized } from "./helpers";
+import { CommentBlock, Level_1, Level_2 } from "./interfaces";
 const fs = require("fs");
 const path = require("path");
 
@@ -7,47 +7,12 @@ const path = require("path");
 /*                      Level files and folders creation                      */
 /* -------------------------------------------------------------------------- */
 /**
- * Copy a files and folder structure from a source path to an destination path
- * it copies the folder structure and create for each file an html file
- * @param filesPaths lists of source files path
- * @param sourcePath path that will be removed to create the output structure (! without the / at the end)
- * @param destinationPath path from where the output structure will be created (! without the / at the end)
- *
- * @example createFolderStructure(filesPaths, "inputPath", "outputPath");
- * from filesPaths =
- * ["inputPath/test.json","inputPath/folder/file.json","inputPath/folder2/test2.txt"]
- * this will create :
- * ./outputPath/test.html and ./outputPath/folder/file.html  and ./outputPath/folder2/test2.html
+ * Create level0 index file with link to level 1 index files
+ * @param {string} Level1IndexLinks
+ * @returns {string} Level 0 index file content
  */
-export function copyFilesStructToHtml(filesPaths: string[], sourcePath: string, destinationPath: string) {
-	filesPaths.forEach((filePath) => {
-		const fileName = path.basename(filePath).replace(path.extname(filePath), "");
-		const fileFolderPath = path.dirname(filePath);
-		const interactionTypes = fileFolderPath.replace(sourcePath, "");
-		const destinationFolder = destinationPath + interactionTypes;
-		const destinationFile = "./" + destinationFolder + "/" + fileName;
-
-		// Create output folder if it doesn't exist
-		if (!fs.existsSync(destinationPath)) {
-			fs.mkdirSync(destinationPath);
-		}
-
-		if (!fs.existsSync(destinationFolder)) {
-			fs.mkdirSync(destinationFolder);
-		}
-		HtmlToFile("", destinationFile);
-	});
-}
-
-/**
- * Create Level 1 folder, index and html file
- * @export
- * @param {*} htmlFilesOutputFolder
- * @param {*} levelDefinitionData
- * @returns {string[]}
- */
-export function createLevel1IndexHtml(Level2IndexLinks): string {
-	const level1IndexHtml = `
+export function createLevel_0_IndexHtml(Level1IndexLinks: string): string {
+	const level0IndexHtml = `
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -86,10 +51,95 @@ export function createLevel1IndexHtml(Level2IndexLinks): string {
 				</div>
 			</div>
 		</header>
+			<aside id="sidebar" class="sidebar">
+				<ul id="sidebar-nav" class="sidebar-nav">
+					${Level1IndexLinks}
+				</ul>
+			</aside>
+		<main id="main" class="main">
+				<div>
+					ReplaceByNoLevel
+				</div>
+				<div class="pagetitle">
+				<h1>READ ME</h1>
+				<br />
+				<br />
+				<zero-md src="README.md"></zero-md>
+			</div>
+		</main>
+	</body>
+</html>`;
+	// 1 create level 1 folder and for each index file vide pour les lien dans le index du level 1
+	return level0IndexHtml;
+}
+
+/**
+ * Create level1 index file with link to level 2 html files
+ * @param {level_1} level_1
+ * @param {string[]} level1FolderPath
+ * @returns {string} Level 1 index file content
+ */
+export function createLevel_1_IndexHtml(level_1: Level_1): string {
+	var level2FilePathsLinks = "";
+	level_1.level_2s.forEach((level_2) => {
+		level2FilePathsLinks += `
+				<li class="nav-item">
+					<a href=${level_2.levelName}.html class="nav-link">
+						${unCamelized(level_2.levelName)}	
+					</a>
+				</li>`;
+	});
+	const level1IndexHtml = `
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+		<title>Home, Block</title>
+		<link type="text/css" rel="stylesheet" href="../../styles/style.css" />
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+			integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+			crossorigin="anonymous"
+		/>
+		<!-- Script -->
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+			integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+			crossorigin="anonymous"
+		></script>
+		<script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+		<script type="module" src="https://cdn.jsdelivr.net/npm/zero-md@3?register"></script>
+	</head>
+	<body>
+		<header id="header" class="header fixed-top d-flex align-items-center">
+			<div class="d-flex align-items-center justify-content-between">
+				<div class="logo d-flex align-items-center">
+					<a href="../index.html" class="logo d-flex align-items-center">
+						<img
+							src="https://cdn0.iconfinder.com/data/icons/juice/512/juice_cucumber_vegetables_drink-512.png"
+							alt=""
+						/>
+					</a>
+				</div>
+				<div class="logo d-flex align-items-center">
+					<h1 class="d-flex align-items-center">Doc-Parser</h1>
+				</div>
+			</div>
+		</header>
+		<aside id="sidebar" class="sidebar">
+			<ul id="sidebar-nav" class="sidebar-nav">
+				${level2FilePathsLinks}
+			</ul>
+		</aside>
 		<main id="main" class="main">
 			<div class="pagetitle">
-				<!-- link vers les pages de level 1  -->
-				${Level2IndexLinks}
+				<h1>${level_1.levelName}</h1>
+				<p>${level_1.levelDesc}</p>
+			<div>
+			ReplaceByNoLevel
+			</div>
 			</div>
 		</main>
 	</body>
@@ -101,51 +151,16 @@ export function createLevel1IndexHtml(Level2IndexLinks): string {
 /* -------------------------------------------------------------------------- */
 /*                            Html blocks creation                           */
 /* -------------------------------------------------------------------------- */
-export function createHtmlFileDesc(fileData: FileCommentExtract): string {
-	var fileName = fileData.fileName;
-	var fileDesc = fileData.fileDesc.replace(/.\n/g, "<br />");
-	const htmlBlock = `
-		<div class="pagetitle">
-			<h1>${fileName}</h1>
-			<p>${fileDesc}</p>
-		</div>`;
-	return htmlBlock;
-}
-
-export function createHtmlInteractionType(interactionTypes: InteractionType[]): string {
-	if (interactionTypes.length > 0) {
-		var htmlBlocks: string = `
-		<div class="pagetitle" id="interActionTypes">
-			<h2>Interaction types </h2>
-		</div>`;
-		interactionTypes.forEach((interactionType) => {
-			var interactionTypeName = interactionType.interactionTypeName;
-			var interactionTypeDesc = interactionType.interactionTypeDesc.replace(/.\n/g, "<br />");
-			const htmlBlock = `
-		<div class="pagetitle" id="BlockDef">
-			<h3>${interactionTypeName}</h3>
-			<p>${interactionTypeDesc}</p>
-		</div>`;
-			htmlBlocks += htmlBlock;
-			// htmlBlocks.push(htmlBlock);
-		});
-
-		return htmlBlocks;
-	} else {
-		return "";
-	}
-}
-
-export function createTitleHtmlBlock(commentBlock: CommentBlock): string {
+export function createTitleHtmlBlock(commentBlock: CommentBlock, index: number): string {
 	var stepDefName = commentBlock.stepDef;
 	const htmlBlock = `
 					<button
 						class="accordion-button collapsed"
 						type="button"
 						data-bs-toggle="collapse"
-						data-bs-target="#collapseHeader${commentBlock.blocNumber - 1}"
+						data-bs-target="#collapseHeader${index}"
 						aria-expanded="false"
-						aria-controls="collapseHeader${commentBlock.blocNumber - 1}"
+						aria-controls="collapseHeader${index}"
 					>
 						<h3 >${stepDefName}</h3>
 					</button>`;
@@ -267,12 +282,12 @@ export function createStepDefHtmlBlock(
 	paramBlock: string,
 	exampleBlock: string,
 	todoBlock: string,
-	blocNumber: number
+	index: number
 ): string {
 	const htmlBlock = `
 				${TitleBlock ? TitleBlock : ""}
 					<div
-						id="collapseHeader${blocNumber - 1}"
+						id="collapseHeader${index}"
 						class="accordion-body accordion-collapse collapse"
 						aria-labelledby="flush-headingOne"
 						data-bs-parent="#accordionFlushExample"
@@ -285,7 +300,7 @@ export function createStepDefHtmlBlock(
 	return htmlBlock;
 }
 
-export function createHtmlFile(mainHtml: string): string {
+export function createHtmlFile(mainHtml: string, level_2: Level_2): string {
 	const htmlBlock = `
 <!DOCTYPE html>
 <html lang="en">
@@ -293,7 +308,7 @@ export function createHtmlFile(mainHtml: string): string {
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
 		<title>Home, Block</title>
-		<link type="text/css" rel="stylesheet" href="styles/style.css" />
+		<link type="text/css" rel="stylesheet" href="../../styles/style.css" />
 		<link
 			rel="stylesheet"
 			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -327,17 +342,7 @@ export function createHtmlFile(mainHtml: string): string {
 		</header>
 		<aside id="sidebar" class="sidebar">
 			<ul id="sidebar-nav" class="sidebar-nav">
-				<li class="nav-item">
-					<a href="contextSetupOutput.html" class="nav-link"> Context Setup </a>
-				</li>
-				<li class="nav-item">
-					<a href="navigationOutput.html" class="nav-link collapsed"> Navigation </a>
-				</li>
-				<li class="nav-item">
-					<a href="listCommonOutput.html" class="nav-link collapsed"> List common </a>
-				</li>
-				<li class="nav-item"><a href="storageOutput.html" class="nav-link collapsed"> Storage </a></li>
-				<li class="nav-item"><a href="genericOutput.html" class="nav-link collapsed"> Generic </a></li>
+				${level_2.htmlNavBar}
 			</ul>
 		</aside>
 		<main id="main" class="main">

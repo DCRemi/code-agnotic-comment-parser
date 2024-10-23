@@ -1,15 +1,23 @@
 import {
-	extractTagSpecificData,
 	extractJsComContent,
 	extractGenericTagBlock,
 	getTagIndex,
-	removeJsComBoundary
+	removeJsComBoundary,
+	extractBlockTagData
 } from "./ressources/commentExtractCommands";
-import { unCamelized, getAllFilePathFromDir, JSONToFile } from "./ressources/helpers";
-import { GenericCommentBlock, GenericGlobalComments } from "./ressources/interfaces";
+import { getAllFilePathFromDir, JSONToFile, unCamelized } from "./ressources/helpers";
+import {
+	CommentBlock,
+	GenericCommentBlock,
+	GenericGlobalComments,
+	Levels,
+	Level_1,
+	Level_2
+} from "./ressources/interfaces";
 
 // import fs from "fs";
 const fs = require("fs");
+const path = require("path");
 
 /* ---------------------------- Variables --------------------------- */
 const folderPath = "input";
@@ -17,15 +25,32 @@ const folderPath = "input";
 /* -------------------------------------------------------------------------- */
 /*                         STEP 0 - Get files tree data                       */
 /* -------------------------------------------------------------------------- */
+
+/* --------------------------- Get code files path -------------------------- */
 const filesPaths: string[] = [];
 getAllFilePathFromDir(folderPath, filesPaths, ".ts");
 
-filesPaths.forEach((filePath) => {
-	const fileName = filePath.split(/input\/(.*)\.ts/)[1];
-	const intermediateOutputFilePath = `./json_output/intermediate/${fileName}Intermediate`;
-	const finalOutputFilePath = `./json_output/${fileName}Output`;
-	const fileNameUnCamelized = unCamelized(fileName);
+/* ----------------------------- Get level data ----------------------------- */
+const levelDefinitionData: Levels = JSON.parse(fs.readFileSync("input/levelDefinition.json", "utf-8"));
 
+/* ---------------------- Create empty blocks for each ---------------------- */
+levelDefinitionData.noLevel1Blocks = [];
+
+levelDefinitionData.level_1s.forEach((level1) => {
+	level1.noLevel2Blocks = [];
+	level1.level_2s.forEach((level2) => {
+		level2.commentBlocks = [];
+	});
+});
+
+/* ----------------------- Create the jsonOutput folder --------------------- */
+if (!fs.existsSync("./json_output")) {
+	fs.mkdirSync("./json_output");
+}
+
+const commentBlocks = [];
+
+filesPaths.forEach((filePath) => {
 	/* -------------------------------------------------------------------------- */
 	/*                        STEP 1 - Read type script file                      */
 	/* -------------------------------------------------------------------------- */
@@ -60,37 +85,58 @@ filesPaths.forEach((filePath) => {
 		}
 	});
 
-	// #region intermediate extract
-	// if(intermediateOutputFilePath.match(/\.\/json_output\/intermediate\/\w*\//)) // not a root file
-	// {
-	// 	if (!fs.existsSync(intermediateOutputFilePath.match(/\.\/json_output\/intermediate\/\w*\//)[0])){
-	// 		fs.mkdirSync(intermediateOutputFilePath.match(/\.\/json_output\/intermediate\/\w*\//)[0]);
-	// 	}
-	// }
-	// JSONToFile(genericGlobalComments, intermediateOutputFilePath);
-	//#endregion
+	/* -------------------------------------------------------------------------- */
+	/*               STEP 5 - Extract tag data depending on the tag               */
+	/* -------------------------------------------------------------------------- */
 
-	/* -------------------------------------------------------------------------- */
-	/*               STEP - 5 Extract tag data depending on the tag               */
-	/* -------------------------------------------------------------------------- */
-	const finalJson = extractTagSpecificData(fileNameUnCamelized, genericGlobalComments);
+	genericGlobalComments.genericCommentBlocks.forEach((genericCommentBlock) => {
+		/* ----------------------- Extract comment block data ----------------------- */
+		const commentBlock: CommentBlock = extractBlockTagData(genericCommentBlock);
 
-	/* -------------------------------------------------------------------------- */
-	/*                        STEP 6 - Create output folder                       */
-	/* -------------------------------------------------------------------------- */
-	if (!fs.existsSync("./json_output")) {
-		fs.mkdirSync("./json_output");
-	}
-
-	if (finalOutputFilePath.match(/\.\/json_output\/\w*\//)) {
-		// not a root file
-		if (!fs.existsSync(finalOutputFilePath.match(/\.\/json_output\/\w*\//)[0])) {
-			fs.mkdirSync(finalOutputFilePath.match(/\.\/json_output\/\w*\//)[0]);
+		const level1ThatMatch = levelDefinitionData.level_1s.find((level1) => level1.levelName === commentBlock.level1);
+		if (level1ThatMatch) {
+			/* ----------- Build navbar for level 1 wiht link to level 2 pages ---------- */
+			var level2FilePathsLinks = "";
+			level1ThatMatch.level_2s.forEach((level_2) => {
+				level2FilePathsLinks += `
+							<li class="nav-item">
+								<a href=${level_2.levelName}.html class="nav-link">
+									${unCamelized(level_2.levelName)}	
+								</a>
+							</li>`;
+			});
+			/* ------------- If the level1 written in the tag @level1 exist ------------- */
+			const level2ThatMatch = level1ThatMatch.level_2s.find((level2) => level2.levelName === commentBlock.level2);
+			if (level2ThatMatch) {
+				/* ------------- If the level2 written in the tag @level2 exist ------------- */
+				level2ThatMatch.commentBlocks.push(commentBlock);
+				// add on each level 2 block the nav bar menu (used when building html pages)
+				level2ThatMatch.htmlNavBar = level2FilePathsLinks;
+			} else {
+				/* --------- If the level2 written in the tag @level2 doesn't exist --------- */
+				level1ThatMatch.noLevel2Blocks.push(commentBlock); //the block is written in the level 1 genric file
+			}
+		} else {
+			/* --------- If the level1 written in the tag @level1 doesn't exist --------- */
+			levelDefinitionData.noLevel1Blocks.push(commentBlock); //the block is written in the level "0" genric file
 		}
-	}
+	});
 
 	/* -------------------------------------------------------------------------- */
-	/*                 STEP 7 - Write extracted data in json files                */
+	/*                STEP 6 - Sort blocks by level 3 inside level2               */
 	/* -------------------------------------------------------------------------- */
-	JSONToFile(finalJson, finalOutputFilePath);
+
+	// TO DO
 });
+
+/* -------------------------------------------------------------------------- */
+/*                 STEP 7 - Write extracted data in json files                */
+/* -------------------------------------------------------------------------- */
+
+levelDefinitionData.level_1s.forEach((level1) => {
+	level1.level_2s.forEach((level2) => {
+		JSONToFile(level2, "./json_output/" + level1.levelName + "/" + level2.levelName);
+	});
+	JSONToFile(level1.noLevel2Blocks, path.join("./json_output/" + level1.levelName, "noLevel"));
+});
+JSONToFile(levelDefinitionData.noLevel1Blocks, path.join("./json_output", "noLevel"));

@@ -1,25 +1,3 @@
-// Levels
-export interface Level_3 {
-	levelName: string;
-	levelDesc: string;
-}
-
-export interface Level_2 {
-	levelName: string;
-	levelDesc: string;
-	// level_3s: Level_3[];
-}
-
-export interface Level_1 {
-	levelName: string;
-	levelDesc: string;
-	level_2s: Level_2[];
-}
-
-export interface Levels {
-	level_1s: Level_1[];
-}
-
 // Generic
 export interface TagIndex {
 	tag: string;
@@ -74,15 +52,10 @@ export interface TodoTag {
 	todo_text: string;
 }
 
-export interface InteractionType {
-	interactionTypeName: string;
-	interactionTypeDesc: string;
-}
-
 export interface CommentBlock {
-	blocNumber: number;
-	// stepType: "Given" | "When" | "Then" | "interactionTypeBlock" | "Missing";
-	stepType: string;
+	level1?: string;
+	level2?: string;
+	level3?: string;
 	memberof?: string;
 	stepDef?: string;
 	paramTags?: ParamTag[];
@@ -93,9 +66,27 @@ export interface CommentBlock {
 	genericTags?: GenericTag[];
 }
 
-export interface FileCommentExtract {
-	fileName: string;
-	fileDesc: string;
-	interactionTypes?: InteractionType[];
-	commentBlocks: CommentBlock[];
+// Levels
+export interface Level_3 {
+	levelName: string;
+	levelDesc: string;
+}
+
+export interface Level_2 {
+	levelName: string;
+	levelDesc: string;
+	commentBlocks?: CommentBlock[];
+	htmlNavBar?: string;
+}
+
+export interface Level_1 {
+	levelName: string;
+	levelDesc: string;
+	level_2s: Level_2[];
+	noLevel2Blocks?: CommentBlock[];
+}
+
+export interface Levels {
+	level_1s: Level_1[];
+	noLevel1Blocks?: CommentBlock[];
 }

@@ -2,20 +2,14 @@ import {
 	CommentBlock,
 	DescriptionTag,
 	ExampleTag,
-	FileCommentExtract,
 	GenericCommentBlock,
-	GenericGlobalComments,
 	GenericTag,
 	GenericTagSentence,
-	InteractionType,
 	ParamTag,
 	SeeTag,
 	TagIndex,
 	TodoTag
 } from "./interfaces";
-const fs = require("fs");
-const path = require("path");
-
 /* -------------------------------------------------------------------------- */
 /*                               Extract JS data                              */
 /* -------------------------------------------------------------------------- */
@@ -97,81 +91,6 @@ export const extractGenericTagBlock = function (
 /* ---------------------------- Extract Tags data --------------------------- */
 
 /**
- * @description Construct from a Generic global comment a structured json with different tags and their parameters
- * @param {string} fileName name of the file the comments comes from
- * @param {GenericGlobalComments} genericGlobalComments array of tags extracted
- * @returns json structured with all the known tags and their parameter to be used as documentation
- */
-export const extractTagSpecificData = function (fileName: string, genericGlobalComments: GenericGlobalComments) {
-	// Initialize the file
-	const fileComments: FileCommentExtract = {
-		fileName,
-		fileDesc: "empty file description",
-		interactionTypes: [],
-		commentBlocks: []
-	};
-
-	const fileTagType = ["@fileDesc", "@interactionTypes"];
-
-	genericGlobalComments.genericCommentBlocks.forEach((genericCommentBlock) => {
-		// If the 1st tag is a file tag it will treat only this tag and add it to the file data
-		if (fileTagType.includes(genericCommentBlock.genericTagSentences[0].tag)) {
-			// fileComments.interactionTypes.push(
-			extractFileTagData(fileComments, genericCommentBlock);
-			// );
-		}
-		// If it is not a file tag it will iterate on the tags and extract all data
-		else {
-			fileComments.commentBlocks.push(extractBlockTagData(genericCommentBlock));
-		}
-	});
-	return fileComments;
-};
-
-/**
- * @description Treat file related block when the tag is fileDesc or interactionsTypes
- * @param {FileCommentExtract} fileComments FileCommentExtract where the data will be added
- * @param {GenericGlobalComment} genericCommentBlock comment block that contains the file tag
- * @returns FileCommentExtract modified
- */
-export const extractFileTagData = function (
-	fileComments: FileCommentExtract,
-	genericCommentBlock: GenericCommentBlock
-): FileCommentExtract {
-	const typeRegex = /\{(.*)\}/;
-
-	switch (genericCommentBlock.genericTagSentences[0].tag) {
-		case "@fileDesc":
-			fileComments.fileDesc = genericCommentBlock.genericTagSentences[0].tag_content;
-			return fileComments;
-		case "@interactionTypes":
-			let interactionType: InteractionType;
-			// if the tag contains a type into {type}
-			if (genericCommentBlock.genericTagSentences[0].tag_content.match(typeRegex)) {
-				const interactionTypeName = genericCommentBlock.genericTagSentences[0].tag_content.match(typeRegex);
-				interactionType = {
-					interactionTypeName: interactionTypeName[1],
-					interactionTypeDesc: genericCommentBlock.genericTagSentences[0].tag_content
-						.substring(interactionTypeName[0].length)
-						.trim()
-				};
-			}
-			// if the tag doesn't contain a type into it will put none
-			else {
-				interactionType = {
-					interactionTypeName: "none",
-					interactionTypeDesc: genericCommentBlock.genericTagSentences[0].tag_content
-				};
-			}
-			fileComments.interactionTypes.push(interactionType);
-			return fileComments;
-		default:
-			//
-			break;
-	}
-};
-
-/**
  * @description Treat block tag, iterate on all tag of the blocks to extract all data
  * @param {GenericGlobalComment} genericCommentBlock comment block that contains the file tag
  * @returns CommentBlock extracted data
@@ -179,12 +98,19 @@ export const extractFileTagData = function (
 export const extractBlockTagData = function (genericCommentBlock: GenericCommentBlock): CommentBlock {
 	const typeRegex = /\{(.*)\}/;
 
-	const commentBlock: CommentBlock = { blocNumber: genericCommentBlock.blocNumber, stepType: "Missing" };
+	// const commentBlock: CommentBlock = { blocNumber: genericCommentBlock.blocNumber, stepType: "Missing" };
+	const commentBlock: CommentBlock = {};
 
 	genericCommentBlock.genericTagSentences.forEach((genericTagSentence) => {
 		switch (genericTagSentence.tag) {
-			case "@stepType":
-				commentBlock.stepType = genericTagSentence.tag_content.trim();
+			case "@level1":
+				commentBlock.level1 = genericTagSentence.tag_content.trim();
+				break;
+			case "@level2":
+				commentBlock.level2 = genericTagSentence.tag_content.trim();
+				break;
+			case "@level3":
+				commentBlock.level3 = genericTagSentence.tag_content.trim();
 				break;
 			case "@stepDef":
 				commentBlock.stepDef = genericTagSentence.tag_content.trim();
