@@ -57,6 +57,9 @@ export function createLevel_0_IndexHtml(Level1IndexLinks: string): string {
 				</ul>
 			</aside>
 		<main id="main" class="main">
+				<div>
+					ReplaceByNovel
+				</div>
 				<div class="pagetitle">
 				<h1>READ ME</h1>
 				<br />
@@ -134,6 +137,9 @@ export function createLevel_1_IndexHtml(level_1: Level_1): string {
 			<div class="pagetitle">
 				<h1>${level_1.levelName}</h1>
 				<p>${level_1.levelDesc}</p>
+			<div>
+			ReplaceByNovel
+			</div>
 			</div>
 		</main>
 	</body>
