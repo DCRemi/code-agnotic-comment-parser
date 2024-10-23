@@ -39,7 +39,7 @@ filesPaths.forEach((filePath) => {
 	var htmlCommentBlocks = "";
 	commentJsonBlocks.forEach((commentBlock: CommentBlock, index) => {
 		/* ------------------------ Build each comment block ------------------------ */
-		const TitleHtmlBlock = createTitleHtmlBlock(commentBlock);
+		const TitleHtmlBlock = createTitleHtmlBlock(commentBlock, index);
 		const defHtmlBlock = createDefHtmlBlock(commentBlock);
 		const paramHtmlBlock = createParamHtmlBlock(commentBlock);
 		const exampleHtmlBlock = createExampleHtmlBlock(commentBlock);

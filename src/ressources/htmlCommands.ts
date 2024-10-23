@@ -145,29 +145,19 @@ export function createLevel_1_IndexHtml(level_1: Level_1, level1FolderPath: stri
 /* -------------------------------------------------------------------------- */
 /*                            Html blocks creation                           */
 /* -------------------------------------------------------------------------- */
-export function createTitleHtmlBlock(commentBlock: CommentBlock): string {
+export function createTitleHtmlBlock(commentBlock: CommentBlock, index: number): string {
 	var stepDefName = commentBlock.stepDef;
-	// const htmlBlock = `
-	// 				<button
-	// 					class="accordion-button collapsed"
-	// 					type="button"
-	// 					data-bs-toggle="collapse"
-	// 					data-bs-target="#collapseHeader${commentBlock.blocNumber - 1}"
-	// 					aria-expanded="false"
-	// 					aria-controls="collapseHeader${commentBlock.blocNumber - 1}"
-	// 				>
-	// 					<h3 >${stepDefName}</h3>
-	// 				</button>`;
-	// return htmlBlock;
 	const htmlBlock = `
-	<button
-		class="accordion-button collapsed"
-		type="button"
-		data-bs-toggle="collapse"
-		aria-expanded="false"
-	>
-		<h3 >${stepDefName}</h3>
-	</button>`;
+					<button
+						class="accordion-button collapsed"
+						type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#collapseHeader${index}"
+						aria-expanded="false"
+						aria-controls="collapseHeader${index}"
+					>
+						<h3 >${stepDefName}</h3>
+					</button>`;
 	return htmlBlock;
 }
 
@@ -286,12 +276,12 @@ export function createStepDefHtmlBlock(
 	paramBlock: string,
 	exampleBlock: string,
 	todoBlock: string,
-	blocNumber: number
+	index: number
 ): string {
 	const htmlBlock = `
 				${TitleBlock ? TitleBlock : ""}
 					<div
-						id="collapseHeader${blocNumber - 1}"
+						id="collapseHeader${index}"
 						class="accordion-body accordion-collapse collapse"
 						aria-labelledby="flush-headingOne"
 						data-bs-parent="#accordionFlushExample"
