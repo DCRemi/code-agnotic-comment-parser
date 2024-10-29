@@ -153,8 +153,8 @@ Example
 
 The corresponding tags are :
 @level1 level1_name
-@level2 level2Name
-@level3 level1_name
+@level2 level2_name
+@level3 level3_name
 
 #### IMPORTANT
 
@@ -162,6 +162,8 @@ The corresponding tags are :
 - level names will be uncamelized on the html pages
 - level name in the levelDefinition must extactly correspond to the one written in the code files
   \*\* if not the comment blocks will be written in the generic page
+
+- for now level3 can only be Given / When / Then
 
 ### II.3. Tags type
 

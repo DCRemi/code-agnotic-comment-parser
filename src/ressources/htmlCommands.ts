@@ -143,8 +143,8 @@ export function createLevel_1_BaseHtml(level_1: Level_1): string {
 			</ul>
 		</aside>
 		<main id="main" class="main">
-			<div class="pagetitle">
-				<h1>${level_1.levelName}</h1>
+			<div>
+				<h1 class="pagetitle">${level_1.levelName}</h1>
 				<p>${level_1.levelDesc}</p>
 			<div>
 			htmlPartToReplace
@@ -294,18 +294,21 @@ export function createStepDefHtmlBlock(
 	index: number
 ): string {
 	const htmlBlock = `
-				${TitleBlock ? TitleBlock : ""}
-					<div
-						id="collapseHeader${index}"
-						class="accordion-body accordion-collapse collapse"
-						aria-labelledby="flush-headingOne"
-						data-bs-parent="#accordionFlushExample"
-					>
-							${defBlock ? defBlock : ""}
-							${paramBlock ? paramBlock : ""}
-							${exampleBlock ? exampleBlock : ""}
-							${todoBlock ? todoBlock : ""}
-					</div>`;
+							<div class="accordion-item stepDefinition" id="commentBlock${index}">
+									${TitleBlock ? TitleBlock : ""}
+									<div
+										id="collapseHeader${index}"
+										class="accordion-body accordion-collapse collapse"
+										aria-labelledby="flush-headingOne"
+										data-bs-parent="#accordionFlushExample"
+									>
+											${defBlock ? defBlock : ""}
+											${paramBlock ? paramBlock : ""}
+											${exampleBlock ? exampleBlock : ""}
+											${todoBlock ? todoBlock : ""}
+									</div>
+							</div>`;
+
 	return htmlBlock;
 }
 
@@ -360,7 +363,7 @@ export function createHtmlFile(mainHtml: string, level_2: Level_2): string {
 		</aside>
 		<main id="main" class="main">
 				${mainHtml}	
-			</main>
+		</main>
 	</body>
 </html>
 `;
