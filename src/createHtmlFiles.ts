@@ -88,8 +88,8 @@ filesPaths.forEach((filePath) => {
 		/* -------------------------------------------------------------------------- */
 		const noLevelBlocks: CommentBlock[] = JSON.parse(fs.readFileSync(filePath, "utf-8"));
 		const levelFolder = filePath.replace("json_output/", "").replace(path.basename(filePath), "");
-		const indexFilePath = destinationPath + "/" + levelFolder + "index.html";
-		const indexHtmlFile = fs.readFileSync(indexFilePath, "utf-8");
+		const nolevelFilePath = destinationPath + "/" + levelFolder + "nolevel.html";
+		const nolevelHtmlFile = fs.readFileSync(nolevelFilePath, "utf-8");
 		var htmlFile;
 		if (noLevelBlocks.length !== 0) {
 			/* -------------------------------------------------------------------------- */
@@ -139,13 +139,13 @@ filesPaths.forEach((filePath) => {
 			/* -------------------------------------------------------------------------- */
 			/*               STEP 5 - Build the html file including the body              */
 			/* -------------------------------------------------------------------------- */
-			htmlFile = indexHtmlFile.replace("ReplaceByNoLevel", htmlBody);
+			htmlFile = nolevelHtmlFile.replace("htmlPartToReplace", htmlBody);
 		} else {
-			htmlFile = indexHtmlFile.replace("ReplaceByNoLevel", "");
+			htmlFile = nolevelHtmlFile.replace("htmlPartToReplace", "<p>No unknown levels or tags<p>");
 		}
 		/* -------------------------------------------------------------------------- */
 		/*                 STEP 6 - Write the corresponding html file                 */
 		/* -------------------------------------------------------------------------- */
-		HtmlToFile(htmlFile, indexFilePath.replace(path.extname(indexFilePath), ""));
+		HtmlToFile(htmlFile, nolevelFilePath.replace(path.extname(nolevelFilePath), ""));
 	}
 });

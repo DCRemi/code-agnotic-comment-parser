@@ -11,7 +11,7 @@ const path = require("path");
  * @param {string} Level1IndexLinks
  * @returns {string} Level 0 index file content
  */
-export function createLevel_0_IndexHtml(Level1IndexLinks: string): string {
+export function createLevel_0_baseHtml(Level1IndexLinks: string): string {
 	const level0IndexHtml = `
 <!DOCTYPE html>
 <html lang="en">
@@ -39,7 +39,7 @@ export function createLevel_0_IndexHtml(Level1IndexLinks: string): string {
 		<header id="header" class="header fixed-top d-flex align-items-center">
 			<div class="d-flex align-items-center justify-content-between">
 				<div class="logo d-flex align-items-center">
-					<a href="index.html" class="logo d-flex align-items-center">
+					<a href="/html_output/pages_tree/index.html" class="logo d-flex align-items-center">
 						<img
 							src="https://cdn0.iconfinder.com/data/icons/juice/512/juice_cucumber_vegetables_drink-512.png"
 							alt=""
@@ -54,11 +54,15 @@ export function createLevel_0_IndexHtml(Level1IndexLinks: string): string {
 			<aside id="sidebar" class="sidebar">
 				<ul id="sidebar-nav" class="sidebar-nav">
 					${Level1IndexLinks}
+					<li class="nav-item">
+						<a href=nolevel.html class="nav-link">
+							No Level	
+						</a>
 				</ul>
 			</aside>
 		<main id="main" class="main">
 				<div>
-					ReplaceByNoLevel
+					htmlPartToReplace
 				</div>
 				<div class="pagetitle">
 				<h1>READ ME</h1>
@@ -79,7 +83,7 @@ export function createLevel_0_IndexHtml(Level1IndexLinks: string): string {
  * @param {string[]} level1FolderPath
  * @returns {string} Level 1 index file content
  */
-export function createLevel_1_IndexHtml(level_1: Level_1): string {
+export function createLevel_1_BaseHtml(level_1: Level_1): string {
 	var level2FilePathsLinks = "";
 	level_1.level_2s.forEach((level_2) => {
 		level2FilePathsLinks += `
@@ -116,7 +120,7 @@ export function createLevel_1_IndexHtml(level_1: Level_1): string {
 		<header id="header" class="header fixed-top d-flex align-items-center">
 			<div class="d-flex align-items-center justify-content-between">
 				<div class="logo d-flex align-items-center">
-					<a href="../index.html" class="logo d-flex align-items-center">
+					<a href="/html_output/pages_tree/index.html" class="logo d-flex align-items-center">
 						<img
 							src="https://cdn0.iconfinder.com/data/icons/juice/512/juice_cucumber_vegetables_drink-512.png"
 							alt=""
@@ -131,6 +135,11 @@ export function createLevel_1_IndexHtml(level_1: Level_1): string {
 		<aside id="sidebar" class="sidebar">
 			<ul id="sidebar-nav" class="sidebar-nav">
 				${level2FilePathsLinks}
+				<li class="nav-item">
+				<a href=nolevel.html class="nav-link">
+					No Level	
+				</a>
+				</li>
 			</ul>
 		</aside>
 		<main id="main" class="main">
@@ -138,7 +147,7 @@ export function createLevel_1_IndexHtml(level_1: Level_1): string {
 				<h1>${level_1.levelName}</h1>
 				<p>${level_1.levelDesc}</p>
 			<div>
-			ReplaceByNoLevel
+			htmlPartToReplace
 			</div>
 			</div>
 		</main>
@@ -328,7 +337,7 @@ export function createHtmlFile(mainHtml: string, level_2: Level_2): string {
 		<header id="header" class="header fixed-top d-flex align-items-center">
 			<div class="d-flex align-items-center justify-content-between">
 				<div class="logo d-flex align-items-center">
-					<a href="index.html" class="logo d-flex align-items-center">
+					<a href="/html_output/pages_tree/index.html" class="logo d-flex align-items-center">
 						<img
 							src="https://cdn0.iconfinder.com/data/icons/juice/512/juice_cucumber_vegetables_drink-512.png"
 							alt=""
@@ -343,6 +352,10 @@ export function createHtmlFile(mainHtml: string, level_2: Level_2): string {
 		<aside id="sidebar" class="sidebar">
 			<ul id="sidebar-nav" class="sidebar-nav">
 				${level_2.htmlNavBar}
+				<li class="nav-item">
+					<a href=nolevel.html class="nav-link">
+						No Level	
+					</a>
 			</ul>
 		</aside>
 		<main id="main" class="main">

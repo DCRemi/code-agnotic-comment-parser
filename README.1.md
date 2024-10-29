@@ -4,7 +4,7 @@ NEED
 
 Improve
 
-- Better deal with unknown tags and level > specific page
+- Better deal with unknown tags > specific page
 - expand todo block
 
 Bonus
@@ -83,7 +83,7 @@ Add in the input folder the files you want to treat.<br />
 ### II.1. Global structure
 
 This works wit comment blocks > Each comment blocks will produce a documentation block.<br />
-A comment block start with /\*_ and end with _/ (like jsdoc comments).<br />
+A comment block start with /\*\* and end with \*/ (like jsdoc comments).<br />
 In each block tags are added to specify the type of content for the documentation.<br />
 
 \* as this "tool" doesn't take into account the code itself, the comment blocks can be written where ever you want. <br/>
@@ -180,11 +180,12 @@ If the variable are not correctly set an error will appear on the console. Howev
 
 ### III.1. Code tags
 
-**@stepType** (Simple tag)
+**@levelX** (Simple tag)
 
-> will be used to regroup the step type together<br />
-> Values are : Given / When / Then <br />
-> @stepdef TWhen
+> @levelX levelName<br />
+> @level1 platformName<br />
+> @level2 featureName<br />
+> @level1 stepTypeName<br />
 
 **@stepDef** (Simple tag)
 

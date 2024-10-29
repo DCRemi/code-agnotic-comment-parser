@@ -1,5 +1,5 @@
 import { HtmlToFile, JSONToFile } from "./ressources/helpers";
-import { createLevel_0_IndexHtml, createLevel_1_IndexHtml } from "./ressources/htmlCommands";
+import { createLevel_0_baseHtml, createLevel_1_BaseHtml } from "./ressources/htmlCommands";
 import { Levels } from "./ressources/interfaces";
 
 const fs = require("fs");
@@ -53,8 +53,10 @@ levelDefinitionData.level_1s.forEach((level_1) => {
 
 	/* ----------------------- Create Level 1 index files ----------------------- */
 	const level1IndexFilePath = level1HtmlFolderPath + "/index";
-	const level1IndexFile = createLevel_1_IndexHtml(level_1);
-	HtmlToFile(level1IndexFile, level1IndexFilePath);
+	const level1NoLevelFilePath = level1HtmlFolderPath + "/nolevel";
+	const level1BaseFile = createLevel_1_BaseHtml(level_1);
+	HtmlToFile(level1BaseFile, level1IndexFilePath);
+	HtmlToFile(level1BaseFile, level1NoLevelFilePath);
 
 	/* ----- Create link to level 1 index file to put in level 0 index file ----- */
 	Level1IndexLinks += `
@@ -68,7 +70,6 @@ levelDefinitionData.level_1s.forEach((level_1) => {
 /* -------------------------------------------------------------------------- */
 /*                     STEP 3 - Create level 0 index file                     */
 /* -------------------------------------------------------------------------- */
-const level0IndexFile = createLevel_0_IndexHtml(Level1IndexLinks);
-HtmlToFile(level0IndexFile, htmlFilesOutputFolder + "/index");
-
-levelDefinitionData.level_1s.forEach((level_1) => {});
+const level0BaseFile = createLevel_0_baseHtml(Level1IndexLinks);
+HtmlToFile(level0BaseFile, htmlFilesOutputFolder + "/index");
+HtmlToFile(level0BaseFile, htmlFilesOutputFolder + "/nolevel");
