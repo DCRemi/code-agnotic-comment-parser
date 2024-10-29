@@ -36,7 +36,10 @@ filesPaths.forEach((filePath) => {
 		/* -------------------------------------------------------------------------- */
 		/*                   STEP 2 - Create the html comment block                   */
 		/* -------------------------------------------------------------------------- */
-		var htmlCommentBlocks = "";
+		var htmlGivenBlocks = "";
+		var htmlWhenBlocks = "";
+		var htmlThenBlocks = "";
+		var htmlUnknownBlocks = "";
 		commentJsonBlocks.forEach((commentBlock: CommentBlock, index) => {
 			/* ------------------------ Build each comment block ------------------------ */
 			const TitleHtmlBlock = createTitleHtmlBlock(commentBlock, index);
@@ -44,7 +47,7 @@ filesPaths.forEach((filePath) => {
 			const paramHtmlBlock = createParamHtmlBlock(commentBlock);
 			const exampleHtmlBlock = createExampleHtmlBlock(commentBlock);
 			const todoHtmlBlock = createToDoHtmlBlock(commentBlock);
-			const bloc = createStepDefHtmlBlock(
+			const htmlStepDefBlock = createStepDefHtmlBlock(
 				TitleHtmlBlock,
 				defHtmlBlock,
 				paramHtmlBlock,
@@ -52,25 +55,54 @@ filesPaths.forEach((filePath) => {
 				todoHtmlBlock,
 				index
 			);
-			const htmlCommentBlock = `
-				<div class="accordion-item stepDefinition" id="commentBlock${index}">
-					${bloc}
-				</div>`;
-			/* ---------------------- Push to the global html block --------------------- */
-			htmlCommentBlocks += htmlCommentBlock + "<br/><br/>";
+
+			/* ----------------------- Split between level3 blocs ----------------------- */
+			switch (commentBlock.level3) {
+				case "Given":
+					htmlGivenBlocks += htmlStepDefBlock + "<br/>";
+					break;
+				case "When":
+					htmlWhenBlocks += htmlStepDefBlock + "<br/>";
+					break;
+				case "Then":
+					htmlThenBlocks += htmlStepDefBlock + "<br/>";
+					break;
+				case "default":
+					htmlUnknownBlocks += htmlStepDefBlock + "<br/>";
+					break;
+			}
 		});
+		/* ---------------------------- Create main block --------------------------- */
+		const htmlCommentBlocks = `
+		<h2 class="pagetitle"> Given </h2>
+			<div class="accordion">
+					${htmlGivenBlocks}
+			</div>
+			<br />
+		<h2 class="pagetitle"> When </h2>
+			<div class="accordion">
+					${htmlWhenBlocks}
+			</div>
+			<br />
+		<h2 class="pagetitle"> Then </h2>
+			<div class="accordion">
+					${htmlThenBlocks}
+			</div>
+			<br />
+		<h2 class="pagetitle"> Unknown </h2>
+			<div class="accordion">
+					${htmlUnknownBlocks}
+			</div>`;
 		/* -------------------------------------------------------------------------- */
 		/*                        STEP 3 - Create the html body                       */
 		/* -------------------------------------------------------------------------- */
 		var htmlBody: string = "";
 		htmlBody = `
-		<div class="pagetitle">
-			<h2>${fileJsonData.levelName ? fileJsonData.levelName : ""}</h2>
+		<div>
+			<h1 class="pagetitle">${fileJsonData.levelName ? fileJsonData.levelName : ""}</h1>
 			<p>${fileJsonData.levelDesc ? fileJsonData.levelDesc : ""}</p>
 		</div>
-			<div class="accordion">
-			${htmlCommentBlocks ? htmlCommentBlocks : ""}
-			</div>`;
+			${htmlCommentBlocks ? htmlCommentBlocks : ""}`;
 		/* -------------------------------------------------------------------------- */
 		/*               STEP 4 - Integrating the body in the html file               */
 		/* -------------------------------------------------------------------------- */
@@ -112,13 +144,11 @@ filesPaths.forEach((filePath) => {
 					index
 				);
 				const htmlCommentBlock = `
-				<div class="pagetitle">
-					<h3>Level 1 : ${commentBlock.level1 ? commentBlock.level1 : ""}</h3>
-					<h3>Level 2 : ${commentBlock.level2 ? commentBlock.level2 : ""}</h3>
+				<div>
+					<h1 class="pagetitle">Level 1 : ${commentBlock.level1 ? commentBlock.level1 : ""}</h3>
+					<h2 class="pagetitle">Level 2 : ${commentBlock.level2 ? commentBlock.level2 : ""}</h3>
 				</div>
 				<div class="accordion-item stepDefinition" id="commentBlock${index}">
-					<div class="pagetitle">
-					</div>					
 					${bloc}
 				</div>`;
 				/* ---------------------- Push to the global html block --------------------- */
@@ -130,9 +160,7 @@ filesPaths.forEach((filePath) => {
 			/* -------------------------------------------------------------------------- */
 			var htmlBody: string = "";
 			htmlBody = `
-			<div class="pagetitle">
-				<h1>Unknown Level steps</h1>
-			</div>					
+			<h1 class="pagetitle">Unknown Level steps</h1>
 			<div class="accordion">
 			${htmlCommentBlocks ? htmlCommentBlocks : ""}
 			</div>`;
