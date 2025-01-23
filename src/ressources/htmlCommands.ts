@@ -250,9 +250,7 @@ export function createExampleHtmlBlock(commentBlock: CommentBlock): string {
 							<h4>Example :</h4>
 							<div class="card">
 								<div class="card-body">
-									<code class="hljs">
-										${stepDefExample.replace(/.\n/g, "<br />")}
-									</code>
+									<pre><code data-prismjs-copy="Copy" class="language-js">${stepDefExample}</code></pre>
 								</div>
 							</div>
 						</div>`;
@@ -332,6 +330,7 @@ export function createHtmlFile(mainHtml: string, level_2: Level_2): string {
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
 		<title>Home, Block</title>
 		<link type="text/css" rel="stylesheet" href="../../styles/style.css" />
+		<link type="text/css" rel="stylesheet" href="../../styles/prism.css" />		
 		<link
 			rel="stylesheet"
 			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -346,6 +345,7 @@ export function createHtmlFile(mainHtml: string, level_2: Level_2): string {
 		></script>
 		<script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
 		<script type="module" src="https://cdn.jsdelivr.net/npm/zero-md@3?register"></script>
+		<script src="../../js/prism.js"></script>
 	</head>
 	<body>
 		<header id="header" class="header fixed-top d-flex align-items-center">
