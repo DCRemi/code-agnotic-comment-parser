@@ -55,7 +55,7 @@ export function createLevel_0_baseHtml(Level1IndexLinks: string): string {
 				<ul id="sidebar-nav" class="sidebar-nav">
 					${Level1IndexLinks}
 					<li class="nav-item">
-						<a href=nolevel.html class="nav-link">
+						<a href=noLevel1.html class="nav-link">
 							No Level	
 						</a>
 				</ul>
@@ -136,7 +136,7 @@ export function createLevel_1_BaseHtml(level_1: Level_1): string {
 			<ul id="sidebar-nav" class="sidebar-nav">
 				${level2FilePathsLinks}
 				<li class="nav-item">
-				<a href=nolevel.html class="nav-link">
+				<a href=noLevel2.html class="nav-link">
 					No Level	
 				</a>
 				</li>
@@ -356,7 +356,7 @@ export function createHtmlFile(mainHtml: string, level_2: Level_2): string {
 			<ul id="sidebar-nav" class="sidebar-nav">
 				${level_2.htmlNavBar}
 				<li class="nav-item">
-					<a href=nolevel.html class="nav-link">
+					<a href=noLevel2.html class="nav-link">
 						No Level	
 					</a>
 			</ul>

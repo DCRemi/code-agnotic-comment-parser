@@ -38,7 +38,7 @@ levelDefinitionData.level_1s.forEach((level_1) => {
 	if (!fs.existsSync(level1JsonFolderPath)) {
 		fs.mkdirSync(level1JsonFolderPath);
 	}
-	JSONToFile("", path.join(jsonOutputFolder, "noLevel"));
+	JSONToFile("", path.join(jsonOutputFolder, "noLevel1"));
 
 	/* -------------------------- Create level 2 html files -------------------------- */
 	level_1.level_2s.forEach((level_2) => {
@@ -49,11 +49,11 @@ levelDefinitionData.level_1s.forEach((level_1) => {
 	level_1.level_2s.forEach((level_2) => {
 		JSONToFile("", path.join(level1JsonFolderPath, level_2.levelName));
 	});
-	JSONToFile("", path.join(level1JsonFolderPath, "noLevel"));
+	JSONToFile("", path.join(level1JsonFolderPath, "noLevel2"));
 
 	/* ----------------------- Create Level 1 index files ----------------------- */
 	const level1IndexFilePath = level1HtmlFolderPath + "/index";
-	const level1NoLevelFilePath = level1HtmlFolderPath + "/nolevel";
+	const level1NoLevelFilePath = level1HtmlFolderPath + "/noLevel2";
 	const level1BaseFile = createLevel_1_BaseHtml(level_1);
 	HtmlToFile(level1BaseFile, level1IndexFilePath);
 	HtmlToFile(level1BaseFile, level1NoLevelFilePath);
@@ -72,4 +72,4 @@ levelDefinitionData.level_1s.forEach((level_1) => {
 /* -------------------------------------------------------------------------- */
 const level0BaseFile = createLevel_0_baseHtml(Level1IndexLinks);
 HtmlToFile(level0BaseFile, htmlFilesOutputFolder + "/index");
-HtmlToFile(level0BaseFile, htmlFilesOutputFolder + "/nolevel");
+HtmlToFile(level0BaseFile, htmlFilesOutputFolder + "/noLevel1");
