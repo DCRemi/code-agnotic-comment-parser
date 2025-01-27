@@ -61,7 +61,7 @@ levelDefinitionData.level_1s.forEach((level_1) => {
 
 	/* ----------------------- Create Level 1 index files ----------------------- */
 	const level1IndexFilePath = level1HtmlFolderPath + "/index";
-	const level1NoLevelFilePath = level1HtmlFolderPath + "/nolevel";
+	const level1NoLevelFilePath = level1HtmlFolderPath + "/noLevel";
 	const level1BaseFile = createLevel_1_BaseHtml(level_1);
 	HtmlToFile(level1BaseFile, level1IndexFilePath);
 	HtmlToFile(level1BaseFile, level1NoLevelFilePath);
@@ -81,4 +81,4 @@ levelDefinitionData.level_1s.forEach((level_1) => {
 // Need to be done after step 1 because it's need the level1 index links
 const level0BaseFile = createLevel_0_baseHtml(Level1IndexLinks);
 HtmlToFile(level0BaseFile, htmlFilesOutputFolder + "/index");
-HtmlToFile(level0BaseFile, htmlFilesOutputFolder + "/nolevel");
+HtmlToFile(level0BaseFile, htmlFilesOutputFolder + "/noLevel");
