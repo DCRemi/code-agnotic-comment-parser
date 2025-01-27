@@ -137,6 +137,6 @@ levelDefinitionData.level_1s.forEach((level1) => {
 	level1.level_2s.forEach((level2) => {
 		JSONToFile(level2, "./json_output/" + level1.levelName + "/" + level2.levelName);
 	});
-	JSONToFile(level1.noLevel2Blocks, path.join("./json_output/" + level1.levelName, "noLevel2"));
+	JSONToFile(level1.noLevel2Blocks, path.join("./json_output/" + level1.levelName, "noLevel"));
 });
-JSONToFile(levelDefinitionData.noLevel1Blocks, path.join("./json_output", "noLevel1"));
+JSONToFile(levelDefinitionData.noLevel1Blocks, path.join("./json_output", "noLevel"));

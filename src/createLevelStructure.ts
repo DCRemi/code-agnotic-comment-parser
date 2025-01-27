@@ -46,9 +46,7 @@ levelDefinitionData.level_1s.forEach((level_1) => {
 	if (!fs.existsSync(level1JsonFolderPath)) {
 		fs.mkdirSync(level1JsonFolderPath);
 	}
-	JSONToFile("", path.join(jsonOutputFolder, "noLevel1"));
-	// noLevel file will contains all comment block that has no level1
-	// or one that is not referenced in the levelDefinition
+	JSONToFile("", path.join(jsonOutputFolder, "noLevel"));
 
 	/* -------------------------- Create level 2 html files -------------------------- */
 	level_1.level_2s.forEach((level_2) => {
@@ -59,13 +57,11 @@ levelDefinitionData.level_1s.forEach((level_1) => {
 	level_1.level_2s.forEach((level_2) => {
 		JSONToFile("", path.join(level1JsonFolderPath, level_2.levelName));
 	});
-	JSONToFile("", path.join(level1JsonFolderPath, "noLevel2"));
-	// noLevel file will contains all comment block that has no level2
-	// or one that is not referenced in the levelDefinition
+	JSONToFile("", path.join(level1JsonFolderPath, "noLevel"));
 
 	/* ----------------------- Create Level 1 index files ----------------------- */
 	const level1IndexFilePath = level1HtmlFolderPath + "/index";
-	const level1NoLevelFilePath = level1HtmlFolderPath + "/noLevel2";
+	const level1NoLevelFilePath = level1HtmlFolderPath + "/nolevel";
 	const level1BaseFile = createLevel_1_BaseHtml(level_1);
 	HtmlToFile(level1BaseFile, level1IndexFilePath);
 	HtmlToFile(level1BaseFile, level1NoLevelFilePath);
@@ -85,4 +81,4 @@ levelDefinitionData.level_1s.forEach((level_1) => {
 // Need to be done after step 1 because it's need the level1 index links
 const level0BaseFile = createLevel_0_baseHtml(Level1IndexLinks);
 HtmlToFile(level0BaseFile, htmlFilesOutputFolder + "/index");
-HtmlToFile(level0BaseFile, htmlFilesOutputFolder + "/noLevel1");
+HtmlToFile(level0BaseFile, htmlFilesOutputFolder + "/nolevel");
