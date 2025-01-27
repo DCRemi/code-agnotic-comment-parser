@@ -1,11 +1,10 @@
 # To do
 
-NEED
-
-Improve
-
-- Better deal with unknown tags > specific page
-- expand todo block
+ID-09 copy clip board
+ID-10 Add @value to param optional (values possible for param)
+ID-11 noLevel pages improve
+ID-12 expand todo block
+ID-13 faire des bigs example
 
 Bonus
 
@@ -51,13 +50,14 @@ It could even be used for all language or type of document
 
 # I. How to run
 
-### I.1. Code folders
+### I.1. Code folders (structure)
 
-- Input will contain the files to go accross to create the documentation + a level definition json file
+- Input will contain the files to go across to create the documentation + a level definition json file
 - src/ressources
+  - helpers functions
   - interface for the object used
-  - command to extract and parse the data
-- extractJsComments, main code
+  - commands to extract and parse the data
+- createHtmlFiles, createLevelStructure and extractJsComments are the main code
 - json_output will contains for each file the comment tags extract as json format
 - html_output will contains for each file the corresponding html file
 
@@ -65,29 +65,45 @@ It could even be used for all language or type of document
 
 Add in the input folder the files you want to treat.<br />
 
-#### Extract json file from comment
+`npm run generate:doc`
+This command will run all the scripts need to generate the final html files
+It runs all the script through `run-s doc:*`
+
+#### Step 1 : create the json and html folder structure
+
+`npm run doc:createLevelStruct`
+<br/>
+
+#### Step 2 : Generate json files from comment
 
 `npm run doc:extract`
 <br/>
 
-#### Create the full html folder
+#### Step 3 : Create the full html folder from json files
 
-`npm run docToHtml:createHtmlStruct`
+`npm run doc:createHtmlFiles`
+<br/>
 
-#### Extract json file from comment then create the html files
+#### Step 4 : copy the README file to html root folder
 
-`npm run generate:doc`
+`npm run doc:copyREADME`
+<br/>
+
+#### Reset folders
+
+`npm run resetFolders`
+<br/>
 
 # II. How it works
 
 ### II.1. Global structure
 
-This works wit comment blocks > Each comment blocks will produce a documentation block.<br />
+This works with comment blocks > Each comment blocks will produce a documentation block.<br />
 A comment block start with /\*\* and end with \*/ (like jsdoc comments).<br />
 In each block tags are added to specify the type of content for the documentation.<br />
 
-\* as this "tool" doesn't take into account the code itself, the comment blocks can be written where ever you want. <br/>
-However it is a good practice to put for each step definition the block above.<br />
+\* as this "tool" doesn't take into account the code itself, the comment blocks can be written where you want. <br/>
+However it is a good practice to put for each step definition the comment block above.<br />
 In that way it is easy to follow change made on the code and to update the comment accordingly.
 
 ### II.2. Levels
@@ -169,14 +185,16 @@ The corresponding tags are :
 
 #### Simple tag
 
-These tag only necessite to put the tag name followed by text <br />
-ex : description / folder name
+These tag only necessitate to put the tag name followed by text <br />
+like description tag for example
 
-#### Complexe tag
+#### Complex tag
 
-These tag necessite to complete the tag with some variable after it<br />
+These tag necessitate to complete the tag with some variable after it<br />
 ex : param / todo<br />
-If the variable are not correctly set an error will appear on the console. However if the param is not set it will take the value none and all the text will go in the content.<br />
+If the variable are not correctly set an error will appear on the console.
+
+However if the param is not set it will take the value none and all the text will go in the content.<br />
 
 # III. Tags
 
@@ -187,14 +205,14 @@ If the variable are not correctly set an error will appear on the console. Howev
 > @levelX levelName<br />
 > @level1 platformName<br />
 > @level2 featureName<br />
-> @level1 stepTypeName<br />
+> @level3 stepTypeName<br />
 
 **@stepDef** (Simple tag)
 
 > will be used as a title of the comment block. Usually it is a copy of the step definition text<br />
 > @stepdef The user clicks on ...
 
-**@param** (Complexe tag)
+**@param** (Complex tag)
 
 > will be used to describe the parameter used in the step definition <br />
 > It is composed of 2 parameters :
@@ -203,6 +221,7 @@ If the variable are not correctly set an error will appear on the console. Howev
 - param name : 1st word after the param type
 
 > example : @param {string} name it will be used to pass the name of the user to ...
+> param will be a "string" named "name" with the description "it will be used to pass the name of the user to ..."
 
 ### III.2. Description tags
 
@@ -211,14 +230,14 @@ If the variable are not correctly set an error will appear on the console. Howev
 > Use to add a description to explain more in details the step definition<br />
 > @description this step def is used to make the user clicks ...
 
-**@see** (Simple tag)
+**@see** (Simple tag) (NOT Implemented)
 
-> Use to add a link to a docuementation or website<br />
+> Use to add a link to a documentation or website<br />
 > not working now
 
 ### III.3. Other tags
 
-**@todo** (Complexe tag)
+**@todo** (Complex tag)
 
 > will be used to point some improvement or other task that can be made on the code / the doc ...<br />
 > It is composed with 1 parameter :
