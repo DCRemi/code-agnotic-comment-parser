@@ -15,7 +15,7 @@ export interface GenericCommentBlock {
 	genericTagSentences: GenericTagSentence[];
 }
 
-export interface GenericGlobalComments {
+export interface GenericCommentsTable {
 	genericCommentBlocks: GenericCommentBlock[];
 }
 

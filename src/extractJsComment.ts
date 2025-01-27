@@ -9,7 +9,7 @@ import { getAllFilePathFromDir, JSONToFile, unCamelized } from "./ressources/hel
 import {
 	CommentBlock,
 	GenericCommentBlock,
-	GenericGlobalComments,
+	GenericCommentsTable,
 	Levels,
 	Level_1,
 	Level_2
@@ -22,13 +22,18 @@ const path = require("path");
 /* ---------------------------- Variables --------------------------- */
 const folderPath = "input";
 
+/* ---------------------- Create the jsonOutput folder ---------------------- */
+if (!fs.existsSync("./json_output")) {
+	fs.mkdirSync("./json_output");
+}
+
 /* -------------------------------------------------------------------------- */
 /*                         STEP 0 - Get files tree data                       */
 /* -------------------------------------------------------------------------- */
-
-/* --------------------------- Get code files path -------------------------- */
+/* ------------------------ Get all input files path ------------------------ */
 const filesPaths: string[] = [];
 getAllFilePathFromDir(folderPath, filesPaths, ".ts");
+// filesPaths contains the list of all files path
 
 /* ----------------------------- Get level data ----------------------------- */
 const levelDefinitionData: Levels = JSON.parse(fs.readFileSync("input/levelDefinition.json", "utf-8"));
@@ -43,13 +48,12 @@ levelDefinitionData.level_1s.forEach((level1) => {
 	});
 });
 
-/* ----------------------- Create the jsonOutput folder --------------------- */
-if (!fs.existsSync("./json_output")) {
-	fs.mkdirSync("./json_output");
-}
+/* -------------------------------------------------------------------------- */
+/*                 Filing levelDefinitionData object with data                */
+/* -------------------------------------------------------------------------- */
+// each empty block created above will be filed with the corresponding json bocks
 
 const commentBlocks = [];
-
 filesPaths.forEach((filePath) => {
 	/* -------------------------------------------------------------------------- */
 	/*                        STEP 1 - Read type script file                      */
@@ -57,28 +61,30 @@ filesPaths.forEach((filePath) => {
 	const file = fs.readFileSync(filePath, { encoding: "utf-8" });
 
 	/* -------------------------------------------------------------------------- */
-	/*    STEP 2 - Retrieve jsdoc style comment between "slash**"" and "*slash"   */
+	/*                      STEP 2 - Retrieve comment blocks                      */
 	/* -------------------------------------------------------------------------- */
+	// Get data between comment block indicator ("combination of slash and wildcards")
 	const jsCommentsBlocks = extractJsComContent(file);
 
 	/* -------------------------------------------------------------------------- */
-	/*          STEP 3 - Remove blocks indicator "slash **" and "*slash"          */
+	/*                            STEP 3 - Clean blocks                           */
 	/* -------------------------------------------------------------------------- */
+	// Remove comment block indicator ("combination of slash and wildcards")
 	const jsCommentsBlocksCleaned: string[] = [];
 	jsCommentsBlocks?.forEach((element: string, index: number) => {
 		jsCommentsBlocksCleaned[index] = removeJsComBoundary(element);
 	});
 
 	/* -------------------------------------------------------------------------- */
-	/*           STEP 4 - For each block extract tag's value and content          */
+	/*                  STEP 4 - Extract tag's value and content                  */
 	/* -------------------------------------------------------------------------- */
 	const genericCommentBlocks: GenericCommentBlock[] = [];
-	const genericGlobalComments: GenericGlobalComments = {
+	const genericCommentsTable: GenericCommentsTable = {
 		genericCommentBlocks
 	};
 	jsCommentsBlocksCleaned.forEach((element, index) => {
 		if (getTagIndex(element).length !== 0) {
-			genericGlobalComments.genericCommentBlocks[index] = {
+			genericCommentsTable.genericCommentBlocks[index] = {
 				blocNumber: index + 1,
 				genericTagSentences: extractGenericTagBlock(element, getTagIndex(element))
 			};
@@ -89,7 +95,7 @@ filesPaths.forEach((filePath) => {
 	/*               STEP 5 - Extract tag data depending on the tag               */
 	/* -------------------------------------------------------------------------- */
 
-	genericGlobalComments.genericCommentBlocks.forEach((genericCommentBlock) => {
+	genericCommentsTable.genericCommentBlocks.forEach((genericCommentBlock) => {
 		/* ----------------------- Extract comment block data ----------------------- */
 		const commentBlock: CommentBlock = extractBlockTagData(genericCommentBlock);
 

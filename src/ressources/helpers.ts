@@ -30,7 +30,7 @@ export const HtmlToFile = (obj, filename) => fs.writeFileSync(`${filename}.html`
 
 /**
  * Recursive command that go through a folder and all its sub-folder to list all files path
- *
+ * inside the ill the filesPaths given as argument
  * @param {string} folderPath to go through
  * @param {string[]} filesPaths this should be declared outside the call of this command to allows the recursivity
  * @example const folderPath = "input";
