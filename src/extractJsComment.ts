@@ -61,7 +61,7 @@ filesPaths.forEach((filePath) => {
 	const file = fs.readFileSync(filePath, { encoding: "utf-8" });
 
 	/* -------------------------------------------------------------------------- */
-	/*                      STEP 2 - Retrieve comment blocks                      */
+	/*                  STEP 2 - Extract untreated comment blocks                 */
 	/* -------------------------------------------------------------------------- */
 	// Get data between comment block indicator ("combination of slash and wildcards")
 	const jsCommentsBlocks = extractJsComContent(file);
@@ -82,7 +82,9 @@ filesPaths.forEach((filePath) => {
 	const genericCommentsTable: GenericCommentsTable = {
 		genericCommentBlocks
 	};
+
 	jsCommentsBlocksCleaned.forEach((element, index) => {
+		// Check if the block contains a tag if not it is not treated
 		if (getTagIndex(element).length !== 0) {
 			genericCommentsTable.genericCommentBlocks[index] = {
 				blocNumber: index + 1,
@@ -94,16 +96,24 @@ filesPaths.forEach((filePath) => {
 	/* -------------------------------------------------------------------------- */
 	/*               STEP 5 - Extract tag data depending on the tag               */
 	/* -------------------------------------------------------------------------- */
-
 	genericCommentsTable.genericCommentBlocks.forEach((genericCommentBlock) => {
-		/* ----------------------- Extract comment block data ----------------------- */
+		/* -------------------------------------------------------------------------- */
+		/*           STEP 5.1 - Extract tag specific data from generic block          */
+		/* -------------------------------------------------------------------------- */
 		const commentBlock: CommentBlock = extractBlockTagData(genericCommentBlock);
 
+		/* -------------------------------------------------------------------------- */
+		/*           STEP 5.2 - Add specified blocks to the corresping level          */
+		/*                   inside the levelDefinitionData object	                  */
+		/* -------------------------------------------------------------------------- */
+
+		// Check that the level1 from the block exists in levelDefinition file
 		const level1ThatMatch = levelDefinitionData.level_1s.find((level1) => level1.levelName === commentBlock.level1);
 		if (level1ThatMatch) {
-			/* ----------- Build navbar for level 1 wiht link to level 2 pages ---------- */
+			// If the level1 tag is referenced in the levelDefinitionData file
 			var level2FilePathsLinks = "";
 			level1ThatMatch.level_2s.forEach((level_2) => {
+				/* ----------- Build navbar for level 1 with link to level 2 pages ---------- */
 				level2FilePathsLinks += `
 							<li class="nav-item">
 								<a href=${level_2.levelName}.html class="nav-link">
@@ -111,23 +121,24 @@ filesPaths.forEach((filePath) => {
 								</a>
 							</li>`;
 			});
-			/* ------------- If the level1 written in the tag @level1 exist ------------- */
+
+			/* --------------------- Level 2 existence verification --------------------- */
 			const level2ThatMatch = level1ThatMatch.level_2s.find((level2) => level2.levelName === commentBlock.level2);
+			// Check that the level2 from the block exists in levelDefinition file
+
 			if (level2ThatMatch) {
-				/* ------------- If the level2 written in the tag @level2 exist ------------- */
+				// If the level2 tag is referenced in the levelDefinitionData file
 				level2ThatMatch.commentBlocks.push(commentBlock);
-				// add on each level 2 block the nav bar menu (used when building html pages)
-				level2ThatMatch.htmlNavBar = level2FilePathsLinks;
+				level2ThatMatch.htmlNavBar = level2FilePathsLinks; // add on each level 2 block the nav bar menu (used when building html pages)
 			} else {
-				/* --------- If the level2 written in the tag @level2 doesn't exist --------- */
-				level1ThatMatch.noLevel2Blocks.push(commentBlock); //the block is written in the level 1 genric file
+				// If the level2 tag is not referenced in the levelDefinitionData file it considered as no level1 block
+				level1ThatMatch.noLevel2Blocks.push(commentBlock); //the block is written in the level 1 generic file
 			}
 		} else {
-			/* --------- If the level1 written in the tag @level1 doesn't exist --------- */
-			levelDefinitionData.noLevel1Blocks.push(commentBlock); //the block is written in the level "0" genric file
+			// If the level1 tag is not referenced in the levelDefinitionData file it considered as no level1 block
+			levelDefinitionData.noLevel1Blocks.push(commentBlock); //the block is written in the level "0" generic file
 		}
 	});
-
 	/* -------------------------------------------------------------------------- */
 	/*                STEP 6 - Sort blocks by level 3 inside level2               */
 	/* -------------------------------------------------------------------------- */
