@@ -43,15 +43,15 @@ export const removeJsComBoundary = function (text: string): string {
 };
 
 /**
- * extract from a jsCommentBlock each tag marked with @ and with their index in the string
+ * Extract from a jsCommentBlock each tag marked with @ and with their index and the index name
  * @param {string} jsCommentBlock
  * @returns list of all tag with their index
  */
 export const getTagIndex = function (jsCommentBlock: string): TagIndex[] {
 	const tagRegex = / * @\w*/g;
 	const tagMatches = jsCommentBlock.matchAll(tagRegex);
-
 	const tagsIndex: TagIndex[] = [];
+
 	for (const match of tagMatches) {
 		tagsIndex.push({ tag: match[0], tagStart: match.index, tagEnd: match.index + match[0].length });
 	}
@@ -59,7 +59,7 @@ export const getTagIndex = function (jsCommentBlock: string): TagIndex[] {
 };
 
 /**
- * extract from a jsCommentBlock all tag and their content
+ * Extract from a jsCommentBlock, using the corresponding TagsIndex, all tag and their content
  * @param {string} jsCommentBlock text from which tags are to extract
  * @param {TagIndex[]} jsBlockTagsIndex array of tags to extract
  * @returns array of GenericTagSentence that contains the tag and its content
@@ -69,17 +69,15 @@ export const extractGenericTagBlock = function (
 	jsBlockTagsIndex: TagIndex[]
 ): GenericTagSentence[] {
 	const genericTagSentences: GenericTagSentence[] = [];
-
-	jsBlockTagsIndex.forEach((element, index) => {
+	jsBlockTagsIndex.forEach((tagIndex, index) => {
 		let genericTagSentence: GenericTagSentence;
 		genericTagSentence = {
-			tag: element.tag.trim(),
+			tag: tagIndex.tag.trim(),
 			tag_content:
-				index !== jsBlockTagsIndex.length - 1 // for the last tag the end is */ and not the next tag start
+				index !== jsBlockTagsIndex.length - 1 // exception for the last tag that has not a next tag to set the end
 					? jsCommentBlock.substring(jsBlockTagsIndex[index].tagEnd, jsBlockTagsIndex[index + 1].tagStart).trim()
 					: jsCommentBlock.substring(jsBlockTagsIndex[index].tagEnd).trim()
 		};
-		// Clean content
 		// Remove wildcards from the contents, then remove space and line break at the end
 		genericTagSentence.tag_content = genericTagSentence.tag_content.replace(/\*/gi, "").trim();
 		genericTagSentence.tag_content = genericTagSentence.tag_content.replace(/\n\s+/gi, "\n").trim();
@@ -91,12 +89,12 @@ export const extractGenericTagBlock = function (
 /* ---------------------------- Extract Tags data --------------------------- */
 
 /**
- * @description Treat block tag, iterate on all tag of the blocks to extract all data
+ * @description Treat block tag depending on the type, iterate on all tag of the blocks to extract all data
  * @param {GenericGlobalComment} genericCommentBlock comment block that contains the file tag
  * @returns CommentBlock extracted data
  */
 export const extractBlockTagData = function (genericCommentBlock: GenericCommentBlock): CommentBlock {
-	const typeRegex = /\{(.*)\}/;
+	const tagTypeRegex = /\{(.*)\}/;
 
 	// const commentBlock: CommentBlock = { blocNumber: genericCommentBlock.blocNumber, stepType: "Missing" };
 	const commentBlock: CommentBlock = {};
@@ -115,15 +113,12 @@ export const extractBlockTagData = function (genericCommentBlock: GenericComment
 			case "@stepDef":
 				commentBlock.stepDef = genericTagSentence.tag_content.trim();
 				break;
-			case "@memberof":
-				commentBlock.memberof = genericTagSentence.tag_content.trim();
-				break;
 			case "@param":
 				let paramTag: ParamTag;
-				// if the tag contains a type into {type}
+				// if the tag contains a type inside {type}
 
-				if (genericTagSentence.tag_content.match(typeRegex)) {
-					const param_type = genericTagSentence.tag_content.match(typeRegex);
+				if (genericTagSentence.tag_content.match(tagTypeRegex)) {
+					const param_type = genericTagSentence.tag_content.match(tagTypeRegex);
 					const param_name_desc = genericTagSentence.tag_content.substring(param_type[0].length).trim();
 					const param_name = param_name_desc.match(/\w+/)[0];
 					paramTag = {
@@ -132,7 +127,7 @@ export const extractBlockTagData = function (genericCommentBlock: GenericComment
 						param_desc: param_name_desc.substring(param_name.length).trim()
 					};
 				}
-				// if the tag doesn't contain a type into it will put none
+				// if the tag doesn't contain a type it will put none
 				else {
 					paramTag = {
 						param_type: "none",
@@ -148,15 +143,15 @@ export const extractBlockTagData = function (genericCommentBlock: GenericComment
 				break;
 			case "@todo":
 				let todoTag: TodoTag;
-				// if the tag contains a type into {type}
-				if (genericTagSentence.tag_content.match(typeRegex)) {
-					const todo_type = genericTagSentence.tag_content.match(typeRegex);
+				// if the tag contains a type inside {type}
+				if (genericTagSentence.tag_content.match(tagTypeRegex)) {
+					const todo_type = genericTagSentence.tag_content.match(tagTypeRegex);
 					todoTag = {
 						todo_type: todo_type[1],
 						todo_text: genericTagSentence.tag_content.substring(todo_type[0].length).trim()
 					};
 				}
-				// if the tag doesn't contain a type into it will put none
+				// if the tag doesn't contain a type it will put none
 				else {
 					todoTag = {
 						todo_type: "none",

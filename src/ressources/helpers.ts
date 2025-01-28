@@ -30,7 +30,7 @@ export const HtmlToFile = (obj, filename) => fs.writeFileSync(`${filename}.html`
 
 /**
  * Recursive command that go through a folder and all its sub-folder to list all files path
- *
+ * inside the ill the filesPaths given as argument
  * @param {string} folderPath to go through
  * @param {string[]} filesPaths this should be declared outside the call of this command to allows the recursivity
  * @example const folderPath = "input";
@@ -38,13 +38,15 @@ export const HtmlToFile = (obj, filename) => fs.writeFileSync(`${filename}.html`
  * getAllFilePathFromDir(folderPath, filesPaths);
  * filesPaths.forEach((filePath) => {...}
  */
-export function getAllFilePathFromDir(folderPath: string, filesPaths?: string[], fileExtenstion?: string) {
-	fs.readdirSync(folderPath).forEach((element) => {
-		if (fs.statSync(path.join(folderPath, element)).isDirectory()) {
-			getAllFilePathFromDir(path.join(folderPath, element), filesPaths, fileExtenstion);
+export function getAllFilePathFromDir(folderPath: string, filesPaths: string[], fileExtension: string) {
+	fs.readdirSync(folderPath).forEach((fileOrDirectory) => {
+		if (fs.statSync(path.join(folderPath, fileOrDirectory)).isDirectory()) {
+			// if it is a directory call the same function on this directory
+			getAllFilePathFromDir(path.join(folderPath, fileOrDirectory), filesPaths, fileExtension);
 		} else {
-			if (path.extname(element) === fileExtenstion) {
-				filesPaths.push(path.join(folderPath, element));
+			if (path.extname(fileOrDirectory) === fileExtension) {
+				// if it is a file with the extension
+				filesPaths.push(path.join(folderPath, fileOrDirectory));
 			}
 		}
 	});

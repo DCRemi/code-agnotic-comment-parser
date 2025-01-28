@@ -55,19 +55,20 @@ export function createLevel_0_baseHtml(Level1IndexLinks: string): string {
 				<ul id="sidebar-nav" class="sidebar-nav">
 					${Level1IndexLinks}
 					<li class="nav-item">
-						<a href=nolevel.html class="nav-link">
+						<a href=noLevel.html class="nav-link">
 							No Level	
 						</a>
 				</ul>
 			</aside>
 		<main id="main" class="main">
-				<div>
-					htmlPartToReplace
-				</div>
 				<div class="pagetitle">
 				<h1>READ ME</h1>
 				<br />
 				<br />
+
+				<div>
+					htmlPartToReplace
+				</div>
 				<zero-md src="README.md"></zero-md>
 			</div>
 		</main>
@@ -136,7 +137,7 @@ export function createLevel_1_BaseHtml(level_1: Level_1): string {
 			<ul id="sidebar-nav" class="sidebar-nav">
 				${level2FilePathsLinks}
 				<li class="nav-item">
-				<a href=nolevel.html class="nav-link">
+				<a href=noLevel.html class="nav-link">
 					No Level	
 				</a>
 				</li>
@@ -171,27 +172,24 @@ export function createTitleHtmlBlock(commentBlock: CommentBlock, index: number):
 						aria-expanded="false"
 						aria-controls="collapseHeader${index}"
 					>
-						<h3 >${stepDefName}</h3>
+						<h5>${stepDefName}</h5>
 					</button>`;
 	return htmlBlock;
 }
 
 export function createDefHtmlBlock(commentBlock: CommentBlock): string {
-	var stepDefDesc = commentBlock.descriptionTags ? commentBlock.descriptionTags[0].description : "";
-	stepDefDesc = stepDefDesc.replace(/.\n/g, "<br />");
-	var stepDefMemberOf = commentBlock.memberof;
-	var htmlBlock: string;
-	if (stepDefMemberOf) {
+	var htmlBlock = "";
+	if (commentBlock.descriptionTags) {
+		var stepDefDescBloc = "";
+		commentBlock.descriptionTags.forEach((descriptionTag) => {
+			stepDefDescBloc += `
+								<p>${descriptionTag.description.replace(/.\n/g, "<br />")}</p>
+								`;
+		});
 		htmlBlock = `
-						<div class="stepDefinition" id="BlockDef">
-							<p>${stepDefDesc}</p>
-							<p><h4>Member of : </h4>${stepDefMemberOf}</p>
-						</div>`;
-	} else {
-		htmlBlock = `
-						<div class="stepDefinition" id="BlockDef">
-							<p>${stepDefDesc}</p>
-						</div>`;
+							<div class="stepDefinition" id="BlockDef">
+								${stepDefDescBloc}
+							</div>`;
 	}
 	return htmlBlock;
 }
@@ -293,6 +291,7 @@ export function createStepDefHtmlBlock(
 	todoBlock: string,
 	index: number
 ): string {
+	// index is needed because accordion needs to have an unique ID of what to expand / collapse
 	const htmlBlock = `
 							<div class="accordion-item stepDefinition" id="commentBlock${index}">
 									${TitleBlock ? TitleBlock : ""}
@@ -356,7 +355,7 @@ export function createHtmlFile(mainHtml: string, level_2: Level_2): string {
 			<ul id="sidebar-nav" class="sidebar-nav">
 				${level_2.htmlNavBar}
 				<li class="nav-item">
-					<a href=nolevel.html class="nav-link">
+					<a href=noLevel.html class="nav-link">
 						No Level	
 					</a>
 			</ul>
