@@ -61,13 +61,14 @@ export function createLevel_0_baseHtml(Level1IndexLinks: string): string {
 				</ul>
 			</aside>
 		<main id="main" class="main">
-				<div>
-					htmlPartToReplace
-				</div>
 				<div class="pagetitle">
 				<h1>READ ME</h1>
 				<br />
 				<br />
+
+				<div>
+					htmlPartToReplace
+				</div>
 				<zero-md src="README.md"></zero-md>
 			</div>
 		</main>
@@ -179,20 +180,10 @@ export function createTitleHtmlBlock(commentBlock: CommentBlock, index: number):
 export function createDefHtmlBlock(commentBlock: CommentBlock): string {
 	var stepDefDesc = commentBlock.descriptionTags ? commentBlock.descriptionTags[0].description : "";
 	stepDefDesc = stepDefDesc.replace(/.\n/g, "<br />");
-	var stepDefMemberOf = commentBlock.memberof;
-	var htmlBlock: string;
-	if (stepDefMemberOf) {
-		htmlBlock = `
-						<div class="stepDefinition" id="BlockDef">
-							<p>${stepDefDesc}</p>
-							<p><h4>Member of : </h4>${stepDefMemberOf}</p>
-						</div>`;
-	} else {
-		htmlBlock = `
+	const htmlBlock = `
 						<div class="stepDefinition" id="BlockDef">
 							<p>${stepDefDesc}</p>
 						</div>`;
-	}
 	return htmlBlock;
 }
 
