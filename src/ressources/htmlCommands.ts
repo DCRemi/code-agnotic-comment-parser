@@ -178,12 +178,19 @@ export function createTitleHtmlBlock(commentBlock: CommentBlock, index: number):
 }
 
 export function createDefHtmlBlock(commentBlock: CommentBlock): string {
-	var stepDefDesc = commentBlock.descriptionTags ? commentBlock.descriptionTags[0].description : "";
-	stepDefDesc = stepDefDesc.replace(/.\n/g, "<br />");
-	const htmlBlock = `
-						<div class="stepDefinition" id="BlockDef">
-							<p>${stepDefDesc}</p>
-						</div>`;
+	var htmlBlock = "";
+	if (commentBlock.descriptionTags) {
+		var stepDefDescBloc = "";
+		commentBlock.descriptionTags.forEach((descriptionTag) => {
+			stepDefDescBloc += `
+								<p>${descriptionTag.description.replace(/.\n/g, "<br />")}</p>
+								`;
+		});
+		htmlBlock = `
+							<div class="stepDefinition" id="BlockDef">
+								${stepDefDescBloc}
+							</div>`;
+	}
 	return htmlBlock;
 }
 
