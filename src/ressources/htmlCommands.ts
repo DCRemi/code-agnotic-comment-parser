@@ -291,6 +291,7 @@ export function createStepDefHtmlBlock(
 	todoBlock: string,
 	index: number
 ): string {
+	// index is needed because accordion needs to have an unique ID of what to expand / collapse
 	const htmlBlock = `
 							<div class="accordion-item stepDefinition" id="commentBlock${index}">
 									${TitleBlock ? TitleBlock : ""}
