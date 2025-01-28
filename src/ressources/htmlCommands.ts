@@ -172,7 +172,7 @@ export function createTitleHtmlBlock(commentBlock: CommentBlock, index: number):
 						aria-expanded="false"
 						aria-controls="collapseHeader${index}"
 					>
-						<h3 >${stepDefName}</h3>
+						<h5>${stepDefName}</h5>
 					</button>`;
 	return htmlBlock;
 }
