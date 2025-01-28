@@ -21,6 +21,7 @@ const destinationPath = "html_output/pages_tree";
 /*                     Step 0 - Get the list of json files                    */
 /* -------------------------------------------------------------------------- */
 getAllFilePathFromDir(jsonOutputFolder, filesPaths, ".json");
+// filesPaths contains the list of all files path
 
 filesPaths.forEach((filePath) => {
 	/* -------------------------------------------------------------------------- */
@@ -119,9 +120,14 @@ filesPaths.forEach((filePath) => {
 		/*           STEP 1 - get data from the json file and construct path          */
 		/* -------------------------------------------------------------------------- */
 		const noLevelBlocks: CommentBlock[] = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-		const levelFolder = filePath.replace("json_output/", "").replace(path.basename(filePath), "");
-		const noLevelFilePath = destinationPath + "/" + levelFolder + "noLevel.html";
-		const noLevelHtmlFile = fs.readFileSync(noLevelFilePath, "utf-8");
+		const noLevelHtmlFilePath =
+			destinationPath +
+			"/" +
+			filePath.replace("json_output/", "").replace(path.basename(filePath), "") + // level1 folder
+			"noLevel.html";
+		// get the nolevel html (already created) file path
+		const noLevelHtmlFile = fs.readFileSync(noLevelHtmlFilePath, "utf-8");
+
 		var htmlFile;
 		if (noLevelBlocks.length !== 0) {
 			/* -------------------------------------------------------------------------- */
@@ -135,7 +141,7 @@ filesPaths.forEach((filePath) => {
 				const paramHtmlBlock = createParamHtmlBlock(commentBlock);
 				const exampleHtmlBlock = createExampleHtmlBlock(commentBlock);
 				const todoHtmlBlock = createToDoHtmlBlock(commentBlock);
-				const bloc = createStepDefHtmlBlock(
+				const htmlStepDefBlock = createStepDefHtmlBlock(
 					TitleHtmlBlock,
 					defHtmlBlock,
 					paramHtmlBlock,
@@ -145,11 +151,11 @@ filesPaths.forEach((filePath) => {
 				);
 				const htmlCommentBlock = `
 				<div>
-					<h1 class="pagetitle">Level 1 : ${commentBlock.level1 ? commentBlock.level1 : ""}</h3>
-					<h2 class="pagetitle">Level 2 : ${commentBlock.level2 ? commentBlock.level2 : ""}</h3>
+					<p>Level 1 : ${commentBlock.level1 ? commentBlock.level1 : ""}</p>
+					<p>Level 2 : ${commentBlock.level2 ? commentBlock.level2 : ""}</p>
 				</div>
 				<div class="accordion-item stepDefinition" id="commentBlock${index}">
-					${bloc}
+					${htmlStepDefBlock}
 				</div>`;
 				/* ---------------------- Push to the global html block --------------------- */
 				htmlCommentBlocks += htmlCommentBlock + "<br/><br/>";
@@ -165,7 +171,7 @@ filesPaths.forEach((filePath) => {
 			${htmlCommentBlocks ? htmlCommentBlocks : ""}
 			</div>`;
 			/* -------------------------------------------------------------------------- */
-			/*               STEP 5 - Build the html file including the body              */
+			/*                 STEP 4 - Add the body inside the html file                 */
 			/* -------------------------------------------------------------------------- */
 			htmlFile = noLevelHtmlFile.replace("htmlPartToReplace", htmlBody);
 		} else {
@@ -174,6 +180,6 @@ filesPaths.forEach((filePath) => {
 		/* -------------------------------------------------------------------------- */
 		/*                 STEP 6 - Write the corresponding html file                 */
 		/* -------------------------------------------------------------------------- */
-		HtmlToFile(htmlFile, noLevelFilePath.replace(path.extname(noLevelFilePath), ""));
+		HtmlToFile(htmlFile, noLevelHtmlFilePath.replace(path.extname(noLevelHtmlFilePath), ""));
 	}
 });

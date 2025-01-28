@@ -74,6 +74,24 @@ It runs all the script through `run-s doc:*`
 `npm run doc:createLevelStruct`
 <br/>
 
+##### Create json structure
+
+- a root noLevel empty json file
+- a folder for each level1 + the noLevel empty json file
+- an empty json file for each level2
+  <br/>
+
+##### Create html structure
+
+- root html files that contains the html structure with the navBar and a body to replace
+  -- noLevel.html (SEE to remove )
+  -- index.html
+- a folder for each level1 + the html files
+  -- noLevel.html (SEE to remove )
+  -- index.html that contains the html structure with the navBar and a body to replace
+- an empty html file for each level2
+  <br/>
+
 #### Step 2 : Generate json files from comment
 
 `npm run doc:extract`
