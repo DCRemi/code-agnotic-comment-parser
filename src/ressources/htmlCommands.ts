@@ -244,13 +244,18 @@ export function createParamHtmlBlock(commentBlock: CommentBlock): string {
 export function createExampleHtmlBlock(commentBlock: CommentBlock): string {
 	var stepDefExample: string = "";
 	if (commentBlock.exampleTags) {
-		stepDefExample = commentBlock.exampleTags[0].example_content;
+		var exampleBlocks = "";
+		commentBlock.exampleTags.forEach((exampleTag) => {
+			exampleBlocks += `
+									<pre><code data-prismjs-copy="Copy" class="language-js">${exampleTag.example_content}</code></pre>`;
+		});
+
 		const htmlBlock = `
 						<div class="stepDefinition" id="BlockExample">
 							<h4>Example :</h4>
 							<div class="card">
 								<div class="card-body">
-									<pre><code data-prismjs-copy="Copy" class="language-js">${stepDefExample}</code></pre>
+									${exampleBlocks}
 								</div>
 							</div>
 						</div>`;
