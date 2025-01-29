@@ -24,6 +24,7 @@ export interface ParamTag {
 	param_type: string;
 	param_name: string;
 	param_desc: string;
+	param_values: string[];
 }
 
 export interface DescriptionTag {

@@ -115,16 +115,33 @@ export const extractBlockTagData = function (genericCommentBlock: GenericComment
 				break;
 			case "@param":
 				let paramTag: ParamTag;
-				// if the tag contains a type inside {type}
+				const param_values = [];
 
+				// if the tag contains a type inside {type}
 				if (genericTagSentence.tag_content.match(tagTypeRegex)) {
-					const param_type = genericTagSentence.tag_content.match(tagTypeRegex);
-					const param_name_desc = genericTagSentence.tag_content.substring(param_type[0].length).trim();
-					const param_name = param_name_desc.match(/\w+/)[0];
+					// extract the parameter type contained inside {}
+					const param_type = genericTagSentence.tag_content.match(tagTypeRegex)[0];
+					console.log("param_type : " + param_type);
+
+					// remove the parameter type from tag content
+					const param_name_desc_values = genericTagSentence.tag_content.substring(param_type.length).trim();
+					console.log("\nparam_name_desc_values : " + param_name_desc_values);
+
+					// extract the parameter name that is the 1st word after the type
+					const param_name = param_name_desc_values.match(/\w+/)[0];
+					console.log("\nparam_name : " + param_name);
+
+					// remove the parameter type from tag content
+					const param_desc_values = param_name_desc_values.substring(param_name.length).trim();
+					console.log("\nparam_desc_values : " + param_desc_values);
+
+					// const param_name_desc_values = genericTagSentence.tag_content.substring(param_type[0].length).trim();
+
 					paramTag = {
 						param_type: param_type[1],
 						param_name,
-						param_desc: param_name_desc.substring(param_name.length).trim()
+						param_desc: param_desc_values,
+						param_values
 					};
 				}
 				// if the tag doesn't contain a type it will put none
@@ -132,7 +149,8 @@ export const extractBlockTagData = function (genericCommentBlock: GenericComment
 					paramTag = {
 						param_type: "none",
 						param_name: "none",
-						param_desc: genericTagSentence.tag_content
+						param_desc: genericTagSentence.tag_content,
+						param_values
 					};
 					console.error(
 						"error : the param tag config is missing missing {param_type} param_name description (see documentation)"

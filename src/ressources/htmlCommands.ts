@@ -204,6 +204,7 @@ export function createParamHtmlBlock(commentBlock: CommentBlock): string {
 										<th>${paramTag.param_name}</th>
 										<td>${paramTag.param_type}</td>
 										<td>${paramTag.param_desc.replace(/.\n/g, "<br />")}</td>
+										<td>${paramTag.param_values}</td>
 									</tr>`;
 		});
 
@@ -216,6 +217,7 @@ export function createParamHtmlBlock(commentBlock: CommentBlock): string {
 									<th scope="col">Name</th>
 									<th scope="col">Type</th>
 									<th scope="col">Description</th>
+									<th scope="col">Values</th>
 									</tr>
 								</thead>
 								<tbody>
