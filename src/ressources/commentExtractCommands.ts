@@ -120,49 +120,49 @@ export const extractBlockTagData = function (genericCommentBlock: GenericComment
 				// if the tag contains a type inside {type}
 				if (genericTagSentence.tag_content.match(tagTypeRegex)) {
 					// extract the parameter type contained inside {}
-					const param_type = genericTagSentence.tag_content.match(tagTypeRegex)[0];
+					const paramType = genericTagSentence.tag_content.match(tagTypeRegex)[0];
 					// remove the parameter type from tag content
-					const param_name_desc_values = genericTagSentence.tag_content.substring(param_type.length).trim();
+					const paramName_desc_values = genericTagSentence.tag_content.substring(paramType.length).trim();
 
 					// extract the parameter name that is the 1st word after the type
-					const param_name = param_name_desc_values.match(/\w+/)[0];
+					const paramName = paramName_desc_values.match(/\w+/)[0];
 					// remove the parameter type from tag content
-					const param_desc_values = param_name_desc_values.substring(param_name.length).trim();
+					const paramDesc_values = paramName_desc_values.substring(paramName.length).trim();
 
 					// extract the parameter description and values separated by -Values-
-					const param_desc = param_desc_values.split(paraValuesRegex)[0];
-					const param_values_list = param_desc_values.split(paraValuesRegex)[1]
-						? param_desc_values.split(paraValuesRegex)[1]
+					const paramDesc = paramDesc_values.split(paraValuesRegex)[0];
+					const paramValues_list = paramDesc_values.split(paraValuesRegex)[1]
+						? paramDesc_values.split(paraValuesRegex)[1]
 						: "";
 
 					// Split values inside a table
-					const param_values = param_values_list.split(/\//);
+					const paramValues = paramValues_list.split(/\//);
 
 					paramTag = {
-						param_type: param_type,
-						param_name,
-						param_desc,
-						param_values
+						paramType: paramType,
+						paramName,
+						paramDesc,
+						paramValues
 					};
 				}
 				// if the tag doesn't contain a type it will put none
 				else {
 					// extract the parameter description and values separated by -Values-
-					const param_desc = genericTagSentence.tag_content.split(paraValuesRegex)[0];
-					const param_values_list = genericTagSentence.tag_content.split(paraValuesRegex)[1]
+					const paramDesc = genericTagSentence.tag_content.split(paraValuesRegex)[0];
+					const paramValues_list = genericTagSentence.tag_content.split(paraValuesRegex)[1]
 						? genericTagSentence.tag_content.split(paraValuesRegex)[1]
 						: "";
 					// Split values inside a table
-					const param_values = param_values_list.split(/\//);
+					const paramValues = paramValues_list.split(/\//);
 
 					paramTag = {
-						param_type: "none",
-						param_name: "none",
-						param_desc,
-						param_values
+						paramType: "none",
+						paramName: "none",
+						paramDesc,
+						paramValues
 					};
 					console.error(
-						"error : the param tag config is missing missing {param_type} param_name description (see documentation)"
+						"error : the param tag config is missing missing {paramType} paramName description (see documentation)"
 					);
 				}
 				// if the paramTags array doesn't exist, can't use push but need to initialize it
@@ -172,19 +172,19 @@ export const extractBlockTagData = function (genericCommentBlock: GenericComment
 				let todoTag: TodoTag;
 				// if the tag contains a type inside {type}
 				if (genericTagSentence.tag_content.match(tagTypeRegex)) {
-					const todo_type = genericTagSentence.tag_content.match(tagTypeRegex);
+					const todoType = genericTagSentence.tag_content.match(tagTypeRegex);
 					todoTag = {
-						todo_type: todo_type[1],
-						todo_text: genericTagSentence.tag_content.substring(todo_type[0].length).trim()
+						todoType: todoType[1],
+						todoText: genericTagSentence.tag_content.substring(todoType[0].length).trim()
 					};
 				}
 				// if the tag doesn't contain a type it will put none
 				else {
 					todoTag = {
-						todo_type: "none",
-						todo_text: genericTagSentence.tag_content
+						todoType: "none",
+						todoText: genericTagSentence.tag_content
 					};
-					console.error("error : the todo tag config is missing missing {todo_type} description (see documentation)");
+					console.error("error : the todo tag config is missing missing {todoType} description (see documentation)");
 				}
 				// if the todoTags array doesn't exist, can't use push but need to initialize it
 				commentBlock.todoTags ? commentBlock.todoTags.push(todoTag) : (commentBlock.todoTags = [todoTag]);

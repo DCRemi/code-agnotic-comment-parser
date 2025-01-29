@@ -201,10 +201,10 @@ export function createParamHtmlBlock(commentBlock: CommentBlock): string {
 		commentBlock.paramTags.forEach((paramTag) => {
 			htmlParamBlock += `
 									<tr>
-										<th>${paramTag.param_name}</th>
-										<td>${paramTag.param_type}</td>
-										<td>${paramTag.param_desc.replace(/.\n/g, "<br />")}</td>
-										<td>${paramTag.param_values}</td>
+										<th>${paramTag.paramName}</th>
+										<td>${paramTag.paramType}</td>
+										<td>${paramTag.paramDesc.replace(/.\n/g, "<br />")}</td>
+										<td>${paramTag.paramValues}</td>
 									</tr>`;
 		});
 
@@ -259,8 +259,8 @@ export function createToDoHtmlBlock(commentBlock: CommentBlock): string {
 		commentBlock.todoTags.forEach((todoTag) => {
 			htmlTodoBlock += `
 									<tr>
-										<th>${todoTag.todo_type.toUpperCase()}</th>
-										<td>${todoTag.todo_text.replace(/.\n/g, "<br />")}</td>
+										<th>${todoTag.todoType.toUpperCase()}</th>
+										<td>${todoTag.todoText.replace(/.\n/g, "<br />")}</td>
 									</tr>`;
 		});
 
