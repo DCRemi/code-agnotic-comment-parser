@@ -58,6 +58,7 @@ export function createLevel_0_baseHtml(Level1IndexLinks: string): string {
 						<a href=noLevel1.html class="nav-link">
 							No Level	
 						</a>
+					</li>
 				</ul>
 			</aside>
 		<main id="main" class="main">
@@ -197,11 +198,23 @@ export function createParamHtmlBlock(commentBlock: CommentBlock): string {
 		var htmlParamBlock: string = "";
 
 		commentBlock.paramTags.forEach((paramTag) => {
+			var paramValuesList = "";
+			paramTag.paramValues.forEach((paramValue) => {
+				paramValuesList += `
+												<li>
+													${paramValue}
+												</li>`;
+			});
 			htmlParamBlock += `
 									<tr>
-										<th>${paramTag.param_name}</th>
-										<td>${paramTag.param_type}</td>
-										<td>${paramTag.param_desc.replace(/.\n/g, "<br />")}</td>
+										<th>${paramTag.paramName}</th>
+										<td>${paramTag.paramType}</td>
+										<td>${paramTag.paramDesc.replace(/.\n/g, "<br />")}</td>
+										<td>
+											<ul>
+												${paramValuesList}
+											</ul>
+										</td>
 									</tr>`;
 		});
 
@@ -214,6 +227,7 @@ export function createParamHtmlBlock(commentBlock: CommentBlock): string {
 									<th scope="col">Name</th>
 									<th scope="col">Type</th>
 									<th scope="col">Description</th>
+									<th scope="col">Values</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -255,8 +269,8 @@ export function createToDoHtmlBlock(commentBlock: CommentBlock): string {
 		commentBlock.todoTags.forEach((todoTag) => {
 			htmlTodoBlock += `
 									<tr>
-										<th>${todoTag.todo_type.toUpperCase()}</th>
-										<td>${todoTag.todo_text.replace(/.\n/g, "<br />")}</td>
+										<th>${todoTag.todoType.toUpperCase()}</th>
+										<td>${todoTag.todoText.replace(/.\n/g, "<br />")}</td>
 									</tr>`;
 		});
 

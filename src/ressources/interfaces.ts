@@ -21,9 +21,10 @@ export interface GenericCommentsTable {
 
 // Specific
 export interface ParamTag {
-	param_type: string;
-	param_name: string;
-	param_desc: string;
+	paramType: string;
+	paramName: string;
+	paramDesc: string;
+	paramValues: string[];
 }
 
 export interface DescriptionTag {
@@ -48,8 +49,8 @@ export interface StepDefTag {
 }
 
 export interface TodoTag {
-	todo_type: string;
-	todo_text: string;
+	todoType: string;
+	todoText: string;
 }
 
 export interface CommentBlock {
