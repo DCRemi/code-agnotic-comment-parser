@@ -225,25 +225,27 @@ However if the param is not set it will take the value none and all the text wil
 > @level2 featureName<br />
 > @level3 stepTypeName<br />
 
-**@stepDef** (Simple tag)
+**@stepDef** (Simple tag) (should be UNIQUE)
 
 > will be used as a title of the comment block. Usually it is a copy of the step definition text<br />
 > @stepdef The user clicks on ...
 
-**@param** (Complex tag)
+**@param** (Complex tag) (can be MULTIPLE)
 
 > will be used to describe the parameter used in the step definition <br />
 > It is composed of 2 parameters :
 
 - param type : after the tag and between {}
 - param name : 1st word after the param type
+- param value : started with -Values- and separated by /
 
 > example : @param {string} name it will be used to pass the name of the user to ...
-> param will be a "string" named "name" with the description "it will be used to pass the name of the user to ..."
+> -Values- Remi / Julien
+> param will be a "string" named "name" with the description "it will be used to pass the name of the user to ..." and values will be Remi and Julien
 
 ### III.2. Description tags
 
-**@description** (Simple tag)
+**@description** (Simple tag) (should be UNIQUE)
 
 > Use to add a description to explain more in details the step definition<br />
 > @description this step def is used to make the user clicks ...
@@ -255,7 +257,7 @@ However if the param is not set it will take the value none and all the text wil
 
 ### III.3. Other tags
 
-**@todo** (Complex tag)
+**@todo** (Complex tag) (can be MULTIPLE)
 
 > will be used to point some improvement or other task that can be made on the code / the doc ...<br />
 > It is composed with 1 parameter :
@@ -267,7 +269,8 @@ However if the param is not set it will take the value none and all the text wil
 
 ### III.4. Generic tag
 
-**@whatEver** (Simple tag)<br />
+**@whatEver** (Simple tag) (can be MULTIPLE)
+<br />
 All tag that are not recognized by the "tool" will be marked as generic tag.<br />
 They will be displayed with the name of the tag and the text as content
 
