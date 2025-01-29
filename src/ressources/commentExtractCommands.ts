@@ -115,41 +115,50 @@ export const extractBlockTagData = function (genericCommentBlock: GenericComment
 				break;
 			case "@param":
 				let paramTag: ParamTag;
-				const param_values = [];
+				const paraValuesRegex = /-Values-/;
 
 				// if the tag contains a type inside {type}
 				if (genericTagSentence.tag_content.match(tagTypeRegex)) {
 					// extract the parameter type contained inside {}
 					const param_type = genericTagSentence.tag_content.match(tagTypeRegex)[0];
-					console.log("param_type : " + param_type);
-
 					// remove the parameter type from tag content
 					const param_name_desc_values = genericTagSentence.tag_content.substring(param_type.length).trim();
-					console.log("\nparam_name_desc_values : " + param_name_desc_values);
 
 					// extract the parameter name that is the 1st word after the type
 					const param_name = param_name_desc_values.match(/\w+/)[0];
-					console.log("\nparam_name : " + param_name);
-
 					// remove the parameter type from tag content
 					const param_desc_values = param_name_desc_values.substring(param_name.length).trim();
-					console.log("\nparam_desc_values : " + param_desc_values);
 
-					// const param_name_desc_values = genericTagSentence.tag_content.substring(param_type[0].length).trim();
+					// extract the parameter description and values separated by -Values-
+					const param_desc = param_desc_values.split(paraValuesRegex)[0];
+					const param_values_list = param_desc_values.split(paraValuesRegex)[1]
+						? param_desc_values.split(paraValuesRegex)[1]
+						: "";
+
+					// Split values inside a table
+					const param_values = param_values_list.split(/\//);
 
 					paramTag = {
-						param_type: param_type[1],
+						param_type: param_type,
 						param_name,
-						param_desc: param_desc_values,
+						param_desc,
 						param_values
 					};
 				}
 				// if the tag doesn't contain a type it will put none
 				else {
+					// extract the parameter description and values separated by -Values-
+					const param_desc = genericTagSentence.tag_content.split(paraValuesRegex)[0];
+					const param_values_list = genericTagSentence.tag_content.split(paraValuesRegex)[1]
+						? genericTagSentence.tag_content.split(paraValuesRegex)[1]
+						: "";
+					// Split values inside a table
+					const param_values = param_values_list.split(/\//);
+
 					paramTag = {
 						param_type: "none",
 						param_name: "none",
-						param_desc: genericTagSentence.tag_content,
+						param_desc,
 						param_values
 					};
 					console.error(
