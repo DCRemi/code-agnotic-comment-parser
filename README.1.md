@@ -243,6 +243,14 @@ However if the param is not set it will take the value none and all the text wil
 > -Values- Remi / Julien
 > param will be a "string" named "name" with the description "it will be used to pass the name of the user to ..." and values will be Remi and Julien
 
+**@example** (Simple tag) (can be MULTIPLE)
+
+> will be used to give example on how to use the code
+> it will allows to copy paste the example
+> <br/>
+
+> example : @example the HCP stores data from a random "patient list table row" and opens it
+
 ### III.2. Description tags
 
 **@description** (Simple tag) (should be UNIQUE)
