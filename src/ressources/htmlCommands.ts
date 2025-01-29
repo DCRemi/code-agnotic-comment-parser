@@ -58,6 +58,7 @@ export function createLevel_0_baseHtml(Level1IndexLinks: string): string {
 						<a href=noLevel.html class="nav-link">
 							No Level	
 						</a>
+					</li>
 				</ul>
 			</aside>
 		<main id="main" class="main">
@@ -137,9 +138,9 @@ export function createLevel_1_BaseHtml(level_1: Level_1): string {
 			<ul id="sidebar-nav" class="sidebar-nav">
 				${level2FilePathsLinks}
 				<li class="nav-item">
-				<a href=noLevel.html class="nav-link">
-					No Level	
-				</a>
+					<a href=noLevel.html class="nav-link">
+						No Level	
+					</a>
 				</li>
 			</ul>
 		</aside>
@@ -199,12 +200,23 @@ export function createParamHtmlBlock(commentBlock: CommentBlock): string {
 		var htmlParamBlock: string = "";
 
 		commentBlock.paramTags.forEach((paramTag) => {
+			var paramValuesList = "";
+			paramTag.paramValues.forEach((paramValue) => {
+				paramValuesList += `
+												<li>
+													${paramValue}
+												</li>`;
+			});
 			htmlParamBlock += `
 									<tr>
 										<th>${paramTag.paramName}</th>
 										<td>${paramTag.paramType}</td>
 										<td>${paramTag.paramDesc.replace(/.\n/g, "<br />")}</td>
-										<td>${paramTag.paramValues}</td>
+										<td>
+											<ul>
+												${paramValuesList}
+											</ul>
+										</td>
 									</tr>`;
 		});
 
@@ -360,6 +372,7 @@ export function createHtmlFile(mainHtml: string, level_2: Level_2): string {
 					<a href=noLevel.html class="nav-link">
 						No Level	
 					</a>
+				</li>
 			</ul>
 		</aside>
 		<main id="main" class="main">
