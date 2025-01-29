@@ -1,24 +1,13 @@
 # To do
 
-NEED
-
-- Generic levels
-- File that allows to make small desc of each levels and list the levels
-
-- Global menu level 1
-- Make navigation menu dynamic (create accoding to html files + layout open page)
-
-- Change for the global org >> Update doc
-
-Improve
-
-- expand todo block
+ID-11 noLevel pages improve
+ID-12 expand todo block
+ID-13 faire des bigs example
 
 Bonus
 
 - Search & filtering
 - Table css
-- Accordion css
 - Extract values for param
 
 # Introduction
@@ -59,13 +48,14 @@ It could even be used for all language or type of document
 
 # I. How to run
 
-### I.1. Code folders
+### I.1. Code folders (structure)
 
-- Input will contain the files to go accross to create the documentation
+- Input will contain the files to go across to create the documentation + a level definition json file
 - src/ressources
+  - helpers functions
   - interface for the object used
-  - command to extract and parse the data
-- extractJsComments, main code
+  - commands to extract and parse the data
+- createHtmlFiles, createLevelStructure and extractJsComments are the main code
 - json_output will contains for each file the comment tags extract as json format
 - html_output will contains for each file the corresponding html file
 
@@ -73,121 +63,207 @@ It could even be used for all language or type of document
 
 Add in the input folder the files you want to treat.<br />
 
-#### Extract json file from comment
+`npm run generate:doc`
+This command will run all the scripts need to generate the final html files
+It runs all the script through `run-s doc:*`
+
+#### Step 1 : create the json and html folder structure
+
+`npm run doc:createLevelStruct`
+<br/>
+
+##### Create json structure
+
+- a root noLevel empty json file
+- a folder for each level1 + the noLevel empty json file
+- an empty json file for each level2
+  <br/>
+
+##### Create html structure
+
+- root html files that contains the html structure with the navBar and a body to replace
+  -- noLevel.html (SEE to remove )
+  -- index.html
+- a folder for each level1 + the html files
+  -- noLevel.html (SEE to remove )
+  -- index.html that contains the html structure with the navBar and a body to replace
+- an empty html file for each level2
+  <br/>
+
+#### Step 2 : Generate json files from comment
 
 `npm run doc:extract`
 <br/>
 
-#### Create the full html folder
+#### Step 3 : Create the full html folder from json files
 
-`npm run docToHtml:createHtmlStruct`
+`npm run doc:createHtmlFiles`
+<br/>
 
-#### Extract json file from comment then create the html files
+#### Step 4 : copy the README file to html root folder
 
-`npm run generate:doc`
+`npm run doc:copyREADME`
+<br/>
+
+#### Reset folders
+
+`npm run resetFolders`
+<br/>
 
 # II. How it works
 
 ### II.1. Global structure
 
-This works wit comment blocks > Each comment blocks will produce a documentation block.<br />
-A comment block start with /\*_ and end with _/ (like jsdoc comments).<br />
+This works with comment blocks > Each comment blocks will produce a documentation block.<br />
+A comment block start with /\*\* and end with \*/ (like jsdoc comments).<br />
 In each block tags are added to specify the type of content for the documentation.<br />
 
-\* as this "tool" doesn't take into account the code itself, the comment blocks can be written where ever you want. <br/>
-However it is a good practice to put for each step definition the block above.<br />
+\* as this "tool" doesn't take into account the code itself, the comment blocks can be written where you want. <br/>
+However it is a good practice to put for each step definition the comment block above.<br />
 In that way it is easy to follow change made on the code and to update the comment accordingly.
 
-### II.2. Blocks
+### II.2. Levels
 
-There is 2 types of blocks
+The comment extraction allows 3 level :
 
-- File blocks : use to define the folder that will belong to the file
-  - These blocks can have only one tag @fileDesc or @interactionTypes
-- Step definition blocks : use to define the documentation that describe a step definition (contains stepdef tag)
+- Level 1 that will be represented by an html folder
+- Level 2 that will be represented by an html file in its level 1 folder
+- Level 3 that will be represented by a part in the html file
+
+This is made in 2 parts :
+
+- levelDefinition.json file
+- levels tags
+
+#### Levels defintion
+
+The input folder should contain a file : levelDefinition.json
+That file will define the level and can have a small description for each level
+
+This json is :
+
+```
+"level1s" : Level_1 {
+	levelName: string;
+	levelDesc: string;
+	level_2s:
+  {
+    levelName: string;
+	  levelDesc: string;
+  }[];
+}[];
+```
+
+```
+Example
+{
+    "level_1s": [
+        {
+            "levelName": "level_1_1",
+            "levelDesc": "All steps related to HCP Dashboard",
+            "level_2s": [
+                {
+                    "levelName": "ContextSetup",
+                    "levelDesc": "These steps are used to setup the context of tests config and user login"
+                },
+                {
+                    "levelName": "Navigation",
+                    "levelDesc": "These steps are used to navigate to a specific page or verify that the HCP is properly redirected"
+                }
+            ]
+        },
+        {
+            "levelName": "App",
+            "levelDesc": "All steps related to App",
+            "level_2s": []
+        }
+    ]
+}
+```
+
+#### Levels tags
+
+The corresponding tags are :
+@level1 level1_name
+@level2 level2_name
+@level3 level3_name
+
+#### IMPORTANT
+
+- level name should not have space
+- level names will be uncamelized on the html pages
+- level name in the levelDefinition must extactly correspond to the one written in the code files
+  \*\* if not the comment blocks will be written in the generic page
+
+- for now level3 can only be Given / When / Then
 
 ### II.3. Tags type
 
 #### Simple tag
 
-These tag only necessite to put the tag name followed by text <br />
-ex : description / folder name
+These tag only necessitate to put the tag name followed by text <br />
+like description tag for example
 
-#### Complexe tag
+#### Complex tag
 
-These tag necessite to complete the tag with some variable after it<br />
+These tag necessitate to complete the tag with some variable after it<br />
 ex : param / todo<br />
-If the variable are not correctly set an error will appear on the console. However if the param is not set it will take the value none and all the text will go in the content.<br />
+If the variable are not correctly set an error will appear on the console.
+
+However if the param is not set it will take the value none and all the text will go in the content.<br />
 
 # III. Tags
 
-### III.1. File tags
+### III.1. Code tags
 
-**@fileDesc** (Simple tag)
+**@levelX** (Simple tag)
 
-> Add a description to the file <br />
-> NEED TO BE UNIQUE and the only tag in the block<br />
+> @levelX levelName<br />
+> @level1 platformName<br />
+> @level2 featureName<br />
+> @level3 stepTypeName<br />
 
-**@interactionTypes** (complexe tag)
-
-> Create groupe of step definition<br />
-> NEED TO BE THE ONLY TAG IN THE BLOCK<br />
-
-> It is composed with 1 parameter :
-
-- interactionType name : after the tag and between {}
-
-/\*\*
-
-- @interactionTypes {1_generic_Click}
-- These steps are used to do basic actions click, type ...
-  \*/
-
-> example :@interactionTypes {1_generic_Click} These steps are used to do basic actions click, type ...<br />
-
-**@memberof** (Simple tag)
-
-> Add the comment block to an interactionType <br />
-> @memberof name of an existing interactionType in the file \* if the interactionType name doesn't exist it will be treated as a generic tag
-
-### III.2. Code tags
-
-**@stepType** (Simple tag)
-
-> will be used to regroup the step type together<br />
-> Values are : Given / When / Then <br />
-> @stepdef TWhen
-
-**@stepDef** (Simple tag)
+**@stepDef** (Simple tag) (should be UNIQUE)
 
 > will be used as a title of the comment block. Usually it is a copy of the step definition text<br />
 > @stepdef The user clicks on ...
 
-**@param** (Complexe tag)
+**@param** (Complex tag) (can be MULTIPLE)
 
 > will be used to describe the parameter used in the step definition <br />
 > It is composed of 2 parameters :
 
 - param type : after the tag and between {}
 - param name : 1st word after the param type
+- param value : started with -Values- and separated by /
 
 > example : @param {string} name it will be used to pass the name of the user to ...
+> -Values- Remi / Julien
+> param will be a "string" named "name" with the description "it will be used to pass the name of the user to ..." and values will be Remi and Julien
 
-### III.3. Description tags
+**@example** (Simple tag) (can be MULTIPLE)
 
-**@description** (Simple tag)
+> will be used to give example on how to use the code
+> it will allows to copy paste the example
+> <br/>
+
+> example : @example the HCP stores data from a random "patient list table row" and opens it
+
+### III.2. Description tags
+
+**@description** (Simple tag) (should be UNIQUE)
 
 > Use to add a description to explain more in details the step definition<br />
 > @description this step def is used to make the user clicks ...
 
-**@see** (Simple tag)
+**@see** (Simple tag) (NOT Implemented)
 
-> Use to add a link to a docuementation or website<br />
+> Use to add a link to a documentation or website<br />
 > not working now
 
-### III.4. Other tags
+### III.3. Other tags
 
-**@todo** (Complexe tag)
+**@todo** (Complex tag) (can be MULTIPLE)
 
 > will be used to point some improvement or other task that can be made on the code / the doc ...<br />
 > It is composed with 1 parameter :
@@ -197,46 +273,15 @@ If the variable are not correctly set an error will appear on the console. Howev
 > example : @todo {CODE} Factorize ...<br />
 > example : @todo {DOC} List the value that can be use in this param
 
-### III.5. Generic tag
+### III.4. Generic tag
 
-**@whatEver** (Simple tag)<br />
+**@whatEver** (Simple tag) (can be MULTIPLE)
+<br />
 All tag that are not recognized by the "tool" will be marked as generic tag.<br />
 They will be displayed with the name of the tag and the text as content
 
 # IV. Example :
 
 ```
-/**
- * @interactionType 1_generic_Click
- * These steps are used to do basic click action
- */
-
-/**
- * @stepType When
- * @stepDef the user clicks on the {element}
- * @memberof 1_generic_Click
- * @description Clicks on an element + verify that it is te only one in the page
- * @param {string} element - element's name
- * @see README.md (see home page)
- * @example the user clicks on the "user list add user button"
- */
-When("the user clicks on the {string}", (element: string) => {
-	cy.dataCy(camelize(element)).click();
-});
-
-/**
- * @stepType When
- * @stepDef the user clicks on the {element} in a random position
- * @memberof 1_generic_Click
- * @description Clicks on a random element of this type
- * @param {string} element - element's name
- * @see README.md (see home page)
- * @example the user clicks on the "user list table row" in a random position
- * Will open a random user from the list
- * @todo {SIMPLE} Rephrase to align all random steps (click children ...)
- */
-When("the user clicks on the {string} in a random position", (element: string) => {
-	cy.dataCy(camelize(element)).yieldRandom().click();
-});
 
 ```
