@@ -1,7 +1,5 @@
 # To do
 
-ID-09 copy clip board
-ID-10 Add @value to param optional (values possible for param)
 ID-11 noLevel pages improve
 ID-12 expand todo block
 ID-13 faire des bigs example
