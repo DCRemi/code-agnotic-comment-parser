@@ -120,15 +120,7 @@ filesPaths.forEach((filePath) => {
 		/*           STEP 1 - get data from the json file and construct path          */
 		/* -------------------------------------------------------------------------- */
 		const noLevelBlocks: CommentBlock[] = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-		const noLevelHtmlFilePath =
-			destinationPath +
-			"/" +
-			filePath.replace("json_output/", "").replace(path.basename(filePath), "") + // level1 folder
-			"noLevel.html";
-		// get the nolevel html (already created) file path
-		const noLevelHtmlFile = fs.readFileSync(noLevelHtmlFilePath, "utf-8");
-
-		var htmlFile;
+		var htmlBody: string = "";
 		if (noLevelBlocks.length !== 0) {
 			/* -------------------------------------------------------------------------- */
 			/*                   STEP 2 - Create the html comment block                   */
@@ -164,7 +156,6 @@ filesPaths.forEach((filePath) => {
 			/* -------------------------------------------------------------------------- */
 			/*                        STEP 3 - Create the html body                       */
 			/* -------------------------------------------------------------------------- */
-			var htmlBody: string = "";
 			htmlBody = `
 			<h1 class="pagetitle">Unknown Level steps</h1>
 			<div class="accordion">
@@ -173,13 +164,25 @@ filesPaths.forEach((filePath) => {
 			/* -------------------------------------------------------------------------- */
 			/*                 STEP 4 - Add the body inside the html file                 */
 			/* -------------------------------------------------------------------------- */
-			htmlFile = noLevelHtmlFile.replace("htmlPartToReplace", htmlBody);
 		} else {
-			htmlFile = noLevelHtmlFile.replace("htmlPartToReplace", "<p>No unknown levels or tags<p>");
+			htmlBody = "<p>No unknown levels or tags<p>";
 		}
 		/* -------------------------------------------------------------------------- */
 		/*                 STEP 6 - Write the corresponding html file                 */
 		/* -------------------------------------------------------------------------- */
-		HtmlToFile(htmlFile, noLevelHtmlFilePath.replace(path.extname(noLevelHtmlFilePath), ""));
+		var noLevelhtmlFilePath;
+		if (filePath.includes("noLevel1")) {
+			noLevelhtmlFilePath = destinationPath + "/noLevel1.html";
+		} else if (filePath.includes("noLevel2")) {
+			noLevelhtmlFilePath =
+				destinationPath +
+				"/" +
+				filePath.replace("json_output/", "").replace(path.basename(filePath), "") + // level1 folder
+				"index.html";
+		}
+
+		const noLevelHtmlFile = fs.readFileSync(noLevelhtmlFilePath, "utf-8");
+		const htmlFileContent = noLevelHtmlFile.replace("htmlPartToReplace", htmlBody);
+		HtmlToFile(htmlFileContent, noLevelhtmlFilePath.replace(path.extname(noLevelhtmlFilePath), ""));
 	}
 });
