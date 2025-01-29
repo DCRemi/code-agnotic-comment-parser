@@ -384,6 +384,7 @@ export function createHtmlFile(mainHtml: string, level_2: Level_2): string {
 				${mainHtml}	
 		</main>
 	</body>
+	<script src="../../js/copyClipboard.js"></script>
 </html>
 `;
 	return htmlBlock;

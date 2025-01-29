@@ -56,6 +56,7 @@ pre[class*="language-"] {
 	white-space: normal;
 }
 pre:has(code) {
+	border-radius: 5px;
 	position: relative;
 	margin: 5px 0;
 	padding: 1.75rem 0 1.75rem 1rem;
@@ -67,8 +68,12 @@ pre:has(code) button {
 	position: absolute;
 	top: 5px;
 	right: 5px;
-
-	/* more stuff */
+	font-size: 0.9rem;
+	padding: 0.15rem;
+	background-color: #cac7c7;
+	border: none;
+	border-radius: 5px;
+	text-shadow: #c4c4c4 0 0 2px;
 }
 .token.cdata,
 .token.comment,
