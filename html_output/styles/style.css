@@ -313,16 +313,20 @@ h3.stepDefinition {
 /* Accordion */
 .accordion-item {
 	border: 1px solid #ebeef4;
+	border-radius: 5px;
+	background-color: #27f00c;
 }
 
 .accordion-button:focus {
 	outline: 0;
 	box-shadow: none;
+	border-radius: 5px;
 }
 
 .accordion-button:not(.collapsed) {
 	color: #012970;
 	background-color: #27f00c;
+	/* border-radius: 5px; */
 }
 
 /* .accordion-flush .accordion-button {
@@ -340,6 +344,7 @@ h3.stepDefinition {
 	padding: 0 0 15px 0;
 	color: #3e4f6f;
 	font-size: 15px;
+	/* border-radius: 5px; */
 }
 
 /* Breadcrumbs */

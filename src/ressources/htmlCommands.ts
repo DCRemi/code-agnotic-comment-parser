@@ -244,15 +244,18 @@ export function createParamHtmlBlock(commentBlock: CommentBlock): string {
 export function createExampleHtmlBlock(commentBlock: CommentBlock): string {
 	var stepDefExample: string = "";
 	if (commentBlock.exampleTags) {
-		stepDefExample = commentBlock.exampleTags[0].example_content;
+		var exampleBlocks = "";
+		commentBlock.exampleTags.forEach((exampleTag) => {
+			exampleBlocks += `
+									<pre><code data-prismjs-copy="Copy" class="language-js">${exampleTag.example_content}</code></pre>`;
+		});
+
 		const htmlBlock = `
 						<div class="stepDefinition" id="BlockExample">
 							<h4>Example :</h4>
 							<div class="card">
 								<div class="card-body">
-									<code class="hljs">
-										${stepDefExample.replace(/.\n/g, "<br />")}
-									</code>
+									${exampleBlocks}
 								</div>
 							</div>
 						</div>`;
@@ -346,6 +349,7 @@ export function createHtmlFile(mainHtml: string, level_2: Level_2): string {
 		></script>
 		<script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
 		<script type="module" src="https://cdn.jsdelivr.net/npm/zero-md@3?register"></script>
+		<script src="../../js/prism.js"></script>
 	</head>
 	<body>
 		<header id="header" class="header fixed-top d-flex align-items-center">
@@ -379,6 +383,7 @@ export function createHtmlFile(mainHtml: string, level_2: Level_2): string {
 				${mainHtml}	
 		</main>
 	</body>
+	<script src="../../js/copyClipboard.js"></script>
 </html>
 `;
 	return htmlBlock;

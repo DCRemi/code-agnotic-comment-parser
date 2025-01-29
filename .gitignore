@@ -9,11 +9,9 @@ docs
 
 # exclude data folders
 json_output/*
-html_output/*
+html_output/pages_tree
 input/*
 tmp
 
 # exception to the rule
-!html_output/styles
-!html_output/index.html
 !input/.gitkeep
