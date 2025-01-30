@@ -251,7 +251,7 @@ However if the param is not set it will take the value none and all the text wil
 
 ### III.2. Description tags
 
-**@description** (Simple tag) (should be UNIQUE)
+**@description** (Simple tag) (can be MULTIPLE)
 
 > Use to add a description to explain more in details the step definition<br />
 > @description this step def is used to make the user clicks ...

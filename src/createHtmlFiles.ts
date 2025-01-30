@@ -97,8 +97,8 @@ filesPaths.forEach((filePath) => {
 		/* -------------------------------------------------------------------------- */
 		/*                        STEP 3 - Create the html body                       */
 		/* -------------------------------------------------------------------------- */
-		var htmlBody: string = "";
-		htmlBody = `
+		var mainHtml: string = "";
+		mainHtml = `
 		<div>
 			<h1 class="pagetitle">${fileJsonData.levelName ? fileJsonData.levelName : ""}</h1>
 			<p>${fileJsonData.levelDesc ? fileJsonData.levelDesc : ""}</p>
@@ -107,7 +107,7 @@ filesPaths.forEach((filePath) => {
 		/* -------------------------------------------------------------------------- */
 		/*               STEP 4 - Integrating the body in the html file               */
 		/* -------------------------------------------------------------------------- */
-		const htmlFile = createHtmlFile(htmlBody, fileJsonData);
+		const htmlFile = createHtmlFile(mainHtml, fileJsonData);
 		/* -------------------------------------------------------------------------- */
 		/*                 STEP 5 - Write the corresponding html file                 */
 		/* -------------------------------------------------------------------------- */
@@ -120,7 +120,7 @@ filesPaths.forEach((filePath) => {
 		/*           STEP 1 - get data from the json file and construct path          */
 		/* -------------------------------------------------------------------------- */
 		const noLevelBlocks: CommentBlock[] = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-		var htmlBody: string = "";
+		var mainHtml: string = "";
 		if (noLevelBlocks.length !== 0) {
 			/* -------------------------------------------------------------------------- */
 			/*                   STEP 2 - Create the html comment block                   */
@@ -156,7 +156,7 @@ filesPaths.forEach((filePath) => {
 			/* -------------------------------------------------------------------------- */
 			/*                        STEP 3 - Create the html body                       */
 			/* -------------------------------------------------------------------------- */
-			htmlBody = `
+			mainHtml = `
 			<h1 class="pagetitle">Unknown Level steps</h1>
 			<div class="accordion">
 			${htmlCommentBlocks ? htmlCommentBlocks : ""}
@@ -165,7 +165,7 @@ filesPaths.forEach((filePath) => {
 			/*                 STEP 4 - Add the body inside the html file                 */
 			/* -------------------------------------------------------------------------- */
 		} else {
-			htmlBody = "<p>No unknown levels or tags<p>";
+			mainHtml = "<p>No unknown levels or tags<p>";
 		}
 		/* -------------------------------------------------------------------------- */
 		/*                 STEP 6 - Write the corresponding html file                 */
@@ -182,7 +182,7 @@ filesPaths.forEach((filePath) => {
 		}
 
 		const noLevelHtmlFile = fs.readFileSync(noLevelhtmlFilePath, "utf-8");
-		const htmlFileContent = noLevelHtmlFile.replace("${htmlBody}", htmlBody);
+		const htmlFileContent = noLevelHtmlFile.replace("${mainHtml}", mainHtml);
 		HtmlToFile(htmlFileContent, noLevelhtmlFilePath.replace(path.extname(noLevelhtmlFilePath), ""));
 	}
 });

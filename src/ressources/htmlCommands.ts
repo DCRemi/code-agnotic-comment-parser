@@ -240,65 +240,8 @@ export function createStepDefHtmlBlock(
 }
 
 export function createHtmlFile(mainHtml: string, level_2: Level_2): string {
-	const htmlBlock = `
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-		<title>Home, Block</title>
-		<link type="text/css" rel="stylesheet" href="../../styles/style.css" />
-		<link type="text/css" rel="stylesheet" href="../../styles/prism.css" />
-		<link
-			rel="stylesheet"
-			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-			integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-			crossorigin="anonymous"
-		/>
-		<!-- Script -->
-		<script
-			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-			integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
-			crossorigin="anonymous"
-		></script>
-		<script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-		<script type="module" src="https://cdn.jsdelivr.net/npm/zero-md@3?register"></script>
-		<script src="../../js/prism.js"></script>
-	</head>
-	<body>
-		<header id="header" class="header fixed-top d-flex align-items-center">
-			<div class="d-flex align-items-center justify-content-between">
-				<div class="logo d-flex align-items-center">
-					<a href="/html_output/pages_tree/index.html" class="logo d-flex align-items-center">
-						<img
-							src="https://cdn0.iconfinder.com/data/icons/juice/512/juice_cucumber_vegetables_drink-512.png"
-							alt=""
-						/>
-					</a>
-				</div>
-				<div class="logo d-flex align-items-center">
-					<h1 class="d-flex align-items-center">Doc-Parser</h1>
-				</div>
-			</div>
-		</header>
-		<aside id="sidebar" class="sidebar">
-			<ul id="sidebar-nav" class="sidebar-nav">
-				<li class="nav-item">
-					<a href=index.html class="nav-link">
-						HOME	
-					</a>
-				</li>
-			</ul>	
-		<ul id="sidebar-nav" class="sidebar-nav">
-				${level_2.htmlNavBar}
-			</ul>
-		</aside>
-		<main id="main" class="main">
-				${mainHtml}	
-		</main>
-	</body>
-	<script src="../../js/copyClipboard.js"></script>
-</html>
-`;
-	return htmlBlock;
+	var level2HtmlFile = fs.readFileSync("src/htmlFilesStruct/level2.html", "utf-8");
+	level2HtmlFile = level2HtmlFile.replace("${mainHtml}", mainHtml);
+	level2HtmlFile = level2HtmlFile.replace("${level_2.htmlNavBar}", level_2.htmlNavBar);
+	return level2HtmlFile;
 }
