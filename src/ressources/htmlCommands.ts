@@ -12,8 +12,23 @@ const path = require("path");
  * @returns {string} Level 0 index file content
  */
 export function createLevel_0_IndexHtml(Level1IndexLinks: string): string {
-	var level0IndexHtml = fs.readFileSync("src/htmlFilesStruct/level0.html", "utf-8");
-	level0IndexHtml = level0IndexHtml.replace("${Level1IndexLinks}", Level1IndexLinks);
+	var level0IndexHtml = fs.readFileSync("src/ressources/htmlFile.html", "utf-8");
+	const mainHtml = `
+			<div class="pagetitle">
+				<h1>READ ME</h1>
+				<br />
+				<br />
+				<zero-md src="README.md"></zero-md>
+			</div>`;
+	const sidebar = `
+			<ul id="sidebar-nav" class="sidebar-nav">
+				${Level1IndexLinks}
+				<li class="nav-item">
+					<a href="noLevel1.html" class="nav-link"> No Level </a>
+				</li>
+			</ul>`;
+	level0IndexHtml = level0IndexHtml.replace("${sideBar}", sidebar);
+	level0IndexHtml = level0IndexHtml.replace("${mainHtml}", mainHtml);
 	return level0IndexHtml;
 }
 
@@ -23,8 +38,15 @@ export function createLevel_0_IndexHtml(Level1IndexLinks: string): string {
  * @returns {string} NoLevel 0 file content
  */
 export function createLevel_0_NoLevelHtml(Level1IndexLinks: string): string {
-	var level0NoLevelHtml = fs.readFileSync("src/htmlFilesStruct/noLevel0.html", "utf-8");
-	level0NoLevelHtml = level0NoLevelHtml.replace("${Level1IndexLinks}", Level1IndexLinks);
+	var level0NoLevelHtml = fs.readFileSync("src/ressources/htmlFile.html", "utf-8");
+	const sidebar = `
+			<ul id="sidebar-nav" class="sidebar-nav">
+				${Level1IndexLinks}
+				<li class="nav-item">
+					<a href="noLevel1.html" class="nav-link"> No Level </a>
+				</li>
+			</ul>`;
+	level0NoLevelHtml = level0NoLevelHtml.replace("${sideBar}", sidebar);
 	return level0NoLevelHtml;
 }
 
@@ -36,6 +58,12 @@ export function createLevel_0_NoLevelHtml(Level1IndexLinks: string): string {
  */
 export function createLevel_1_BaseHtml(level_1: Level_1): string {
 	var level1IndexHtml = fs.readFileSync("src/htmlFilesStruct/level1.html", "utf-8");
+	// 	const mainHtml = `
+	// 				<div>
+	// 	<h1 class="pagetitle">${level_1.levelName}</h1>
+	// 	<p>${level_1.levelDesc}</p>
+	// 	<div>${mainHtml}</div>
+	// </div>`;
 
 	var level2FilePathsLinks = "";
 	level_1.level_2s.forEach((level_2) => {
@@ -46,6 +74,7 @@ export function createLevel_1_BaseHtml(level_1: Level_1): string {
 					</a>
 				</li>`;
 	});
+
 	level1IndexHtml = level1IndexHtml.replace("${level2FilePathsLinks}", level2FilePathsLinks);
 	level1IndexHtml = level1IndexHtml.replace("${level_1.levelName}", level_1.levelName);
 	level1IndexHtml = level1IndexHtml.replace("${level_1.levelDesc}", level_1.levelDesc);
