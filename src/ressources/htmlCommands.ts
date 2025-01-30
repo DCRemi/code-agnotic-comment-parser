@@ -279,8 +279,17 @@ export function createStepDefHtmlBlock(
 }
 
 export function createHtmlFile(mainHtml: string, level_2: Level_2): string {
-	var level2HtmlFile = fs.readFileSync("src/htmlFilesStruct/level2.html", "utf-8");
+	var level2HtmlFile = fs.readFileSync("src/ressources/htmlFile.html", "utf-8");
+	const sidebar = `
+			<ul id="sidebar-nav" class="sidebar-nav">
+				<li class="nav-item">
+					<a href="index.html" class="nav-link"> HOME </a>
+				</li>
+			</ul>
+			<ul id="sidebar-nav" class="sidebar-nav">
+				${level_2.htmlNavBar}
+			</ul>`;
+	level2HtmlFile = level2HtmlFile.replace("${sideBar}", sidebar);
 	level2HtmlFile = level2HtmlFile.replace("${mainHtml}", mainHtml);
-	level2HtmlFile = level2HtmlFile.replace("${level_2.htmlNavBar}", level_2.htmlNavBar);
 	return level2HtmlFile;
 }
