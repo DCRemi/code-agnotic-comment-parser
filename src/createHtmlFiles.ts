@@ -182,7 +182,7 @@ filesPaths.forEach((filePath) => {
 		}
 
 		const noLevelHtmlFile = fs.readFileSync(noLevelhtmlFilePath, "utf-8");
-		const htmlFileContent = noLevelHtmlFile.replace("htmlPartToReplace", htmlBody);
+		const htmlFileContent = noLevelHtmlFile.replace("${htmlBody}", htmlBody);
 		HtmlToFile(htmlFileContent, noLevelhtmlFilePath.replace(path.extname(noLevelhtmlFilePath), ""));
 	}
 });

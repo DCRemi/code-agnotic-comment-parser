@@ -11,68 +11,21 @@ const path = require("path");
  * @param {string} Level1IndexLinks
  * @returns {string} Level 0 index file content
  */
-export function createLevel_0_baseHtml(Level1IndexLinks: string): string {
-	const level0IndexHtml = `
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-		<title>Home, Block</title>
-		<link type="text/css" rel="stylesheet" href="../styles/style.css" />
-		<link
-			rel="stylesheet"
-			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-			integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-			crossorigin="anonymous"
-		/>
-		<!-- Script -->
-		<script
-			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-			integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
-			crossorigin="anonymous"
-		></script>
-		<script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-		<script type="module" src="https://cdn.jsdelivr.net/npm/zero-md@3?register"></script>
-	</head>
-	<body>
-		<header id="header" class="header fixed-top d-flex align-items-center">
-			<div class="d-flex align-items-center justify-content-between">
-				<div class="logo d-flex align-items-center">
-					<a href="/html_output/pages_tree/index.html" class="logo d-flex align-items-center">
-						<img
-							src="https://cdn0.iconfinder.com/data/icons/juice/512/juice_cucumber_vegetables_drink-512.png"
-							alt=""
-						/>
-					</a>
-				</div>
-				<div class="logo d-flex align-items-center">
-					<h1 class="d-flex align-items-center">Doc-Parser</h1>
-				</div>
-			</div>
-		</header>
-			<aside id="sidebar" class="sidebar">
-				<ul id="sidebar-nav" class="sidebar-nav">
-					${Level1IndexLinks}
-					<li class="nav-item">
-						<a href=noLevel1.html class="nav-link">
-							No Level	
-						</a>
-					</li>
-				</ul>
-			</aside>
-		<main id="main" class="main">
-				<div class="pagetitle">
-				<h1>READ ME</h1>
-				<br />
-				<br />
-				<zero-md src="README.md"></zero-md>
-			</div>
-		</main>
-	</body>
-</html>`;
-	// 1 create level 1 folder and for each index file vide pour les lien dans le index du level 1
+export function createLevel_0_IndexHtml(Level1IndexLinks: string): string {
+	var level0IndexHtml = fs.readFileSync("src/htmlFilesStruct/level0.html", "utf-8");
+	level0IndexHtml = level0IndexHtml.replace("${Level1IndexLinks}", Level1IndexLinks);
 	return level0IndexHtml;
+}
+
+/**
+ * Create noLevel0 file with link to level 1 index files
+ * @param {string} Level1IndexLinks
+ * @returns {string} NoLevel 0 file content
+ */
+export function createLevel_0_NoLevelHtml(Level1IndexLinks: string): string {
+	var level0NoLevelHtml = fs.readFileSync("src/htmlFilesStruct/noLevel0.html", "utf-8");
+	level0NoLevelHtml = level0NoLevelHtml.replace("${Level1IndexLinks}", Level1IndexLinks);
+	return level0NoLevelHtml;
 }
 
 /**
@@ -82,6 +35,8 @@ export function createLevel_0_baseHtml(Level1IndexLinks: string): string {
  * @returns {string} Level 1 index file content
  */
 export function createLevel_1_BaseHtml(level_1: Level_1): string {
+	var level1IndexHtml = fs.readFileSync("src/htmlFilesStruct/level1.html", "utf-8");
+
 	var level2FilePathsLinks = "";
 	level_1.level_2s.forEach((level_2) => {
 		level2FilePathsLinks += `
@@ -91,69 +46,9 @@ export function createLevel_1_BaseHtml(level_1: Level_1): string {
 					</a>
 				</li>`;
 	});
-	const level1IndexHtml = `
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-		<title>Home, Block</title>
-		<link type="text/css" rel="stylesheet" href="../../styles/style.css" />
-		<link
-			rel="stylesheet"
-			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-			integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-			crossorigin="anonymous"
-		/>
-		<!-- Script -->
-		<script
-			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-			integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
-			crossorigin="anonymous"
-		></script>
-		<script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-		<script type="module" src="https://cdn.jsdelivr.net/npm/zero-md@3?register"></script>
-	</head>
-	<body>
-		<header id="header" class="header fixed-top d-flex align-items-center">
-			<div class="d-flex align-items-center justify-content-between">
-				<div class="logo d-flex align-items-center">
-					<a href="/html_output/pages_tree/index.html" class="logo d-flex align-items-center">
-						<img
-							src="https://cdn0.iconfinder.com/data/icons/juice/512/juice_cucumber_vegetables_drink-512.png"
-							alt=""
-						/>
-					</a>
-				</div>
-				<div class="logo d-flex align-items-center">
-					<h1 class="d-flex align-items-center">Doc-Parser</h1>
-				</div>
-			</div>
-		</header>
-		<aside id="sidebar" class="sidebar">
-			<ul id="sidebar-nav" class="sidebar-nav">
-				<li class="nav-item">
-					<a href=index.html class="nav-link">
-						HOME	
-					</a>
-				</li>
-			</ul>	
-			<ul id="sidebar-nav" class="sidebar-nav">
-				${level2FilePathsLinks}
-			</ul>
-		</aside>
-		<main id="main" class="main">
-			<div>
-				<h1 class="pagetitle">${level_1.levelName}</h1>
-				<p>${level_1.levelDesc}</p>
-			<div>
-			htmlPartToReplace
-			</div>
-			</div>
-		</main>
-	</body>
-</html>`;
-	// 1 create level 1 folder and for each index file vide pour les lien dans le index du level 1
+	level1IndexHtml = level1IndexHtml.replace("${level2FilePathsLinks}", level2FilePathsLinks);
+	level1IndexHtml = level1IndexHtml.replace("${level_1.levelName}", level_1.levelName);
+	level1IndexHtml = level1IndexHtml.replace("${level_1.levelDesc}", level_1.levelDesc);
 	return level1IndexHtml;
 }
 
@@ -335,6 +230,7 @@ export function createHtmlFile(mainHtml: string, level_2: Level_2): string {
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
 		<title>Home, Block</title>
 		<link type="text/css" rel="stylesheet" href="../../styles/style.css" />
+		<link type="text/css" rel="stylesheet" href="../../styles/prism.css" />
 		<link
 			rel="stylesheet"
 			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"

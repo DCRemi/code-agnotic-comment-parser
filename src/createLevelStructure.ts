@@ -1,5 +1,5 @@
 import { HtmlToFile, JSONToFile } from "./ressources/helpers";
-import { createLevel_0_baseHtml, createLevel_1_BaseHtml } from "./ressources/htmlCommands";
+import { createLevel_0_IndexHtml, createLevel_0_NoLevelHtml, createLevel_1_BaseHtml } from "./ressources/htmlCommands";
 import { Levels } from "./ressources/interfaces";
 
 const fs = require("fs");
@@ -67,9 +67,7 @@ levelDefinitionData.level_1s.forEach((level_1) => {
 	/* ----- Create link to level 1 index file to put in level 0 index file ----- */
 	Level1IndexLinks += `
 				<li class="nav-item">
-					<a href="/${level1HtmlFolderPath}/index.html" class="nav-link">
-					${level_1.levelName}	
-					</a>
+					<a href="/${level1HtmlFolderPath}/index.html" class="nav-link"> ${level_1.levelName}</a>
 				</li>`;
 });
 
@@ -77,6 +75,7 @@ levelDefinitionData.level_1s.forEach((level_1) => {
 /*                     STEP 2 - Create level 0 index file                     */
 /* -------------------------------------------------------------------------- */
 // Need to be done after step 1 because it's need the level1 index links
-const level0BaseFile = createLevel_0_baseHtml(Level1IndexLinks);
-HtmlToFile(level0BaseFile, htmlFilesOutputFolder + "/index");
-HtmlToFile(level0BaseFile, htmlFilesOutputFolder + "/noLevel1");
+const level0IndexFile = createLevel_0_IndexHtml(Level1IndexLinks);
+const level0NoLevelFile = createLevel_0_NoLevelHtml(Level1IndexLinks);
+HtmlToFile(level0IndexFile, htmlFilesOutputFolder + "/index");
+HtmlToFile(level0NoLevelFile, htmlFilesOutputFolder + "/noLevel1");
