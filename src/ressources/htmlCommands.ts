@@ -55,6 +55,10 @@ export function createLevel_1_BaseHtml(level_1: Level_1): string {
 /* -------------------------------------------------------------------------- */
 /*                            Html blocks creation                           */
 /* -------------------------------------------------------------------------- */
+/**
+ * Construct the html block for the step definition adding the expand/collapse button with the block index
+ * @param index will be use inside the accordion item so the button collapse the right box
+ */
 export function createTitleHtmlBlock(commentBlock: CommentBlock, index: number): string {
 	var stepDefName = commentBlock.stepDef;
 	const htmlBlock = `
@@ -71,8 +75,12 @@ export function createTitleHtmlBlock(commentBlock: CommentBlock, index: number):
 	return htmlBlock;
 }
 
-export function createDefHtmlBlock(commentBlock: CommentBlock): string {
-	var htmlBlock = "";
+/**
+ * Create the description html block
+ * Manage if multiple description blocks
+ */
+export function createDescHtmlBlock(commentBlock: CommentBlock): string {
+	var htmlDescBlock = "";
 	if (commentBlock.descriptionTags) {
 		var stepDefDescBloc = "";
 		commentBlock.descriptionTags.forEach((descriptionTag) => {
@@ -80,27 +88,35 @@ export function createDefHtmlBlock(commentBlock: CommentBlock): string {
 								<p>${descriptionTag.description.replace(/.\n/g, "<br />")}</p>
 								`;
 		});
-		htmlBlock = `
+		htmlDescBlock = `
 							<div class="stepDefinition" id="BlockDef">
 								${stepDefDescBloc}
 							</div>`;
 	}
-	return htmlBlock;
+	return htmlDescBlock;
 }
 
+/**
+ * Create the param html block
+ * Manage if multiple param blocks
+ * add into the table the parameter of this tag
+ */
 export function createParamHtmlBlock(commentBlock: CommentBlock): string {
-	if (commentBlock.paramTags) {
-		var htmlParamBlock: string = "";
+	var htmlParamBlock: string = "";
 
+	if (commentBlock.paramTags) {
+		var htmlParamTableLine = "";
 		commentBlock.paramTags.forEach((paramTag) => {
 			var paramValuesList = "";
-			paramTag.paramValues.forEach((paramValue) => {
-				paramValuesList += `
+			if (paramTag.paramValues) {
+				paramTag.paramValues.forEach((paramValue) => {
+					paramValuesList += `
 												<li>
 													${paramValue}
 												</li>`;
-			});
-			htmlParamBlock += `
+				});
+			}
+			htmlParamTableLine += `
 									<tr>
 										<th>${paramTag.paramName}</th>
 										<td>${paramTag.paramType}</td>
@@ -113,7 +129,7 @@ export function createParamHtmlBlock(commentBlock: CommentBlock): string {
 									</tr>`;
 		});
 
-		const htmlBlock: string = `
+		htmlParamBlock = `
 						<div class="stepDefinition" id="BlockParam">
 							<h4>Parameters : </h4>
 							<table class="table">
@@ -126,18 +142,20 @@ export function createParamHtmlBlock(commentBlock: CommentBlock): string {
 									</tr>
 								</thead>
 								<tbody>
-									${htmlParamBlock}
+									${htmlParamTableLine}
 								</tbody>
 							</table>
 						</div>`;
-		return htmlBlock;
-	} else {
-		return "";
 	}
+	return htmlParamBlock;
 }
 
+/**
+ * Create the example html block
+ * Manage if multiple example blocks
+ */
 export function createExampleHtmlBlock(commentBlock: CommentBlock): string {
-	var stepDefExample: string = "";
+	var htmlExampleBlock: string = "";
 	if (commentBlock.exampleTags) {
 		var exampleBlocks = "";
 		commentBlock.exampleTags.forEach((exampleTag) => {
@@ -145,7 +163,7 @@ export function createExampleHtmlBlock(commentBlock: CommentBlock): string {
 									<pre><code data-prismjs-copy="Copy" class="language-js">${exampleTag.example_content}</code></pre>`;
 		});
 
-		const htmlBlock = `
+		htmlExampleBlock = `
 						<div class="stepDefinition" id="BlockExample">
 							<h4>Example :</h4>
 							<div class="card">
@@ -154,16 +172,19 @@ export function createExampleHtmlBlock(commentBlock: CommentBlock): string {
 								</div>
 							</div>
 						</div>`;
-		return htmlBlock;
-	} else {
-		return "";
 	}
+	return htmlExampleBlock;
 }
 
+/**
+ * Create the to do html block
+ * Manage if multiple to do blocks
+ * add into the table the parameter of this tag
+ */
 export function createToDoHtmlBlock(commentBlock: CommentBlock): string {
+	var htmlToDoBlock: string = "";
 	if (commentBlock.todoTags) {
 		var htmlTodoBlock: string = "";
-
 		commentBlock.todoTags.forEach((todoTag) => {
 			htmlTodoBlock += `
 									<tr>
@@ -171,8 +192,7 @@ export function createToDoHtmlBlock(commentBlock: CommentBlock): string {
 										<td>${todoTag.todoText.replace(/.\n/g, "<br />")}</td>
 									</tr>`;
 		});
-
-		const htmlBlock: string = `
+		htmlToDoBlock = `
 						<div class="stepDefinition" id="BlockToDo">
 							<h4>To Do : </h4>				
 							<table class="table">
@@ -187,10 +207,8 @@ export function createToDoHtmlBlock(commentBlock: CommentBlock): string {
 								</tbody>
 							</table>
 						</div>`;
-		return htmlBlock;
-	} else {
-		return "";
 	}
+	return htmlToDoBlock;
 }
 
 export function createStepDefHtmlBlock(

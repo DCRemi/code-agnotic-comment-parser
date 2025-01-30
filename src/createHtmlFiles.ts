@@ -1,5 +1,5 @@
 import {
-	createDefHtmlBlock,
+	createDescHtmlBlock,
 	createExampleHtmlBlock,
 	createHtmlFile,
 	createParamHtmlBlock,
@@ -44,7 +44,7 @@ filesPaths.forEach((filePath) => {
 		commentJsonBlocks.forEach((commentBlock: CommentBlock, index) => {
 			/* ------------------------ Build each comment block ------------------------ */
 			const TitleHtmlBlock = createTitleHtmlBlock(commentBlock, index);
-			const defHtmlBlock = createDefHtmlBlock(commentBlock);
+			const defHtmlBlock = createDescHtmlBlock(commentBlock);
 			const paramHtmlBlock = createParamHtmlBlock(commentBlock);
 			const exampleHtmlBlock = createExampleHtmlBlock(commentBlock);
 			const todoHtmlBlock = createToDoHtmlBlock(commentBlock);
@@ -129,7 +129,7 @@ filesPaths.forEach((filePath) => {
 			noLevelBlocks.forEach((commentBlock: CommentBlock, index) => {
 				/* ------------------------ Build each comment block ------------------------ */
 				const TitleHtmlBlock = createTitleHtmlBlock(commentBlock, index);
-				const defHtmlBlock = createDefHtmlBlock(commentBlock);
+				const defHtmlBlock = createDescHtmlBlock(commentBlock);
 				const paramHtmlBlock = createParamHtmlBlock(commentBlock);
 				const exampleHtmlBlock = createExampleHtmlBlock(commentBlock);
 				const todoHtmlBlock = createToDoHtmlBlock(commentBlock);
