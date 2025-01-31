@@ -116,55 +116,40 @@ export const extractBlockTagData = function (genericCommentBlock: GenericComment
 			case "@param":
 				let paramTag: ParamTag;
 				const paraValuesRegex = /-Values-/;
-
-				// if the tag contains a type inside {type}
+				var paramType, paramName, paramDesc;
+				/* --------------------- param tag correctly configured --------------------- */
 				if (genericTagSentence.tag_content.match(tagTypeRegex)) {
 					// extract the parameter type contained inside {}
-					const paramType = genericTagSentence.tag_content.match(tagTypeRegex)[0];
+					paramType = genericTagSentence.tag_content.match(tagTypeRegex)[0];
 					// remove the parameter type from tag content
 					const paramName_desc_values = genericTagSentence.tag_content.substring(paramType.length).trim();
 
 					// extract the parameter name that is the 1st word after the type
-					const paramName = paramName_desc_values.match(/\w+/)[0];
+					paramName = paramName_desc_values.match(/\w+/)[0];
 					// remove the parameter type from tag content
 					const paramDesc_values = paramName_desc_values.substring(paramName.length).trim();
 
 					// extract the parameter description and values separated by -Values-
-					const paramDesc = paramDesc_values.split(paraValuesRegex)[0];
-					const paramValues_list = paramDesc_values.split(paraValuesRegex)[1]
-						? paramDesc_values.split(paraValuesRegex)[1]
-						: "";
-
-					// Split values inside a table
-					const paramValues = paramValues_list.split(/\//);
-
+					paramDesc = paramDesc_values.split(paraValuesRegex)[0];
+					const paramValues_list = paramDesc_values.split(paraValuesRegex)[1];
+					const paramValues = paramValues_list?.split(/\//);
 					paramTag = {
-						paramType: paramType,
 						paramName,
+						paramType,
 						paramDesc,
 						paramValues
 					};
-				}
-				// if the tag doesn't contain a type it will put none
-				else {
-					// extract the parameter description and values separated by -Values-
-					const paramDesc = genericTagSentence.tag_content.split(paraValuesRegex)[0];
-					const paramValues_list = genericTagSentence.tag_content.split(paraValuesRegex)[1]
-						? genericTagSentence.tag_content.split(paraValuesRegex)[1]
-						: "";
-					// Split values inside a table
-					const paramValues = paramValues_list.split(/\//);
-
+				} else {
+					/* --------------------- param tag NOT correctly configured --------------------- */
+					const error = "**Param tag config is missing (see documentation)**";
+					console.error(`error : ${error}`);
 					paramTag = {
-						paramType: "none",
-						paramName: "none",
-						paramDesc,
-						paramValues
+						paramName: error,
+						paramType: "Undefined",
+						paramDesc: "Undefined"
 					};
-					console.error(
-						"error : the param tag config is missing missing {paramType} paramName description (see documentation)"
-					);
 				}
+
 				// if the paramTags array doesn't exist, can't use push but need to initialize it
 				commentBlock.paramTags ? commentBlock.paramTags.push(paramTag) : (commentBlock.paramTags = [paramTag]);
 				break;

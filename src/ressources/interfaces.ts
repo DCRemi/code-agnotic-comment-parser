@@ -21,10 +21,10 @@ export interface GenericCommentsTable {
 
 // Specific
 export interface ParamTag {
-	paramType: string;
 	paramName: string;
+	paramType: string;
 	paramDesc: string;
-	paramValues: string[];
+	paramValues?: string[];
 }
 
 export interface DescriptionTag {

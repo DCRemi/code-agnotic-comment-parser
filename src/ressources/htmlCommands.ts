@@ -11,68 +11,43 @@ const path = require("path");
  * @param {string} Level1IndexLinks
  * @returns {string} Level 0 index file content
  */
-export function createLevel_0_baseHtml(Level1IndexLinks: string): string {
-	const level0IndexHtml = `
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-		<title>Home, Block</title>
-		<link type="text/css" rel="stylesheet" href="../styles/style.css" />
-		<link
-			rel="stylesheet"
-			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-			integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-			crossorigin="anonymous"
-		/>
-		<!-- Script -->
-		<script
-			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-			integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
-			crossorigin="anonymous"
-		></script>
-		<script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-		<script type="module" src="https://cdn.jsdelivr.net/npm/zero-md@3?register"></script>
-	</head>
-	<body>
-		<header id="header" class="header fixed-top d-flex align-items-center">
-			<div class="d-flex align-items-center justify-content-between">
-				<div class="logo d-flex align-items-center">
-					<a href="/html_output/pages_tree/index.html" class="logo d-flex align-items-center">
-						<img
-							src="https://cdn0.iconfinder.com/data/icons/juice/512/juice_cucumber_vegetables_drink-512.png"
-							alt=""
-						/>
-					</a>
-				</div>
-				<div class="logo d-flex align-items-center">
-					<h1 class="d-flex align-items-center">Doc-Parser</h1>
-				</div>
-			</div>
-		</header>
-			<aside id="sidebar" class="sidebar">
-				<ul id="sidebar-nav" class="sidebar-nav">
-					${Level1IndexLinks}
-					<li class="nav-item">
-						<a href=noLevel1.html class="nav-link">
-							No Level	
-						</a>
-					</li>
-				</ul>
-			</aside>
-		<main id="main" class="main">
-				<div class="pagetitle">
+export function createLevel_0_IndexHtml(Level1IndexLinks: string): string {
+	var level0IndexHtml = fs.readFileSync("src/ressources/htmlFile.html", "utf-8");
+	const mainHtml = `
+			<div class="pagetitle">
 				<h1>READ ME</h1>
 				<br />
 				<br />
 				<zero-md src="README.md"></zero-md>
-			</div>
-		</main>
-	</body>
-</html>`;
-	// 1 create level 1 folder and for each index file vide pour les lien dans le index du level 1
+			</div>`;
+	const sidebar = `
+			<ul id="sidebar-nav" class="sidebar-nav">
+				${Level1IndexLinks}
+				<li class="nav-item">
+					<a href="noLevel1.html" class="nav-link"> No Level </a>
+				</li>
+			</ul>`;
+	level0IndexHtml = level0IndexHtml.replace("${sideBar}", sidebar);
+	level0IndexHtml = level0IndexHtml.replace("${mainHtml}", mainHtml);
 	return level0IndexHtml;
+}
+
+/**
+ * Create noLevel0 file with link to level 1 index files
+ * @param {string} Level1IndexLinks
+ * @returns {string} NoLevel 0 file content
+ */
+export function createLevel_0_NoLevelHtml(Level1IndexLinks: string): string {
+	var level0NoLevelHtml = fs.readFileSync("src/ressources/htmlFile.html", "utf-8");
+	const sidebar = `
+			<ul id="sidebar-nav" class="sidebar-nav">
+				${Level1IndexLinks}
+				<li class="nav-item">
+					<a href="noLevel1.html" class="nav-link"> No Level </a>
+				</li>
+			</ul>`;
+	level0NoLevelHtml = level0NoLevelHtml.replace("${sideBar}", sidebar);
+	return level0NoLevelHtml;
 }
 
 /**
@@ -82,6 +57,8 @@ export function createLevel_0_baseHtml(Level1IndexLinks: string): string {
  * @returns {string} Level 1 index file content
  */
 export function createLevel_1_BaseHtml(level_1: Level_1): string {
+	var level1IndexHtml = fs.readFileSync("src/ressources/htmlFile.html", "utf-8");
+
 	var level2FilePathsLinks = "";
 	level_1.level_2s.forEach((level_2) => {
 		level2FilePathsLinks += `
@@ -91,75 +68,36 @@ export function createLevel_1_BaseHtml(level_1: Level_1): string {
 					</a>
 				</li>`;
 	});
-	const level1IndexHtml = `
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-		<title>Home, Block</title>
-		<link type="text/css" rel="stylesheet" href="../../styles/style.css" />
-		<link
-			rel="stylesheet"
-			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-			integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-			crossorigin="anonymous"
-		/>
-		<!-- Script -->
-		<script
-			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-			integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
-			crossorigin="anonymous"
-		></script>
-		<script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-		<script type="module" src="https://cdn.jsdelivr.net/npm/zero-md@3?register"></script>
-	</head>
-	<body>
-		<header id="header" class="header fixed-top d-flex align-items-center">
-			<div class="d-flex align-items-center justify-content-between">
-				<div class="logo d-flex align-items-center">
-					<a href="/html_output/pages_tree/index.html" class="logo d-flex align-items-center">
-						<img
-							src="https://cdn0.iconfinder.com/data/icons/juice/512/juice_cucumber_vegetables_drink-512.png"
-							alt=""
-						/>
-					</a>
-				</div>
-				<div class="logo d-flex align-items-center">
-					<h1 class="d-flex align-items-center">Doc-Parser</h1>
-				</div>
-			</div>
-		</header>
-		<aside id="sidebar" class="sidebar">
+	const sidebar = `
 			<ul id="sidebar-nav" class="sidebar-nav">
 				<li class="nav-item">
-					<a href=index.html class="nav-link">
-						HOME	
-					</a>
+					<a href="index.html" class="nav-link"> HOME </a>
 				</li>
-			</ul>	
+			</ul>
 			<ul id="sidebar-nav" class="sidebar-nav">
 				${level2FilePathsLinks}
-			</ul>
-		</aside>
-		<main id="main" class="main">
+			</ul>`;
+
+	const mainHtml = `
 			<div>
 				<h1 class="pagetitle">${level_1.levelName}</h1>
 				<p>${level_1.levelDesc}</p>
-			<div>
-			htmlPartToReplace
-			</div>
-			</div>
-		</main>
-	</body>
-</html>`;
-	// 1 create level 1 folder and for each index file vide pour les lien dans le index du level 1
+				<div>\${mainHtml}</div>
+			</div>`;
+
+	level1IndexHtml = level1IndexHtml.replace("${sideBar}", sidebar);
+	level1IndexHtml = level1IndexHtml.replace("${mainHtml}", mainHtml);
+
 	return level1IndexHtml;
 }
 
 /* -------------------------------------------------------------------------- */
 /*                            Html blocks creation                           */
 /* -------------------------------------------------------------------------- */
+/**
+ * Construct the html block for the step definition adding the expand/collapse button with the block index
+ * @param index will be use inside the accordion item so the button collapse the right box
+ */
 export function createTitleHtmlBlock(commentBlock: CommentBlock, index: number): string {
 	var stepDefName = commentBlock.stepDef;
 	const htmlBlock = `
@@ -176,8 +114,12 @@ export function createTitleHtmlBlock(commentBlock: CommentBlock, index: number):
 	return htmlBlock;
 }
 
-export function createDefHtmlBlock(commentBlock: CommentBlock): string {
-	var htmlBlock = "";
+/**
+ * Create the description html block
+ * Manage if multiple description blocks
+ */
+export function createDescHtmlBlock(commentBlock: CommentBlock): string {
+	var htmlDescBlock = "";
 	if (commentBlock.descriptionTags) {
 		var stepDefDescBloc = "";
 		commentBlock.descriptionTags.forEach((descriptionTag) => {
@@ -185,27 +127,35 @@ export function createDefHtmlBlock(commentBlock: CommentBlock): string {
 								<p>${descriptionTag.description.replace(/.\n/g, "<br />")}</p>
 								`;
 		});
-		htmlBlock = `
+		htmlDescBlock = `
 							<div class="stepDefinition" id="BlockDef">
 								${stepDefDescBloc}
 							</div>`;
 	}
-	return htmlBlock;
+	return htmlDescBlock;
 }
 
+/**
+ * Create the param html block
+ * Manage if multiple param blocks
+ * add into the table the parameter of this tag
+ */
 export function createParamHtmlBlock(commentBlock: CommentBlock): string {
-	if (commentBlock.paramTags) {
-		var htmlParamBlock: string = "";
+	var htmlParamBlock: string = "";
 
+	if (commentBlock.paramTags) {
+		var htmlParamTableLine = "";
 		commentBlock.paramTags.forEach((paramTag) => {
 			var paramValuesList = "";
-			paramTag.paramValues.forEach((paramValue) => {
-				paramValuesList += `
+			if (paramTag.paramValues) {
+				paramTag.paramValues.forEach((paramValue) => {
+					paramValuesList += `
 												<li>
 													${paramValue}
 												</li>`;
-			});
-			htmlParamBlock += `
+				});
+			}
+			htmlParamTableLine += `
 									<tr>
 										<th>${paramTag.paramName}</th>
 										<td>${paramTag.paramType}</td>
@@ -218,7 +168,7 @@ export function createParamHtmlBlock(commentBlock: CommentBlock): string {
 									</tr>`;
 		});
 
-		const htmlBlock: string = `
+		htmlParamBlock = `
 						<div class="stepDefinition" id="BlockParam">
 							<h4>Parameters : </h4>
 							<table class="table">
@@ -231,18 +181,20 @@ export function createParamHtmlBlock(commentBlock: CommentBlock): string {
 									</tr>
 								</thead>
 								<tbody>
-									${htmlParamBlock}
+									${htmlParamTableLine}
 								</tbody>
 							</table>
 						</div>`;
-		return htmlBlock;
-	} else {
-		return "";
 	}
+	return htmlParamBlock;
 }
 
+/**
+ * Create the example html block
+ * Manage if multiple example blocks
+ */
 export function createExampleHtmlBlock(commentBlock: CommentBlock): string {
-	var stepDefExample: string = "";
+	var htmlExampleBlock: string = "";
 	if (commentBlock.exampleTags) {
 		var exampleBlocks = "";
 		commentBlock.exampleTags.forEach((exampleTag) => {
@@ -250,7 +202,7 @@ export function createExampleHtmlBlock(commentBlock: CommentBlock): string {
 									<pre><code data-prismjs-copy="Copy" class="language-js">${exampleTag.example_content}</code></pre>`;
 		});
 
-		const htmlBlock = `
+		htmlExampleBlock = `
 						<div class="stepDefinition" id="BlockExample">
 							<h4>Example :</h4>
 							<div class="card">
@@ -259,16 +211,19 @@ export function createExampleHtmlBlock(commentBlock: CommentBlock): string {
 								</div>
 							</div>
 						</div>`;
-		return htmlBlock;
-	} else {
-		return "";
 	}
+	return htmlExampleBlock;
 }
 
+/**
+ * Create the to do html block
+ * Manage if multiple to do blocks
+ * add into the table the parameter of this tag
+ */
 export function createToDoHtmlBlock(commentBlock: CommentBlock): string {
+	var htmlToDoBlock: string = "";
 	if (commentBlock.todoTags) {
 		var htmlTodoBlock: string = "";
-
 		commentBlock.todoTags.forEach((todoTag) => {
 			htmlTodoBlock += `
 									<tr>
@@ -276,8 +231,7 @@ export function createToDoHtmlBlock(commentBlock: CommentBlock): string {
 										<td>${todoTag.todoText.replace(/.\n/g, "<br />")}</td>
 									</tr>`;
 		});
-
-		const htmlBlock: string = `
+		htmlToDoBlock = `
 						<div class="stepDefinition" id="BlockToDo">
 							<h4>To Do : </h4>				
 							<table class="table">
@@ -292,10 +246,8 @@ export function createToDoHtmlBlock(commentBlock: CommentBlock): string {
 								</tbody>
 							</table>
 						</div>`;
-		return htmlBlock;
-	} else {
-		return "";
 	}
+	return htmlToDoBlock;
 }
 
 export function createStepDefHtmlBlock(
@@ -327,64 +279,17 @@ export function createStepDefHtmlBlock(
 }
 
 export function createHtmlFile(mainHtml: string, level_2: Level_2): string {
-	const htmlBlock = `
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-		<title>Home, Block</title>
-		<link type="text/css" rel="stylesheet" href="../../styles/style.css" />
-		<link
-			rel="stylesheet"
-			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-			integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-			crossorigin="anonymous"
-		/>
-		<!-- Script -->
-		<script
-			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-			integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
-			crossorigin="anonymous"
-		></script>
-		<script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-		<script type="module" src="https://cdn.jsdelivr.net/npm/zero-md@3?register"></script>
-		<script src="../../js/prism.js"></script>
-	</head>
-	<body>
-		<header id="header" class="header fixed-top d-flex align-items-center">
-			<div class="d-flex align-items-center justify-content-between">
-				<div class="logo d-flex align-items-center">
-					<a href="/html_output/pages_tree/index.html" class="logo d-flex align-items-center">
-						<img
-							src="https://cdn0.iconfinder.com/data/icons/juice/512/juice_cucumber_vegetables_drink-512.png"
-							alt=""
-						/>
-					</a>
-				</div>
-				<div class="logo d-flex align-items-center">
-					<h1 class="d-flex align-items-center">Doc-Parser</h1>
-				</div>
-			</div>
-		</header>
-		<aside id="sidebar" class="sidebar">
+	var level2HtmlFile = fs.readFileSync("src/ressources/htmlFile.html", "utf-8");
+	const sidebar = `
 			<ul id="sidebar-nav" class="sidebar-nav">
 				<li class="nav-item">
-					<a href=index.html class="nav-link">
-						HOME	
-					</a>
+					<a href="index.html" class="nav-link"> HOME </a>
 				</li>
-			</ul>	
-		<ul id="sidebar-nav" class="sidebar-nav">
-				${level_2.htmlNavBar}
 			</ul>
-		</aside>
-		<main id="main" class="main">
-				${mainHtml}	
-		</main>
-	</body>
-	<script src="../../js/copyClipboard.js"></script>
-</html>
-`;
-	return htmlBlock;
+			<ul id="sidebar-nav" class="sidebar-nav">
+				${level_2.htmlNavBar}
+			</ul>`;
+	level2HtmlFile = level2HtmlFile.replace("${sideBar}", sidebar);
+	level2HtmlFile = level2HtmlFile.replace("${mainHtml}", mainHtml);
+	return level2HtmlFile;
 }

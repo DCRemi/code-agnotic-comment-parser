@@ -1,8 +1,8 @@
 # To do
 
-ID-11 noLevel pages improve
-ID-12 expand todo block
-ID-13 faire des bigs example
+ID-11 Ajouter un tag favoris + faire des bigs example
+ID-12 noLevel pages improve
+ID-13 expand todo block
 
 Bonus
 
@@ -251,7 +251,7 @@ However if the param is not set it will take the value none and all the text wil
 
 ### III.2. Description tags
 
-**@description** (Simple tag) (should be UNIQUE)
+**@description** (Simple tag) (can be MULTIPLE)
 
 > Use to add a description to explain more in details the step definition<br />
 > @description this step def is used to make the user clicks ...
@@ -280,7 +280,11 @@ However if the param is not set it will take the value none and all the text wil
 All tag that are not recognized by the "tool" will be marked as generic tag.<br />
 They will be displayed with the name of the tag and the text as content
 
-# IV. Example :
+# IV. Step to setup :
+
+1. create your levelDefinition file
+2. add the tags
+   ...
 
 ```
 
